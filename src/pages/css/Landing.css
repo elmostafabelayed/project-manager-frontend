@@ -1,0 +1,53 @@
+.landing-page {
+  font-family: "Inter", sans-serif;
+  color: #172A39;
+}
+
+.hero {
+  background-color: #172A39;
+  color: #E9E4E0;
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.hero-buttons .btn-primary {
+  background-color: #FC563C;
+  color: #fff;
+  padding: 12px 24px;
+  border: none;
+  margin-right: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.hero-buttons .btn-secondary {
+  background-color: transparent;
+  color: #FC563C;
+  border: 2px solid #FC563C;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.featured-projects {
+  background-color: #E9E4E0;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.cta {
+  background-color: #6E7575;
+  color: #fff;
+  text-align: center;
+  padding: 80px 20px;
+}
