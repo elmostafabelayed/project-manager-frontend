@@ -2,16 +2,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #172A39;
+  background-color: #E6F1FB;
   padding: 15px 40px;
-  color: #E9E4E0;
   font-family: "Inter", sans-serif;
+  position: sticky; 
+  top: 0;
+  z-index: 100;
 }
 
 .navbar-logo a {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #FC563C;
+  color: #185FA5;
   text-decoration: none;
 }
 
@@ -22,14 +24,14 @@
 }
 
 .navbar-links a {
-  color: #E9E4E0;
+  color: #185FA5;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
 .navbar-links a:hover {
-  color: #FC563C;
+  color: #0C447C;
 }
 
 .navbar-auth {
@@ -38,7 +40,7 @@
 }
 
 .btn-primary {
-  background-color: #FC563C;
+  background-color: #185FA5;
   color: #fff;
   padding: 8px 16px;
   border-radius: 6px;
@@ -48,12 +50,12 @@
 }
 
 .btn-primary:hover {
-  background-color: #e04a32;
+  background-color: #0C447C;
 }
 
 .btn-secondary {
-  border: 2px solid #FC563C;
-  color: #FC563C;
+  border: 2px solid #185FA5;
+  color: #185FA5;
   padding: 8px 16px;
   border-radius: 6px;
   text-decoration: none;
@@ -62,6 +64,6 @@
 }
 
 .btn-secondary:hover {
-  background-color: #FC563C;
+  background-color: #0C447C;
   color: #fff;
 }

@@ -3,9 +3,9 @@
   color: #172A39;
 }
 
+
 .hero {
-  background-color: #172A39;
-  color: #E9E4E0;
+  background-color: #E6F1FB;
   text-align: center;
   padding: 100px 20px;
 }
@@ -17,37 +17,50 @@
 
 .hero p {
   font-size: 1.2rem;
+  color: #888780;
   margin-bottom: 30px;
 }
 
 .hero-buttons .btn-primary {
-  background-color: #FC563C;
-  color: #fff;
+  background-color: #185FA5;
+  color: #ffffff;
   padding: 12px 24px;
   border: none;
   margin-right: 10px;
   border-radius: 6px;
   cursor: pointer;
+  transition: background 0.2s;
+}
+
+.hero-buttons .btn-primary:hover {
+  background-color: #0C447C;
 }
 
 .hero-buttons .btn-secondary {
   background-color: transparent;
-  color: #FC563C;
-  border: 2px solid #FC563C;
+  color: #185FA5;
+  border: 2px solid #185FA5;
   padding: 12px 24px;
   border-radius: 6px;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
+.hero-buttons .btn-secondary:hover {
+  background-color: #E6F1FB;
+}
+
+
 .featured-projects {
-  background-color: #E9E4E0;
+  background-color: #ffffff;
   padding: 60px 20px;
   text-align: center;
 }
 
+
 .cta {
-  background-color: #6E7575;
-  color: #fff;
+  background-color: #185FA5;
+  color: #ffffff;
   text-align: center;
   padding: 80px 20px;
 }
