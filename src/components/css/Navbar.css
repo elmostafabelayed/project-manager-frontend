@@ -89,7 +89,6 @@
 
 .overlay.active { display: block; }
 
-/* Sidebar */
 .sidebar {
   position: fixed;
   top: 50px;
