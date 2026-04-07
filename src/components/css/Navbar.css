@@ -55,7 +55,6 @@
 .btn-primary:hover { background-color: #0C447C; }
 
 .btn-secondary {
-  border: 2px solid #185FA5;
   color: #185FA5;
   padding: 8px 16px;
   border-radius: 6px;
@@ -64,10 +63,7 @@
   transition: all 0.3s ease;
 }
 
-.btn-secondary:hover {
-  background-color: #0C447C;
-  color: #fff;
-}
+
 
 .menu-btn {
   display: none;
@@ -165,3 +161,13 @@
   .navbar-links { display: none; }
   .navbar-auth { display: none; }
 }
+
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu{
+  left: 50%;
+  transform: translateX(-50%);
+}
+

@@ -65,3 +65,42 @@
   text-align: center;
   padding: 80px 20px;
 }
+
+.categories-section {
+  padding: 60px 0;
+  background: linear-gradient(to bottom, #cce3f9, #E6F1FB);
+}
+
+.category-box {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  transition: transform 0.2s ease;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.category-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.category-box i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.category-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* l’image remplit le box sans déformation */
+}
+.category-box p {
+  background: rgba(255,255,255,0.8);
+  margin: 0;
+  padding: 8px;
+  font-weight: 600;
+}
