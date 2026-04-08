@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { loginUser, clearError } from '../../store/slices/authSlice'
+import '../css/Login.css'
 
 export default function Login() {
   const dispatch  = useDispatch()
@@ -10,7 +11,6 @@ export default function Login() {
 
   const [form, setForm] = useState({ email: '', password: '' })
 
-  // إلا راه logged in — redirect مباشرة
   useEffect(() => {
     if (role) redirectByRole(role)
   }, [role])
@@ -34,71 +34,61 @@ export default function Login() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#E6F1FB', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ backgroundColor: '#fff', borderRadius: '12px', padding: '40px', width: '100%', maxWidth: '420px', boxShadow: '0 4px 24px rgba(24,95,165,0.08)' }}>
-        
-        {/* Logo */}
-        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-          <img src="/img/logon.png" alt="Jobsy" style={{ height: '50px' }} />
+    <div className="login-container">
+      <div className="login-card">
+
+        <div className="login-logo">
+          <img src="/img/logon.png" alt="Jobsy" />
           <p style={{ color: '#888780', fontSize: '14px', marginTop: '8px' }}>
             Connectez-vous à votre compte
           </p>
         </div>
 
-        {/* Error */}
         {error && (
-          <div style={{ backgroundColor: '#FCEBEB', color: '#A32D2D', padding: '10px 14px', borderRadius: '8px', marginBottom: '16px', fontSize: '14px' }}>
+          <div className="login-error">
             {error.message || 'Email ou mot de passe incorrect'}
           </div>
         )}
 
-        {/* Form */}
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#172A39', marginBottom: '6px' }}>
-              Email
-            </label>
+            <label>Email</label>
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
               required
-              placeholder="exemple@email.com"
-              style={{ width: '100%', padding: '10px 14px', border: '1.5px solid #B5D4F4', borderRadius: '8px', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
+              placeholder='exemple@email.com'
+              className="login-input"
             />
           </div>
 
           <div style={{ marginBottom: '24px' }}>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#172A39', marginBottom: '6px' }}>
-              Mot de passe
-            </label>
+            <label>Mot de passe</label>
             <input
               type="password"
               name="password"
               value={form.password}
               onChange={handleChange}
               required
-              placeholder="••••••••"
-              style={{ width: '100%', padding: '10px 14px', border: '1.5px solid #B5D4F4', borderRadius: '8px', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }}
+              placeholder='••••••••'
+              className="login-input"
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{ width: '100%', padding: '12px', backgroundColor: loading ? '#85B7EB' : '#185FA5', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '15px', fontWeight: '600', cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }}
-          >
+          <button type="submit" disabled={loading} className="login-button">
             {loading ? 'Connexion...' : 'Se connecter'}
           </button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '14px', color: '#888780' }}>
+        <p className="login-footer">
           Pas encore de compte ?{' '}
-          <Link to="/auth/register" style={{ color: '#185FA5', fontWeight: '600', textDecoration: 'none' }}>
+          <Link to="/auth/register" style={{ color: '#185FA5', fontWeight: '600' }}>
             S'inscrire
           </Link>
         </p>
+
       </div>
     </div>
   )
