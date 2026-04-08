@@ -1,11 +1,11 @@
-import AppRoutes from "./pages/routes/AppRoutes";
+import Navbar from './components/Navbar'
+import AppRoutes from './routes/AppRoutes'
 
-export default function App(){
+export default function App() {
   return (
-      <div className="app-container">
-        <main className="main-content">
-          <AppRoutes />
-        </main>
-      </div>
-  );
-};
+    <>
+      <Navbar />
+      <AppRoutes />
+    </>
+  )
+}
