@@ -1,0 +1,63 @@
+.footer {
+  background: linear-gradient(to bottom, #a4d2fd, #beddfa);
+  color: #000000;
+  padding: 60px 20px 20px;
+}
+
+.footer-container {
+  max-width: 1100px;
+  margin: auto;
+  text-align: center;
+}
+
+.footer-brand h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.footer-brand p {
+  color: #000000;
+  max-width: 500px;
+  margin: 0 auto 30px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.footer-links div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-links h4 {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #000000;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.footer-links a:hover {
+  color: #38bdf8;
+}
+
+.footer-bottom {
+  border-top: 1px solid #1e293b;
+  padding-top: 15px;
+  text-align: center;
+  font-size: 14px;
+  color: #000000;
+}
+
+.footer-logo {
+  width: 120px;
+  margin-bottom: 15px;
+}

@@ -68,7 +68,7 @@
 
 .categories-section {
   padding: 60px 0;
-  background: linear-gradient(to bottom, #cce3f9, #E6F1FB);
+  background: #cce3f9;
 }
 
 .category-box {
@@ -96,7 +96,7 @@
 .category-img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* l’image remplit le box sans déformation */
+  object-fit: cover;
 }
 .category-box p {
   background: rgba(255,255,255,0.8);

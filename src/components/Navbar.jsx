@@ -231,10 +231,10 @@ export default function Navbar() {
 
         <div className="auth-links">
           <Link to="/auth/login" onClick={() => setOpen(false)}>
-            Connexion
+            Log in
           </Link>
           <Link to="/auth/register" onClick={() => setOpen(false)}>
-            Inscription
+            Sign up
           </Link>
         </div>
       </div>
