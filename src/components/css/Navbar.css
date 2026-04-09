@@ -171,3 +171,40 @@
   transform: translateX(-50%);
 }
 
+.user-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-name {
+  color: #185fa5;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.btn-logout {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.btn-logout-sidebar {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}

@@ -25,9 +25,9 @@ export default function Landing() {
       <section className="featured-projects">
         <h2>Projets en vedette</h2>
         <div className="project-list">
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
+          <ProjectCard project={{ id: 1, title: 'Modern E-commerce App', budget: 1500, description: 'Build a full-stack e-commerce solution using React and Laravel.', client: { name: 'TechCorp' } }} />
+          <ProjectCard project={{ id: 2, title: 'Brand Identity Design', budget: 500, description: 'Create a unique brand identity for a startup in the green tech sector.', client: { name: 'GreenLife' } }} />
+          <ProjectCard project={{ id: 3, title: 'AI Chatbot Integration', budget: 1200, description: 'Integrate an AI-powered chatbot into an existing customer support system.', client: { name: 'CloudSoft' } }} />
         </div>
       </section>
 
