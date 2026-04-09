@@ -12,7 +12,7 @@ export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
 
   useEffect(() => {
-    if (role) redirectByRole(role);
+    if (role && localStorage.getItem('token')) redirectByRole(role);
   }, [role]);
 
   const redirectByRole = (r) => {
