@@ -1,6 +1,6 @@
 .register-container {
   min-height: 100vh;
-  background-color: #E6F1FB;
+  background: linear-gradient(to bottom, #ebf3fb, #cce3f9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,7 +10,7 @@
 .register-card {
   background-color: #fff;
   border-radius: 12px;
-  padding: 40px;
+  padding: 0 40px 40px 40px;
   width: 100%;
   max-width: 440px;
   box-shadow: 0 4px 24px rgba(24,95,165,0.08);
@@ -23,7 +23,7 @@
 }
 
 .register-header img {
-  height: 50px;
+  height: 130px;
 }
 
 .register-header p {
