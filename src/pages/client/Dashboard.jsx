@@ -70,11 +70,22 @@ export default function ClientDashboard() {
             </div>
 
             {loading ? (
-              <p>Loading your projects...</p>
+              <div className="cl-loading-state">
+                <div className="cl-spinner"></div>
+                <p>Loading your projects...</p>
+              </div>
             ) : myProjects.length === 0 ? (
               <div className="empty-projects">
+                <div className="cl-empty-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+                    <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+                    <path d="M12 18v-6"/>
+                    <path d="M9 15h6"/>
+                  </svg>
+                </div>
                 <p>You haven't posted any projects yet.</p>
-                <Link to="/client/create-project">Start by posting your first project!</Link>
+                <Link to="/client/create-project" className="cl-btn-action">Start by posting your first project!</Link>
               </div>
             ) : (
               <div className="dashboard-project-list">
