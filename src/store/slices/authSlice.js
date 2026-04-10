@@ -99,6 +99,12 @@ const authSlice = createSlice({
         state.role  = null
         localStorage.clear()
       })
+      .addCase(logoutUser.rejected, (state) => {
+        state.user  = null
+        state.token = null
+        state.role  = null
+        localStorage.clear()
+      })
   },
 })
 
