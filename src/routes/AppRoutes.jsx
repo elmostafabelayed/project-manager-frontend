@@ -14,9 +14,11 @@ import MyProposals    from '../pages/freelancer/MyProposals'
 import SubmitProposal from '../pages/freelancer/SubmitProposal'
 import FreelancerDash from '../pages/freelancer/Dashboard'
 
-import Chat    from '../pages/shared/Chat'
-import Profile from '../pages/shared/Profile'
-import Landing from '../pages/Landing'
+import Chat     from '../pages/shared/Chat'
+import Profile  from '../pages/shared/Profile'
+import AboutUs  from '../pages/shared/AboutUs'
+import Contact  from '../pages/shared/Contact'
+import Landing  from '../pages/Landing'
 
 export default function AppRoutes() {
   return (
@@ -80,6 +82,9 @@ export default function AppRoutes() {
           <Profile />
         </ProtectedRoute>
       }/>
+
+      <Route path="/shared/aboutUs" element={<AboutUs />} />
+      <Route path="/shared/contact" element={<Contact />} />
 
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
