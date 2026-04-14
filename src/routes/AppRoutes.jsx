@@ -19,6 +19,11 @@ import Profile  from '../pages/shared/Profile'
 import AboutUs  from '../pages/shared/AboutUs'
 import Contact  from '../pages/shared/Contact'
 import Landing  from '../pages/Landing'
+import Review   from '../pages/shared/Review'
+
+import AdminDashboard   from '../pages/admin/Dashboard'
+import ManageUsers      from '../pages/admin/ManageUsers'
+import ManageProjects   from '../pages/admin/ManageProjects'
 
 export default function AppRoutes() {
   return (
@@ -82,9 +87,32 @@ export default function AppRoutes() {
           <Profile />
         </ProtectedRoute>
       }/>
+      <Route path="/shared/profile/:id" element={
+        <ProtectedRoute allowedRoles={['1','2','3']}>
+          <Profile />
+        </ProtectedRoute>
+      }/>
 
       <Route path="/shared/aboutUs" element={<AboutUs />} />
       <Route path="/shared/contact" element={<Contact />} />
+      <Route path="/shared/review" element={<Review />} />
+
+      {/* Admin */}
+      <Route path="/admin/dashboard" element={
+        <ProtectedRoute allowedRoles={['3']}>
+          <AdminDashboard />
+        </ProtectedRoute>
+      }/>
+      <Route path="/admin/manage-users" element={
+        <ProtectedRoute allowedRoles={['3']}>
+          <ManageUsers />
+        </ProtectedRoute>
+      }/>
+      <Route path="/admin/manage-projects" element={
+        <ProtectedRoute allowedRoles={['3']}>
+          <ManageProjects />
+        </ProtectedRoute>
+      }/>
 
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

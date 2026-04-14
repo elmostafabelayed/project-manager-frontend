@@ -19,6 +19,7 @@ export default function Navbar() {
   const getDashboardLink = () => {
     if (role === "1") return "/client/dashboard";
     if (role === "2") return "/freelancer/dashboard";
+    if (role === "3") return "/admin/dashboard";
     return "/";
   };
 
@@ -66,6 +67,20 @@ export default function Navbar() {
                 <li><a className="dropdown-item" href="#">Markeing jobs</a></li>
                 <li><a className="dropdown-item" href="#">Writing & content jobs</a></li>
                 <li><a className="dropdown-item" href="#">Adming & support jobs</a></li>
+              </ul>
+            </li>
+          )}
+
+          {/* Admin Panel - Visible to Admin */}
+          {role === "3" && (
+            <li className="nav-item dropdown">
+              <a className="nav-link dropdown-toggle" href="#">
+                Admin Panel
+              </a>
+              <ul className="dropdown-menu">
+                <li><Link className="dropdown-item" to="/admin/manage-users">Manage Users</Link></li>
+                <li><Link className="dropdown-item" to="/admin/manage-projects">Manage Projects</Link></li>
+                <li><Link className="dropdown-item" to="/admin/dashboard">Platform Stats</Link></li>
               </ul>
             </li>
           )}
@@ -141,6 +156,19 @@ export default function Navbar() {
                 <li><Link className="dropdown-item" to="/jobs/marketing">Marketing Jobs</Link></li>
                 <li><Link className="dropdown-item" to="/jobs/writing">Writing & Content Jobs</Link></li>
                 <li><Link className="dropdown-item" to="/jobs/admin">Admin & Support Jobs</Link></li>
+              </ul>
+            </li>
+          )}
+
+          {role === "3" && (
+            <li className="nav-item dropdown">
+              <a className="nav-link dropdown-toggle" href="#">
+                Admin Management
+              </a>
+              <ul className="dropdown-menu">
+                <li><Link className="dropdown-item" to="/admin/manage-users" onClick={() => setOpen(false)}>Manage Users</Link></li>
+                <li><Link className="dropdown-item" to="/admin/manage-projects" onClick={() => setOpen(false)}>Manage Projects</Link></li>
+                <li><Link className="dropdown-item" to="/admin/dashboard" onClick={() => setOpen(false)}>Stats Dashboard</Link></li>
               </ul>
             </li>
           )}

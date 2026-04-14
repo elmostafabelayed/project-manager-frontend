@@ -17,8 +17,12 @@ export default function ProjectCard({ project }) {
       </p>
       <div className="project-footer">
         <div className="project-client">
-          <img src={`https://ui-avatars.com/api/?name=${project.client?.name || 'Client'}&background=random`} alt="client" />
-          <span>{project.client?.name || 'Anonymous Client'}</span>
+          <Link to={`/shared/profile/${project.client_id}`}>
+            <img src={`https://ui-avatars.com/api/?name=${project.client?.name || 'Client'}&background=random`} alt="client" />
+          </Link>
+          <Link to={`/shared/profile/${project.client_id}`} className="text-decoration-none text-dark">
+            <span>{project.client?.name || 'Anonymous Client'}</span>
+          </Link>
         </div>
         <Link to={`/freelancer/submit-proposal/${project.id}`} className="btn-apply">
           Apply Now

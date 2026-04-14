@@ -14,14 +14,11 @@ const chatService = {
   },
 
   // Send a new message
-  sendMessage: async (conversationId, message, receiverId) => {
+  sendMessage: async (conversationId, message) => {
     const payload = {
       conversation_id: conversationId,
-      message: message
+      content: message
     };
-    if (receiverId) {
-       payload.receiver_id = receiverId;
-    }
     const response = await api.post('/messages', payload);
     return response.data;
   }

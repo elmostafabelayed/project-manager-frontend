@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Navbar from '../../components/Navbar';
 import MessageBubble from '../../components/MessageBubble';
@@ -92,13 +93,16 @@ export default function Chat() {
   // Determine the name of the "other person" in the active conversation
   const getOtherParticipantName = (conversation) => {
     if (!conversation || !user) return 'User';
-    // Very simplified check: if conversation has a `freelancer` and `client` tied to it, pick the 'other' one.
-    // E.g., if user.role == 1 (client), return freelancer.name.
     if (user.role === '1' && conversation.freelancer) return conversation.freelancer.name;
     if (user.role === '2' && conversation.client) return conversation.client.name;
-    
-    // Fallback if backend provides a generic "other_participant" mapping
     return conversation.other_participant_name || 'Participant';
+  };
+
+  const getOtherParticipantId = (conversation) => {
+    if (!conversation || !user) return null;
+    if (user.role === '1' && conversation.freelancer) return conversation.freelancer_id;
+    if (user.role === '2' && conversation.client) return conversation.client_id;
+    return null;
   };
 
   return (
@@ -142,7 +146,11 @@ export default function Chat() {
         {activeConversation ? (
           <main className="chat-main">
             <header className="chat-main-header">
-              <h3>{getOtherParticipantName(activeConversation)}</h3>
+              <h3>
+                <Link to={`/shared/profile/${getOtherParticipantId(activeConversation)}`} className="text-decoration-none text-dark-blue">
+                  {getOtherParticipantName(activeConversation)}
+                </Link>
+              </h3>
               <span className="status">● Online</span>
             </header>
             

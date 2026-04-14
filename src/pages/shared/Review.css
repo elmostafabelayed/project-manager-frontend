@@ -1,0 +1,93 @@
+.review-container {
+  padding: 3rem 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.review-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.star-rating {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.star {
+  font-size: 2.5rem;
+  cursor: pointer;
+  color: #d1d5db;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.star.active {
+  color: #ffc107;
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+.review-comment {
+  margin-bottom: 2rem;
+}
+
+.review-comment label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #172a39;
+}
+
+.review-comment textarea {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid #cbd5e0;
+  resize: vertical;
+  min-height: 120px;
+  background-color: #f8f9fa;
+}
+
+.review-comment textarea:focus {
+  outline: none;
+  border-color: #185fa5;
+  background-color: white;
+}
+
+.btn-submit-review {
+  width: 100%;
+  padding: 1rem;
+  background-color: #185fa5;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-submit-review:hover {
+  background-color: #0c447c;
+}
+
+.btn-submit-review:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.review-success {
+  text-align: center;
+}
+
+.review-success h2 {
+  color: #1d9e75;
+  margin-bottom: 1rem;
+}

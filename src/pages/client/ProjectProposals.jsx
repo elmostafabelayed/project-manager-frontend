@@ -75,14 +75,19 @@ export default function ProjectProposals() {
             {proposals.map((proposal) => (
               <div key={proposal.id} className="proposal-card">
                 <div className="freelancer-info">
-                   {/* Assuming proposal has freelancer relationship loaded */}
-                   <img 
-                     src={`https://ui-avatars.com/api/?name=${proposal.freelancer?.name || 'Freelancer'}&background=185fa5&color=fff`} 
-                     alt="freelancer" 
-                     className="freelancer-avatar" 
-                   />
+                   <Link to={`/shared/profile/${proposal.freelancer_id}`}>
+                     <img 
+                       src={`https://ui-avatars.com/api/?name=${proposal.freelancer?.name || 'Freelancer'}&background=185fa5&color=fff`} 
+                       alt="freelancer" 
+                       className="freelancer-avatar" 
+                     />
+                   </Link>
                    <div className="freelancer-details">
-                     <h3>{proposal.freelancer?.name || 'Unknown Freelancer'}</h3>
+                     <h3>
+                       <Link to={`/shared/profile/${proposal.freelancer_id}`} className="text-decoration-none text-dark">
+                         {proposal.freelancer?.name || 'Unknown Freelancer'}
+                       </Link>
+                     </h3>
                      <p>Completed Jobs: {proposal.freelancer?.completed_jobs || 0}</p>
                    </div>
                 </div>

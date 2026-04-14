@@ -18,6 +18,12 @@ const proposalService = {
     // proposalData should include projectId, price, duration, cover_letter
     const response = await api.post('/proposals', proposalData);
     return response.data;
+  },
+
+  // Get current freelancer's proposals
+  getMyProposals: async () => {
+    const response = await api.get('/my-proposals');
+    return response.data;
   }
 };
 
