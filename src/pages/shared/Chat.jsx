@@ -70,7 +70,7 @@ export default function Chat() {
         id: Date.now(),
         conversation_id: activeConversation.id,
         sender_id: user.id,
-        message: newMessage,
+        content: newMessage,
         created_at: new Date().toISOString()
       };
       
@@ -80,7 +80,7 @@ export default function Chat() {
       // Determine the receiver based on the conversation if possible. 
       // Assume backend might need it if it's not strictly tied to conversation context, 
       // or the API handles it via conversation_id. We'll rely on convention.
-      await chatService.sendMessage(activeConversation.id, optimisticMsg.message);
+      await chatService.sendMessage(activeConversation.id, optimisticMsg.content);
       
       // Optionally refetch messages here, but optimistic update is sufficient for demo
     } catch (error) {
@@ -92,17 +92,11 @@ export default function Chat() {
 
   // Determine the name of the "other person" in the active conversation
   const getOtherParticipantName = (conversation) => {
-    if (!conversation || !user) return 'User';
-    if (user.role === '1' && conversation.freelancer) return conversation.freelancer.name;
-    if (user.role === '2' && conversation.client) return conversation.client.name;
-    return conversation.other_participant_name || 'Participant';
+    return conversation?.other_participant?.name || 'User';
   };
 
   const getOtherParticipantId = (conversation) => {
-    if (!conversation || !user) return null;
-    if (user.role === '1' && conversation.freelancer) return conversation.freelancer_id;
-    if (user.role === '2' && conversation.client) return conversation.client_id;
-    return null;
+    return conversation?.other_participant?.id || null;
   };
 
   return (

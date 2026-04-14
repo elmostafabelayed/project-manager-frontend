@@ -1,17 +1,26 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProjects } from '../../store/slices/projectSlice';
+import { fetchMyProposals } from '../../store/slices/proposalSlice';
 import ProjectCard from '../../components/ProjectCard';
 import Navbar from '../../components/Navbar';
 import './BrowseProjects.css';
 
 export default function BrowseProjects() {
   const dispatch = useDispatch();
-  const { items, loading, error } = useSelector((state) => state.projects);
+  const { items: projects, loading: projectsLoading, error } = useSelector((state) => state.projects);
+  const { items: proposals, loading: proposalsLoading } = useSelector((state) => state.proposals);
 
   useEffect(() => {
     dispatch(fetchProjects());
+    dispatch(fetchMyProposals());
   }, [dispatch]);
+
+  const loading = projectsLoading || proposalsLoading;
+
+  // Filter out projects that the freelancer has already applied for
+  const appliedProjectIds = (proposals || []).map(p => p.project_id);
+  const availableProjects = projects.filter(p => !appliedProjectIds.includes(p.id));
 
   return (
     <div className="browse-projects-container">
@@ -46,14 +55,14 @@ export default function BrowseProjects() {
               </div>
             )}
 
-            {!loading && items.length === 0 && (
+            {!loading && availableProjects.length === 0 && (
               <div className="empty-state">
-                <p>No projects found. Check back later!</p>
+                <p>No new projects found or you have already applied to all of them. Check back later!</p>
               </div>
             )}
 
             <div className="projects-grid">
-              {items.map((project) => (
+              {availableProjects.map((project) => (
                 <ProjectCard key={project.id} project={project} />
               ))}
             </div>

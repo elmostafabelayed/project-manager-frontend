@@ -205,7 +205,9 @@ export default function FreelancerDashboard() {
                             <circle cx="12" cy="8" r="5"/>
                             <path d="M20 21a8 8 0 1 0-16 0"/>
                           </svg>
-                          {proposal.project?.client?.name || 'Client'}
+                          <Link to={`/shared/profile/${proposal.project?.client?.id}`} className="text-decoration-none">
+                            {proposal.project?.client?.name || 'Client'}
+                          </Link>
                         </span>
                         <span className="fl-proposal-price">
                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -257,7 +259,9 @@ export default function FreelancerDashboard() {
                           src={`https://ui-avatars.com/api/?name=${project.client?.name || 'C'}&background=e2e8f0&color=334155&size=28`}
                           alt="client"
                         />
-                        <span>{project.client?.name || 'Client'}</span>
+                        <Link to={`/shared/profile/${project.client?.id}`} className="text-decoration-none text-muted">
+                          {project.client?.name || 'Client'}
+                        </Link>
                       </div>
                       <Link to={`/freelancer/submit-proposal/${project.id}`} className="fl-btn-apply">
                         Apply

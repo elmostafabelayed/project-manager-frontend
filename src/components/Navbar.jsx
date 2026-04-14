@@ -92,9 +92,14 @@ export default function Navbar() {
             </li>
           )}
           {token && (
-            <li>
-              <Link to={getDashboardLink()}>Dashboard</Link>
-            </li>
+            <>
+              <li>
+                <Link to={getDashboardLink()}>Dashboard</Link>
+              </li>
+              <li>
+                <Link to="/shared/chat">Messages</Link>
+              </li>
+            </>
           )}
 
           <li><Link to="/shared/aboutUs">About Us</Link></li>
@@ -174,7 +179,10 @@ export default function Navbar() {
           )}
 
           {token && (
-            <li><Link to={getDashboardLink()} onClick={() => setOpen(false)}>Dashboard</Link></li>
+            <>
+              <li><Link to={getDashboardLink()} onClick={() => setOpen(false)}>Dashboard</Link></li>
+              <li><Link to="/shared/chat" onClick={() => setOpen(false)}>Messages</Link></li>
+            </>
           )}
           {role === "2" && (
             <li><Link to="/freelancer/browse-projects" onClick={() => setOpen(false)}>Browse Projects</Link></li>

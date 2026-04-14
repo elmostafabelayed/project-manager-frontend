@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import proposalService from '../../services/proposalService';
 import './MyProposals.css';
@@ -53,6 +54,7 @@ export default function MyProposals() {
               <thead>
                 <tr>
                   <th>Project Title</th>
+                  <th>Client</th>
                   <th>Budget Bid</th>
                   <th>Estimated Duration</th>
                   <th>Status</th>
@@ -64,6 +66,11 @@ export default function MyProposals() {
                   <tr key={proposal.id}>
                     <td>
                       <span className="fw-bold text-dark">{proposal.project?.title || 'Unknown Project'}</span>
+                    </td>
+                    <td>
+                      <Link to={`/shared/profile/${proposal.project?.client?.id}`} className="text-decoration-none">
+                        {proposal.project?.client?.name || 'Client'}
+                      </Link>
                     </td>
                     <td><span className="text-success fw-bold">${proposal.price}</span></td>
                     <td>{proposal.duration} days</td>
