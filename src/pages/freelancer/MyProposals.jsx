@@ -33,9 +33,12 @@ export default function MyProposals() {
   };
 
   return (
-    <div className="bg-background min-vh-100">
+    <div className="bg-background min-vh-100 mt-5">
       <Navbar />
       <div className="container py-5">
+        <Link to="/freelancer/dashboard" className="back-link mb-3 d-inline-block text-decoration-none">
+          ← Back to Dashboard
+        </Link>
         <h1 className="fw-bold mb-4 text-dark-blue">My Proposals</h1>
 
         {loading ? (

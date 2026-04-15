@@ -47,9 +47,12 @@ export default function MyProjects() {
   };
 
   return (
-    <div className="bg-background min-vh-100">
+    <div className="bg-background min-vh-100 mt-5">
       <Navbar />
       <div className="container py-5">
+        <Link to="/client/dashboard" className="back-link mb-3 d-inline-block text-decoration-none">
+          ← Back to Dashboard
+        </Link>
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="fw-bold text-dark-blue">My Projects</h1>
           <Link to="/client/create-project" className="cl-btn-primary text-decoration-none">

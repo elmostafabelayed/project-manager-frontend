@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import api from '../../services/api';
 import { useEffect, useState } from 'react';
@@ -48,9 +49,12 @@ export default function ManageUsers() {
   };
 
   return (
-    <div className="bg-background min-vh-100">
+    <div className="bg-background min-vh-100 mt-5">
       <Navbar />
       <div className="container py-5">
+        <Link to="/admin/dashboard" className="back-link mb-3 d-inline-block text-decoration-none">
+          ← Back to Dashboard
+        </Link>
         <h1 className="fw-bold mb-4">Manage Users</h1>
         
         {loading ? (

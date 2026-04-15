@@ -25,7 +25,7 @@ export default function AdminDashboard() {
   if (loading) return <div className="cl-loading-state p-5 text-center"><div className="cl-spinner"></div></div>;
 
   return (
-    <div className="bg-background min-vh-100">
+    <div className="bg-background min-vh-100 mt-5">
       <Navbar />
       <div className="container py-5">
         <h1 className="fw-bold mb-4">Admin Dashboard</h1>

@@ -53,9 +53,12 @@ export default function SubmitProposal() {
   };
 
   return (
-    <div className="dashboard-container bg-background min-vh-100">
+    <div className="dashboard-container bg-background min-vh-100 mt-5">
       <Navbar />
-      <div className="submit-proposal-container container">
+      <div className="submit-proposal-container container py-5">
+        <Link to="/freelancer/browse-projects" className="back-link mb-3 d-inline-block text-decoration-none">
+          ← Back to Projects
+        </Link>
         <div className="submit-header">
           <h1>Submit Proposal</h1>
           <p>Please enter the details of your offer for this project.</p>

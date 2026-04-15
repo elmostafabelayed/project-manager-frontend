@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { createProject } from '../../store/slices/projectSlice';
 import Navbar from '../../components/Navbar';
 import './CreateProject.css';
@@ -32,7 +32,10 @@ export default function CreateProject() {
     <div className="create-project-container">
       <Navbar />
       
-      <main className="create-project-main container">
+      <main className="create-project-main container mt-5 pt-4">
+        <Link to="/client/dashboard" className="back-link mb-3 d-inline-block text-decoration-none">
+          ← Back to Dashboard
+        </Link>
         <div className="form-card">
           <header className="form-header">
             <h1>Post a New Project</h1>

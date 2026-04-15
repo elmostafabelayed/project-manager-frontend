@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUser } from '../../store/slices/authSlice';
 import Navbar from '../../components/Navbar';
@@ -125,9 +125,15 @@ export default function Profile() {
   if (loading) return <div className="cl-loading-state p-5 text-center"><div className="cl-spinner"></div><p>Loading profile...</p></div>;
 
   return (
-    <div className="bg-background min-vh-100">
+    <div className="bg-background min-vh-100 mt-5">
       <Navbar />
-      <div className="profile-container">
+      <div className="profile-container mt-4">
+        <Link 
+          to={currentUser?.role_id == 1 ? '/client/dashboard' : currentUser?.role_id == 2 ? '/freelancer/dashboard' : '/admin/dashboard'} 
+          className="back-link mb-3 d-inline-block text-decoration-none"
+        >
+          ← Back to Dashboard
+        </Link>
         <div className="profile-card">
           <header className="profile-header">
             <img 
