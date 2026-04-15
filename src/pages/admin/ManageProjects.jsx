@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
 import api from '../../services/api';
+import toast from 'react-hot-toast';
 
 export default function ManageProjects() {
   const [projects, setProjects] = useState([]);
@@ -26,9 +27,9 @@ export default function ManageProjects() {
     try {
       await api.delete(`/admin/projects/${id}`);
       setProjects(projects.filter(p => p.id !== id));
-      alert("Project deleted.");
+      toast.success("Project deleted.");
     } catch (error) {
-      alert("Failed to delete project.");
+      toast.error("Failed to delete project.");
     }
   };
 

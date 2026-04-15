@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import projectService from '../../services/projectService';
+import toast from 'react-hot-toast';
 import './MyProjects.css';
 
 export default function MyProjects() {
@@ -28,9 +29,9 @@ export default function MyProjects() {
     try {
       await projectService.deleteProject(id);
       setProjects(projects.filter(p => p.id !== id));
-      alert("Project deleted.");
+      toast.success("Project deleted.");
     } catch (error) {
-      alert("Failed to delete project.");
+      toast.error("Failed to delete project.");
     }
   };
 

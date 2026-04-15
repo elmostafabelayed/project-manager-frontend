@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import proposalService from '../../services/proposalService';
+import toast from 'react-hot-toast';
 import './SubmitProposal.css';
 
 export default function SubmitProposal() {
@@ -40,7 +41,7 @@ export default function SubmitProposal() {
         message: formData.cover_letter 
       });
       
-      alert('Proposal submitted successfully!');
+      toast.success('Proposal submitted successfully!');
       navigate('/freelancer/my-proposals'); // Redirect to my-proposals page
     } catch (err) {
       console.error('Failed to submit proposal', err);

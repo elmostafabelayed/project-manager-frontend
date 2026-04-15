@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import api from '../../services/api';
+import toast from 'react-hot-toast';
 import './Review.css';
 
 export default function Review() {
@@ -19,7 +20,7 @@ export default function Review() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (rating === 0) {
-      alert("Please select a rating.");
+      toast.error("Please select a rating.");
       return;
     }
 
@@ -32,10 +33,11 @@ export default function Review() {
         comment: comment
       });
       setSubmitted(true);
+      toast.success("Review submitted successfully!");
       setTimeout(() => navigate('/'), 3000);
     } catch (error) {
       console.error("Failed to submit review", error);
-      alert("Error submitting review. Please try again.");
+      toast.error("Error submitting review. Please try again.");
     } finally {
       setSubmitting(false);
     }

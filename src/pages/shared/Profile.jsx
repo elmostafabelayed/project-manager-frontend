@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateUser } from '../../store/slices/authSlice';
 import Navbar from '../../components/Navbar';
 import profileService from '../../services/profileService';
 import skillService from '../../services/skillService';
+import toast from 'react-hot-toast';
 import './Profile.css';
 
 export default function Profile() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { id } = useParams();
   const { user: currentUser } = useSelector((state) => state.auth);
   
@@ -95,14 +98,25 @@ export default function Profile() {
     e.preventDefault();
     try {
       setSaving(true);
-      await Promise.all([
-        profileService.updateProfile(profileForm),
-        skillService.syncUserSkills(selectedSkills)
-      ]);
-      alert("Profile updated successfully!");
+      
+      const savePromises = [profileService.updateProfile(profileForm)];
+      
+      // Only sync skills if the user is a freelancer
+      if (isFreelancer) {
+        savePromises.push(skillService.syncUserSkills(selectedSkills));
+      }
+
+      const results = await Promise.all(savePromises);
+      const updateResponse = results[0];
+      
+      if (updateResponse.user) {
+        dispatch(updateUser(updateResponse.user));
+      }
+
+      toast.success("Profile updated successfully!");
     } catch (error) {
       console.error("Failed to save profile:", error);
-      alert("Error saving profile.");
+      toast.error("Error saving profile.");
     } finally {
       setSaving(false);
     }

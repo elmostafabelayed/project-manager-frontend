@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import proposalService from '../../services/proposalService';
+import toast from 'react-hot-toast';
 import './ProjectProposals.css';
 
 export default function ProjectProposals() {
@@ -40,10 +41,10 @@ export default function ProjectProposals() {
         p.id === proposalId ? { ...p, status: 'accepted' } : p
       ));
       
-      alert('Proposal accepted successfully! A contract and conversation have been created.');
+      toast.success('Proposal accepted successfully! A contract and conversation have been created.');
     } catch (err) {
       console.error('Error accepting proposal:', err);
-      alert('Failed to accept proposal.');
+      toast.error('Failed to accept proposal.');
     } finally {
       setAcceptingId(null);
     }

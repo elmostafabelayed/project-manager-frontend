@@ -25,9 +25,7 @@ export default function Register() {
     dispatch(clearError());
     const result = await dispatch(registerUser(form));
     if (registerUser.fulfilled.match(result)) {
-      const role = result.payload.user.role_id;
-      if (role == 1) navigate("/client/dashboard");
-      else if (role == 2) navigate("/freelancer/browse-projects");
+      navigate("/shared/profile");
     }
   };
 

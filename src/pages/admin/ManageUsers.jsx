@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import Navbar from '../../components/Navbar';
 import api from '../../services/api';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function ManageUsers() {
   const { user: currentUser } = useSelector((state) => state.auth);
@@ -28,9 +29,9 @@ export default function ManageUsers() {
     try {
       await api.delete(`/admin/users/${id}`);
       setUsers(users.filter(u => u.id !== id));
-      alert("User deleted.");
+      toast.success("User deleted.");
     } catch (error) {
-      alert("Failed to delete user.");
+      toast.error("Failed to delete user.");
     }
   };
 

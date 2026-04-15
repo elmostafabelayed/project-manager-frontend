@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Navbar from '../../components/Navbar';
 import MessageBubble from '../../components/MessageBubble';
 import chatService from '../../services/chatService';
+import toast from 'react-hot-toast';
 import './Chat.css';
 
 export default function Chat() {
@@ -85,7 +86,7 @@ export default function Chat() {
       // Optionally refetch messages here, but optimistic update is sufficient for demo
     } catch (error) {
       console.error("Failed to send message:", error);
-      alert("Failed to send message.");
+      toast.error("Failed to send message.");
       // We could remove the optimistic message on failure
     }
   };
