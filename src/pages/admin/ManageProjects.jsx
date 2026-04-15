@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 export default function ManageProjects() {
   const [projects, setProjects] = useState([]);
@@ -23,7 +24,17 @@ export default function ManageProjects() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this project?")) return;
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#185fa5',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    });
+
+    if (!result.isConfirmed) return;
     try {
       await api.delete(`/admin/projects/${id}`);
       setProjects(projects.filter(p => p.id !== id));

@@ -3,6 +3,7 @@ import Navbar from '../../components/Navbar';
 import api from '../../services/api';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 export default function ManageUsers() {
   const { user: currentUser } = useSelector((state) => state.auth);
@@ -25,7 +26,18 @@ export default function ManageUsers() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure? This action is permanent.")) return;
+    const userName = users.find(user => user.id == id)?.name;
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "This action is permanent!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#185fa5',
+      cancelButtonColor: '#d33',
+      confirmButtonText: `Yes, delete ${userName}!`
+    });
+
+    if (!result.isConfirmed) return;
     try {
       await api.delete(`/admin/users/${id}`);
       setUsers(users.filter(u => u.id !== id));
