@@ -18,7 +18,10 @@ export default function Profile() {
   
   const [isEditMode, setIsEditMode] = useState(false);
   
+  const isFreelancer = userData?.role_id == 2 || userData?.role?.name?.toLowerCase() === 'freelancer';
+
   const [profileForm, setProfileForm] = useState({
+    name: '',
     title: '',
     bio: '',
     location: '',
@@ -52,14 +55,13 @@ export default function Profile() {
         }
         
         // Populate form
-        if (profileResponse.profile) {
-          setProfileForm({
-            title: profileResponse.profile.title || '',
-            bio: profileResponse.profile.bio || '',
-            location: profileResponse.profile.location || '',
-            hourly_rate: profileResponse.profile.hourly_rate || 0
-          });
-        }
+        setProfileForm({
+          name: profileResponse.name || '',
+          title: profileResponse.profile?.title || '',
+          bio: profileResponse.profile?.bio || '',
+          location: profileResponse.profile?.location || '',
+          hourly_rate: profileResponse.profile?.hourly_rate || 0
+        });
         
         // Populate selected skills
         if (profileResponse.skills) {
@@ -129,32 +131,63 @@ export default function Profile() {
           <div className="profile-body">
             {isEditMode ? (
               <form onSubmit={handleSaveProfile}>
+                {/* Basic Information Section */}
                 <section className="profile-section">
-                  <h2>Professional Details</h2>
+                  <h2>Basic Information</h2>
                   <div className="profile-form-grid">
                     <div className="form-group mb-3">
-                      <label className="form-label">Professional Title</label>
+                      <label className="form-label">Full Name</label>
                       <input 
                         type="text" 
-                        name="title" 
+                        name="name"
                         className="form-control" 
-                        value={profileForm.title} 
-                        onChange={handleInputChange} 
-                        placeholder="e.g. Senior Full Stack Developer"
+                        value={profileForm.name} 
+                        onChange={handleInputChange}
+                        placeholder="Your full name"
                       />
+                      <small className="text-muted">This will be shown on your profile.</small>
                     </div>
                     <div className="form-group mb-3">
-                      <label className="form-label">Location</label>
+                      <label className="form-label">Email Address</label>
                       <input 
-                        type="text" 
-                        name="location" 
+                        type="email" 
                         className="form-control" 
-                        value={profileForm.location} 
-                        onChange={handleInputChange}
-                        placeholder="e.g. Casablanca, Morocco"
+                        value={userData.email} 
+                        disabled 
+                        readOnly
                       />
+                      <small className="text-muted">Email is managed in account settings.</small>
                     </div>
-                    {currentUser?.role_id !== 1 && (
+                  </div>
+                </section>
+
+                {/* Professional Details - Only for Freelancers */}
+                {isFreelancer && (
+                  <section className="profile-section">
+                    <h2>Professional Details</h2>
+                    <div className="profile-form-grid">
+                      <div className="form-group mb-3">
+                        <label className="form-label">Professional Title</label>
+                        <input 
+                          type="text" 
+                          name="title" 
+                          className="form-control" 
+                          value={profileForm.title} 
+                          onChange={handleInputChange} 
+                          placeholder="e.g. Senior Full Stack Developer"
+                        />
+                      </div>
+                      <div className="form-group mb-3">
+                        <label className="form-label">Location</label>
+                        <input 
+                          type="text" 
+                          name="location" 
+                          className="form-control" 
+                          value={profileForm.location} 
+                          onChange={handleInputChange}
+                          placeholder="e.g. Casablanca, Morocco"
+                        />
+                      </div>
                       <div className="form-group mb-3">
                         <label className="form-label">Hourly Rate ($)</label>
                         <input 
@@ -165,22 +198,22 @@ export default function Profile() {
                           onChange={handleInputChange}
                         />
                       </div>
-                    )}
-                  </div>
-                  <div className="form-group mb-3">
-                    <label className="form-label">Bio / Overview</label>
-                    <textarea 
-                      name="bio" 
-                      className="form-control" 
-                      rows="5" 
-                      value={profileForm.bio} 
-                      onChange={handleInputChange}
-                      placeholder="Tell us about your experience and skills..."
-                    ></textarea>
-                  </div>
-                </section>
+                    </div>
+                    <div className="form-group mb-3">
+                      <label className="form-label">Bio / Overview</label>
+                      <textarea 
+                        name="bio" 
+                        className="form-control" 
+                        rows="5" 
+                        value={profileForm.bio} 
+                        onChange={handleInputChange}
+                        placeholder="Tell us about your experience and skills..."
+                      ></textarea>
+                    </div>
+                  </section>
+                )}
 
-                {currentUser?.role_id !== 1 && (
+                {isFreelancer && (
                   <section className="profile-section">
                     <h2>Skills & Expertise</h2>
                     <p className="text-muted small mb-3">Select the skills that match your expertise.</p>
@@ -211,41 +244,41 @@ export default function Profile() {
               </form>
             ) : (
               <div className="public-profile-view">
-                <section className="profile-section">
-                  <h2>Professional Overview</h2>
-                  <div className="mb-4">
-                    <h4 className="fw-bold">{userData.profile?.title || "No title provided"}</h4>
-                    <p className="text-muted">
-                      <i className="bi bi-geo-alt"></i> {userData.profile?.location || "Unknown Location"}
-                    </p>
-                    {userData.role_id === 2 && (
-                       <div className="h5 text-primary fw-bold">
-                         Rate: ${userData.profile?.hourly_rate || '0'}/hr
-                       </div>
-                    )}
-                  </div>
-                  <div className="bio-box p-3 bg-light rounded-3">
-                    <p style={{ whiteSpace: 'pre-wrap' }}>
-                      {userData.profile?.bio || "This user hasn't added a bio yet."}
-                    </p>
-                  </div>
-                </section>
+                {isFreelancer && (
+                  <>
+                    <section className="profile-section">
+                      <h2>Professional Overview</h2>
+                      <div className="mb-4">
+                        <h4 className="fw-bold">{userData.profile?.title || "No title provided"}</h4>
+                        <p className="text-muted">
+                          <i className="bi bi-geo-alt"></i> {userData.profile?.location || "Unknown Location"}
+                        </p>
+                        <div className="h5 text-primary fw-bold">
+                          Rate: ${userData.profile?.hourly_rate || '0'}/hr
+                        </div>
+                      </div>
+                      <div className="bio-box p-3 bg-light rounded-3">
+                        <p style={{ whiteSpace: 'pre-wrap' }}>
+                          {userData.profile?.bio || "This user hasn't added a bio yet."}
+                        </p>
+                      </div>
+                    </section>
 
-                {(userData.role_id === 2 || userData.skills?.length > 0) && (
-                  <section className="profile-section">
-                    <h2>Expertise</h2>
-                    <div className="skills-manager">
-                      {userData.skills?.length > 0 ? (
-                        userData.skills.map(skill => (
-                          <span key={skill.id} className="skill-tag selected">
-                            {skill.name}
-                          </span>
-                        ))
-                      ) : (
-                        <p className="text-muted">No specific skills listed.</p>
-                      )}
-                    </div>
-                  </section>
+                    <section className="profile-section">
+                      <h2>Expertise</h2>
+                      <div className="skills-manager">
+                        {userData.skills?.length > 0 ? (
+                          userData.skills.map(skill => (
+                            <span key={skill.id} className="skill-tag selected">
+                              {skill.name}
+                            </span>
+                          ))
+                        ) : (
+                          <p className="text-muted">No specific skills listed.</p>
+                        )}
+                      </div>
+                    </section>
+                  </>
                 )}
 
                 <div className="mt-4 text-center">
