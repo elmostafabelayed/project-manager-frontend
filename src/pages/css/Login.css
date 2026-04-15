@@ -35,6 +35,13 @@
   font-size: 14px;
 }
 
+.field-error {
+  color: #A32D2D;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
 .login-input {
   width: 100%;
   padding: 10px 14px;

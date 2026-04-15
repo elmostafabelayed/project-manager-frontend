@@ -41,6 +41,13 @@
   font-size: 14px;
 }
 
+.field-error {
+  color: #A32D2D;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
 .form-group {
   margin-bottom: 14px;
 }

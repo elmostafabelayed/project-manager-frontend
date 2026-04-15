@@ -42,7 +42,7 @@ export default function CreateProject() {
             <p>Tell us what you need and find the best freelancers for the job.</p>
           </header>
 
-          {error && <div className="error-alert">{error.message || error}</div>}
+          {error && !error.errors && <div className="error-alert">{error.message || error}</div>}
 
           <form onSubmit={handleSubmit} className="project-form">
             <div className="form-group">
@@ -55,7 +55,9 @@ export default function CreateProject() {
                 onChange={handleChange}
                 placeholder="e.g. Build a Responsive Portfolio Website"
                 required
+                className={error?.errors?.title ? 'input-error' : ''}
               />
+              {error?.errors?.title && <span className="field-error">{error.errors.title[0]}</span>}
               <span className="help-text">A good title helps freelancers understand your needs at a glance.</span>
             </div>
 
@@ -71,8 +73,10 @@ export default function CreateProject() {
                   onChange={handleChange}
                   placeholder="500"
                   required
+                  className={error?.errors?.budget ? 'input-error' : ''}
                 />
               </div>
+              {error?.errors?.budget && <span className="field-error">{error.errors.budget[0]}</span>}
             </div>
 
             <div className="form-group">
@@ -85,7 +89,9 @@ export default function CreateProject() {
                 placeholder="Describe your project in detail..."
                 rows="6"
                 required
+                className={error?.errors?.description ? 'input-error' : ''}
               ></textarea>
+              {error?.errors?.description && <span className="field-error">{error.errors.description[0]}</span>}
               <span className="help-text">Include requirements, tech stack, and any specific goals.</span>
             </div>
 

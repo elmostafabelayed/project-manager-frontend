@@ -65,7 +65,7 @@ export default function SubmitProposal() {
         </div>
 
         <div className="proposal-form-card">
-          {error && <div className="alert alert-danger mb-4">{error}</div>}
+          {error && !error.errors && <div className="alert alert-danger mb-4">{error}</div>}
           
           <form onSubmit={handleSubmit}>
             <div className="form-row">
@@ -77,13 +77,14 @@ export default function SubmitProposal() {
                      type="number"
                      id="price"
                      name="price"
-                     className="form-control input-with-icon"
+                     className={`form-control input-with-icon ${error?.errors?.price ? 'input-error' : ''}`}
                      placeholder="e.g. 500"
                      value={formData.price}
                      onChange={handleInputChange}
                      min="1"
                    />
                 </div>
+                {error?.errors?.price && <span className="field-error">{error.errors.price[0]}</span>}
               </div>
 
               <div className="form-group">
@@ -94,13 +95,14 @@ export default function SubmitProposal() {
                      type="number"
                      id="duration"
                      name="duration"
-                     className="form-control input-with-icon"
+                     className={`form-control input-with-icon ${error?.errors?.duration ? 'input-error' : ''}`}
                      placeholder="e.g. 14"
                      value={formData.duration}
                      onChange={handleInputChange}
                      min="1"
                    />
                 </div>
+                {error?.errors?.duration && <span className="field-error">{error.errors.duration[0]}</span>}
               </div>
             </div>
 
@@ -109,12 +111,13 @@ export default function SubmitProposal() {
               <textarea
                 id="cover_letter"
                 name="cover_letter"
-                className="form-control"
+                className={`form-control ${error?.errors?.message ? 'input-error' : ''}`}
                 placeholder="Introduce yourself, explain why you're a good fit, and detail how you plan to complete this project..."
                 value={formData.cover_letter}
                 onChange={handleInputChange}
                 rows="6"
               />
+              {error?.errors?.message && <span className="field-error">{error.errors.message[0]}</span>}
               <small className="text-muted mt-2 d-block">
                  Write a compelling cover letter. This is your chance to stand out!
               </small>

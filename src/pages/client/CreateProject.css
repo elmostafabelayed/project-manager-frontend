@@ -138,3 +138,18 @@
   border: 1px solid #fee2e2;
   font-weight: 500;
 }
+
+.field-error {
+  color: #991b1b;
+  font-size: 13px;
+  margin-top: 4px;
+  display: block;
+}
+
+.input-error {
+  border-color: #ef4444 !important;
+}
+
+.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}

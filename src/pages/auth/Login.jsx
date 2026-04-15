@@ -43,9 +43,9 @@ export default function Login() {
           </p>
         </div>
 
-        {error && (
+        {error && !error.errors && (
           <div className="login-error">
-            {error.message || "Incorrect email or password"}
+            {error.error || error.message || "Incorrect email or password"}
           </div>
         )}
 
@@ -59,8 +59,11 @@ export default function Login() {
               onChange={handleChange}
               required
               placeholder="example@email.com"
-              className="login-input"
+              className={`login-input ${error?.errors?.email ? 'input-error' : ''}`}
             />
+            {error?.errors?.email && (
+              <span className="field-error">{error.errors.email[0]}</span>
+            )}
           </div>
 
           <div style={{ marginBottom: "24px" }}>
@@ -72,8 +75,11 @@ export default function Login() {
               onChange={handleChange}
               required
               placeholder="••••••••"
-              className="login-input"
+              className={`login-input ${error?.errors?.password ? 'input-error' : ''}`}
             />
+            {error?.errors?.password && (
+              <span className="field-error">{error.errors.password[0]}</span>
+            )}
           </div>
 
           <button type="submit" disabled={loading} className="login-button">

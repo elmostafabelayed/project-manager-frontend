@@ -23,10 +23,20 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(clearError());
+
+    if (form.password !== form.password_confirmation) {
+      // We can manually set an error here or just return and show a toast
+      return;
+    }
+
     const result = await dispatch(registerUser(form));
     if (registerUser.fulfilled.match(result)) {
       navigate("/shared/profile");
     }
+  };
+
+  const getFieldError = (field) => {
+    return error?.errors?.[field]?.[0];
   };
 
   return (
@@ -37,7 +47,7 @@ export default function Register() {
           <p>Create your account for free</p>
         </div>
 
-        {error && (
+        {error && !error.errors && (
           <div className="error-box">
             {error.message || "An error occurred"}
           </div>
@@ -53,7 +63,9 @@ export default function Register() {
               onChange={handleChange}
               required
               placeholder="Your name"
+              className={getFieldError('name') ? 'input-error' : ''}
             />
+            {getFieldError('name') && <span className="field-error">{getFieldError('name')}</span>}
           </div>
 
           <div className="form-group">
@@ -65,7 +77,9 @@ export default function Register() {
               onChange={handleChange}
               required
               placeholder="example@email.com"
+              className={getFieldError('email') ? 'input-error' : ''}
             />
+            {getFieldError('email') && <span className="field-error">{getFieldError('email')}</span>}
           </div>
 
           <div className="form-group">
@@ -77,7 +91,9 @@ export default function Register() {
               onChange={handleChange}
               required
               placeholder="••••••••"
+              className={getFieldError('password') ? 'input-error' : ''}
             />
+            {getFieldError('password') && <span className="field-error">{getFieldError('password')}</span>}
           </div>
 
           <div className="form-group">
@@ -89,7 +105,11 @@ export default function Register() {
               onChange={handleChange}
               required
               placeholder="••••••••"
+              className={form.password !== form.password_confirmation && form.password_confirmation ? 'input-error' : ''}
             />
+            {form.password !== form.password_confirmation && form.password_confirmation && (
+              <span className="field-error">Passwords do not match</span>
+            )}
           </div>
 
           <div className="role-group">
@@ -122,7 +142,7 @@ export default function Register() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || (form.password !== form.password_confirmation && form.password_confirmation)}
             className={`submit-btn ${loading ? "loading" : ""}`}
           >
             {loading ? "Registering..." : "Sign Up"}
