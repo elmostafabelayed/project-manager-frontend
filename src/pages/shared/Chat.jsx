@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Navbar from '../../components/Navbar';
 import MessageBubble from '../../components/MessageBubble';
 import chatService from '../../services/chatService';
+import api from '../../services/api';
 import toast from 'react-hot-toast';
 import './Chat.css';
 
 export default function Chat() {
   const { user } = useSelector((state) => state.auth);
+  const [searchParams] = useSearchParams();
   const [conversations, setConversations] = useState([]);
   const [activeConversation, setActiveConversation] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -30,8 +32,17 @@ export default function Chat() {
         const response = await chatService.getConversations();
         const data = response.data || response;
         setConversations(data);
-        if (data && data.length > 0) {
-          // Auto-select first conversation
+
+        await markAllMessageNotificationsRead();
+
+        const conversationIdFromUrl = searchParams.get('conversationId');
+        const initialConversation = conversationIdFromUrl
+          ? data.find((conv) => String(conv.id) === String(conversationIdFromUrl))
+          : null;
+
+        if (initialConversation) {
+          handleSelectConversation(initialConversation);
+        } else if (data && data.length > 0) {
           handleSelectConversation(data[0]);
         }
       } catch (error) {
@@ -42,7 +53,7 @@ export default function Chat() {
     };
     
     fetchConversations();
-  }, []);
+  }, [searchParams]);
 
   // Fetch messages when a conversation is selected
   const handleSelectConversation = async (conversation) => {
@@ -50,9 +61,28 @@ export default function Chat() {
     try {
       const response = await chatService.getMessages(conversation.id);
       setMessages(response.data || response);
+      await markConversationNotificationsRead(conversation.id);
       scrollToBottom();
     } catch (error) {
       console.error("Failed to load messages:", error);
+    }
+  };
+
+  const markConversationNotificationsRead = async (conversationId) => {
+    try {
+      await api.put(`/notifications/conversation/${conversationId}/read`);
+      window.dispatchEvent(new Event('messageNotificationsRead'));
+    } catch (error) {
+      console.error("Failed to mark conversation notifications read:", error);
+    }
+  };
+
+  const markAllMessageNotificationsRead = async () => {
+    try {
+      await api.put('/notifications/messages/read');
+      window.dispatchEvent(new Event('messageNotificationsRead'));
+    } catch (error) {
+      console.error("Failed to mark all message notifications read:", error);
     }
   };
 

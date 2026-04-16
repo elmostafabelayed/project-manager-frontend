@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../store/slices/authSlice";
+import NotificationDropdown from "./NotificationDropdown";
 import "./css/Navbar.css";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [messageUnreadCount, setMessageUnreadCount] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token, user, role } = useSelector((state) => state.auth);
@@ -97,7 +99,12 @@ export default function Navbar() {
                 <Link to={getDashboardLink()}>Dashboard</Link>
               </li>
               <li>
-                <Link to="/shared/chat">Messages</Link>
+                <Link to="/shared/chat" className="message-link">
+                  Messages
+                  {messageUnreadCount > 0 && (
+                    <span className="message-count-badge">{messageUnreadCount}</span>
+                  )}
+                </Link>
               </li>
             </>
           )}
@@ -114,6 +121,9 @@ export default function Navbar() {
             </>
           ) : (
             <div className="user-nav">
+              <div className="notification-wrapper">
+                <NotificationDropdown onMessageUnreadCountChange={setMessageUnreadCount} />
+              </div>
               <span className="user-name">Hello, {user?.name}</span>
               <button onClick={handleLogout} className="btn-logout">Logout</button>
             </div>
@@ -181,7 +191,15 @@ export default function Navbar() {
           {token && (
             <>
               <li><Link to={getDashboardLink()} onClick={() => setOpen(false)}>Dashboard</Link></li>
-              <li><Link to="/shared/chat" onClick={() => setOpen(false)}>Messages</Link></li>
+              <li>
+                <Link to="/shared/chat" onClick={() => setOpen(false)} className="message-link">
+                  Messages
+                  {messageUnreadCount > 0 && (
+                    <span className="message-count-badge">{messageUnreadCount}</span>
+                  )}
+                </Link>
+              </li>
+              <li><NotificationDropdown onMessageUnreadCountChange={setMessageUnreadCount} /></li>
             </>
           )}
           {role === "2" && (
