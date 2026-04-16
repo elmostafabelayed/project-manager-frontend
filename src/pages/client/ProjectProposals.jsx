@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Navbar from '../../components/Navbar';
 import proposalService from '../../services/proposalService';
+import { createProjectFromProposal } from '../../store/slices/projectSlice';
 import toast from 'react-hot-toast';
 import './ProjectProposals.css';
 
 export default function ProjectProposals() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading: projectLoading } = useSelector((state) => state.projects);
   const [proposals, setProposals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -36,12 +41,22 @@ export default function ProjectProposals() {
       setAcceptingId(proposalId);
       await proposalService.acceptProposal(proposalId);
       
-      // Update local state to reflect accepted status
+      const acceptedProposal = proposals.find(p => p.id === proposalId);
+      const projectData = {
+        proposal_id: proposalId,
+        title: acceptedProposal?.project?.title || `Project from Proposal ${proposalId}`,
+        description: acceptedProposal?.project?.description || '',
+        budget: acceptedProposal?.price || 0,
+      };
+      
+      await dispatch(createProjectFromProposal(projectData));
+      
       setProposals(proposals.map(p => 
         p.id === proposalId ? { ...p, status: 'accepted' } : p
       ));
       
-      toast.success('Proposal accepted successfully! A contract and conversation have been created.');
+      toast.success('Proposal accepted! Project created successfully.');
+      navigate('/client/dashboard');
     } catch (err) {
       console.error('Error accepting proposal:', err);
       toast.error('Failed to accept proposal.');
@@ -106,7 +121,7 @@ export default function ProjectProposals() {
 
                 <div className="proposal-cover-letter">
                   <h4>Cover Letter:</h4>
-                  <p>{proposal.cover_letter}</p>
+                  <p>{proposal.message}</p>
                 </div>
 
                 <div className="proposal-actions">
@@ -117,9 +132,9 @@ export default function ProjectProposals() {
                       <button 
                         className="btn-accept" 
                         onClick={() => handleAccept(proposal.id)}
-                        disabled={acceptingId === proposal.id}
+                        disabled={acceptingId === proposal.id || projectLoading}
                       >
-                        {acceptingId === proposal.id ? 'Accepting...' : 'Accept Offer'}
+                        {acceptingId === proposal.id ? 'Accepting...' : projectLoading ? 'Creating Project...' : 'Accept Offer'}
                       </button>
                       {/* Note: we might want a full view to read the entire cover letter */}
                       <button className="btn-view">View Details</button>

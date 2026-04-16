@@ -25,6 +25,18 @@ export const createProject = createAsyncThunk(
   }
 )
 
+export const createProjectFromProposal = createAsyncThunk(
+  'projects/createFromProposal',
+  async (proposalData, { rejectWithValue }) => {
+    try {
+      const res = await projectService.createProjectFromProposal(proposalData)
+      return res.data
+    } catch (err) {
+      return rejectWithValue(err.response?.data || 'Failed to create project from proposal')
+    }
+  }
+)
+
 const projectSlice = createSlice({
   name: 'projects',
   initialState: {
@@ -55,6 +67,17 @@ const projectSlice = createSlice({
         state.items.unshift(action.payload)
       })
       .addCase(createProject.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+      })
+      .addCase(createProjectFromProposal.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(createProjectFromProposal.fulfilled, (state, action) => {
+        state.loading = false
+        state.items.unshift(action.payload)
+      })
+      .addCase(createProjectFromProposal.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })
