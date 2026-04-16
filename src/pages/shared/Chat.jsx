@@ -16,6 +16,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
+  const [mobileShowSidebar, setMobileShowSidebar] = useState(true);
   
   const messagesEndRef = useRef(null);
 
@@ -58,6 +59,7 @@ export default function Chat() {
   // Fetch messages when a conversation is selected
   const handleSelectConversation = async (conversation) => {
     setActiveConversation(conversation);
+    setMobileShowSidebar(false);
     try {
       const response = await chatService.getMessages(conversation.id);
       setMessages(response.data || response);
@@ -131,7 +133,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="chat-page-container">
+    <div className="chat-page-container mt-5">
       <Navbar />
       <div className="chat-wrapper">
         

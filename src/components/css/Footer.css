@@ -46,18 +46,42 @@
 }
 
 .footer-links a:hover {
-  color: #38bdf8;
+  color: #185fa5;
 }
 
 .footer-bottom {
-  border-top: 1px solid #1e293b;
-  padding-top: 15px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  padding-top: 20px;
   text-align: center;
   font-size: 14px;
-  color: #000000;
+  color: #475569;
 }
 
 .footer-logo {
   width: 120px;
   margin-bottom: 15px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .footer {
+    padding: 40px 15px 20px;
+  }
+  .footer-links {
+    gap: 30px;
+    justify-content: space-around;
+  }
+}
+
+@media (max-width: 576px) {
+  .footer-brand p {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+  .footer-links {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 25px;
+  }
 }

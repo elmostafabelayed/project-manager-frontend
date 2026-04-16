@@ -144,7 +144,7 @@ export default function Navbar() {
 
         <ul>
           {(!role || role === "1") && (
-            <li className="nav-item dropdown">
+            <li className="nav-item dropdown sidebar-dropdown">
               <a className="nav-link dropdown-toggle" href="#" id="hireDropdown">
                 Hire freelancers
               </a>
@@ -160,7 +160,7 @@ export default function Navbar() {
           )}
 
           {(!role || role === "2") && (
-            <li className="nav-item dropdown">
+            <li className="nav-item dropdown sidebar-dropdown">
               <a className="nav-link dropdown-toggle" href="#" id="workDropdown">
                 Find work
               </a>
@@ -176,7 +176,7 @@ export default function Navbar() {
           )}
 
           {role === "3" && (
-            <li className="nav-item dropdown">
+            <li className="nav-item dropdown sidebar-dropdown">
               <a className="nav-link dropdown-toggle" href="#">
                 Admin Management
               </a>
@@ -188,8 +188,11 @@ export default function Navbar() {
             </li>
           )}
 
-          {token && (
+          {token ? (
             <>
+              {role === "2" && (
+                <li><Link to="/freelancer/browse-projects" onClick={() => setOpen(false)}>Browse Projects</Link></li>
+              )}
               <li><Link to={getDashboardLink()} onClick={() => setOpen(false)}>Dashboard</Link></li>
               <li>
                 <Link to="/shared/chat" onClick={() => setOpen(false)} className="message-link">
@@ -199,26 +202,27 @@ export default function Navbar() {
                   )}
                 </Link>
               </li>
-              <li><NotificationDropdown onMessageUnreadCountChange={setMessageUnreadCount} /></li>
+              <li className="sidebar-notifications">
+                <span>Notifications</span>
+                <NotificationDropdown onMessageUnreadCountChange={setMessageUnreadCount} />
+              </li>
             </>
-          )}
-          {role === "2" && (
-            <li><Link to="/freelancer/browse-projects" onClick={() => setOpen(false)}>Browse Projects</Link></li>
-          )}
+          ) : null}
           <li><Link to="/shared/aboutUs" onClick={() => setOpen(false)}>About Us</Link></li>
           <li><Link to="/shared/contact" onClick={() => setOpen(false)}>Contact</Link></li>
         </ul>
 
-        <hr />
-
-        <div className="auth-links">
-          {!token ? (
-            <>
-              <Link to="/auth/login" onClick={() => setOpen(false)}>Log in</Link>
-              <Link to="/auth/register" onClick={() => setOpen(false)}>Sign up</Link>
-            </>
+        <div className="sidebar-footer">
+          {token ? (
+            <div className="sidebar-user-info">
+               <span className="sidebar-user-name">Logged in as: <strong>{user?.name}</strong></span>
+               <button onClick={handleLogout} className="btn-logout-sidebar">Logout</button>
+            </div>
           ) : (
-            <button onClick={handleLogout} className="btn-logout-sidebar">Logout</button>
+            <div className="auth-links">
+              <Link to="/auth/login" onClick={() => setOpen(false)}>Log in</Link>
+              <Link to="/auth/register" onClick={() => setOpen(false)} className="btn-signup-sidebar">Sign up</Link>
+            </div>
           )}
         </div>
       </div>

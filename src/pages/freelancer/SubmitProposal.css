@@ -112,9 +112,37 @@ textarea.form-control {
 }
 
 @media (max-width: 768px) {
+  .submit-proposal-container {
+    padding: 1rem;
+    padding-top: 80px;
+  }
+  .proposal-form-card {
+    padding: 1.5rem;
+  }
   .form-row {
     flex-direction: column;
     gap: 1.5rem;
+  }
+  .submit-header h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .submit-header h1 {
+    font-size: 1.25rem;
+  }
+  .submit-header p {
+    font-size: 1rem;
+  }
+  .btn-submit {
+    width: 100% !important;
+    padding: 12px;
+  }
+  .d-flex.justify-content-between {
+    flex-direction: column-reverse;
+    gap: 15px;
+    align-items: center !important;
   }
 }
 

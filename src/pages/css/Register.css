@@ -135,3 +135,24 @@
   font-weight: 600;
   text-decoration: none;
 }
+
+.register-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Responsiveness */
+@media (max-width: 576px) {
+  .register-card {
+    padding: 0 20px 30px 20px;
+    margin: 40px 15px 15px 15px;
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+  }
+  .register-header img {
+    height: 100px;
+  }
+  .role-options {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

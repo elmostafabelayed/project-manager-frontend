@@ -187,3 +187,30 @@
   color: #6c757d;
   font-size: 1.1rem;
 }
+@media (max-width: 768px) {
+  .proposals-container {
+    padding: 1rem;
+    padding-top: 80px;
+  }
+  .proposals-list {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .proposal-card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .proposals-header h1 {
+    font-size: 1.5rem;
+  }
+  .proposal-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .btn-accept, .btn-view {
+    width: 100%;
+    margin-right: 0;
+  }
+}

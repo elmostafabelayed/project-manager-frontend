@@ -497,23 +497,60 @@
 @media (max-width: 992px) {
   .fl-dashboard-content {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .fl-dashboard-sidebar {
-    display: none;
+    display: block;
+    position: static;
+    padding: 20px;
+    margin-bottom: 0;
+  }
+
+  .fl-user-profile {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    justify-content: center;
+  }
+
+  .fl-dash-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .fl-nav-link {
+    padding: 8px 12px;
+    font-size: 13px;
   }
 
   .fl-dash-header {
     flex-direction: column;
     align-items: flex-start;
   }
-}
 
-@media (max-width: 600px) {
   .fl-dashboard-container {
     padding-top: 80px;
   }
+}
 
+@media (max-width: 768px) {
+  .fl-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .fl-stat-card {
+    padding: 16px;
+  }
+
+  .fl-stat-value {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 600px) {
   .fl-stats-grid {
     grid-template-columns: 1fr;
   }
@@ -526,5 +563,21 @@
 
   .fl-section-card {
     padding: 20px 16px;
+  }
+
+  .fl-btn-browse {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .fl-project-card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .fl-btn-apply {
+    width: 100%;
+    text-align: center;
   }
 }

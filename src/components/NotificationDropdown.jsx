@@ -29,9 +29,7 @@ export default function NotificationDropdown({ onMessageUnreadCountChange }) {
   const fetchNotifications = useCallback(async () => {
     if (!token) return;
     try {
-      console.log("Calling API: /notifications");
       const response = await api.get("/notifications");
-      console.log("Notifications response:", response.data);
       updateCounts(response.data);
     } catch (error) {
       console.error("Error fetching notifications:", error);
@@ -40,14 +38,12 @@ export default function NotificationDropdown({ onMessageUnreadCountChange }) {
 
   useEffect(() => {
     if (token) {
-      console.log("Fetching notifications...");
       fetchNotifications();
     }
   }, [token]);
 
   useEffect(() => {
     const refreshNotifications = () => {
-      console.log("Refreshing notifications from event...");
       fetchNotifications();
     };
     window.addEventListener('notificationsUpdated', refreshNotifications);

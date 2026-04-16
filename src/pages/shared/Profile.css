@@ -109,3 +109,21 @@
     grid-template-columns: 1fr;
   }
 }
+@media (max-width: 576px) {
+  .profile-container {
+    padding: 1rem;
+  }
+  .profile-header {
+    padding: 1.5rem;
+  }
+  .profile-avatar-large {
+    width: 90px;
+    height: 90px;
+  }
+  .profile-header-info h1 {
+    font-size: 1.5rem;
+  }
+  .profile-body {
+    padding: 1.25rem;
+  }
+}
