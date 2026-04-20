@@ -13,7 +13,7 @@ export default function ProjectCard({ project }) {
       </div>
       <h3 className="project-title">{project.title}</h3>
       <p className="project-desc">
-        {project.description?.substring(0, 120)}...
+        {project.description?.substring(0, 30)}...
       </p>
       <div className="project-footer">
         <div className="project-client">
