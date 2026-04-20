@@ -18,6 +18,7 @@ export default function Profile() {
   const [allSkills, setAllSkills] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   
   const [isEditMode, setIsEditMode] = useState(false);
   
@@ -236,19 +237,83 @@ export default function Profile() {
                 {isFreelancer && (
                   <section className="profile-section">
                     <h2>Skills & Expertise</h2>
-                    <p className="text-muted small mb-3">Select the skills that match your expertise.</p>
-                    <div className="skills-manager">
-                      {allSkills.map(skill => (
-                        <span 
-                          key={skill.id} 
-                          className={`skill-tag clickable ${selectedSkills.includes(skill.id) ? 'selected' : ''}`}
-                          onClick={() => toggleSkill(skill.id)}
-                        >
-                          {skill.name}
-                          {selectedSkills.includes(skill.id) && <span>✓</span>}
-                        </span>
-                      ))}
-                    </div>
+                    {!selectedCategory ? (
+                      <>
+                        <p className="text-muted small mb-3">Choose a category to find your skills:</p>
+                        <div className="category-selection-grid">
+                          {[
+                            'Design & creative',
+                            'Developpement & tech',
+                            'AI & emerging tech',
+                            'Markeing',
+                            'Writing & content',
+                            'Adming & support'
+                          ].map(cat => (
+                            <div 
+                              key={cat} 
+                              className="category-card"
+                              onClick={() => setSelectedCategory(cat)}
+                            >
+                              <div className="category-card-icon">
+                                {cat === 'Design & creative' && '🎨'}
+                                {cat === 'Developpement & tech' && '💻'}
+                                {cat === 'AI & emerging tech' && '🤖'}
+                                {cat === 'Markeing' && '📈'}
+                                {cat === 'Writing & content' && '✍️'}
+                                {cat === 'Adming & support' && '🛠️'}
+                              </div>
+                              <div className="category-card-name">{cat}</div>
+                              <div className="category-card-count">
+                                {allSkills.filter(s => s.category === cat).length} skills
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="d-flex align-items-center mb-3">
+                          <button 
+                            type="button" 
+                            className="btn btn-link p-0 me-3 text-decoration-none"
+                            onClick={() => setSelectedCategory(null)}
+                          >
+                            ← All Categories
+                          </button>
+                          <h4 className="mb-0">{selectedCategory}</h4>
+                        </div>
+                        <div className="skills-manager">
+                          {allSkills
+                            .filter(skill => skill.category === selectedCategory)
+                            .map(skill => (
+                              <span 
+                                key={skill.id} 
+                                className={`skill-tag clickable ${selectedSkills.includes(skill.id) ? 'selected' : ''}`}
+                                onClick={() => toggleSkill(skill.id)}
+                              >
+                                {skill.name}
+                                {selectedSkills.includes(skill.id) && <span>✓</span>}
+                              </span>
+                            ))}
+                        </div>
+                      </>
+                    )}
+                    
+                    {selectedSkills.length > 0 && (
+                      <div className="mt-4">
+                        <h6>Your Selected Skills ({selectedSkills.length})</h6>
+                        <div className="selected-skills-summary">
+                          {allSkills
+                            .filter(s => selectedSkills.includes(s.id))
+                            .map(skill => (
+                              <span key={skill.id} className="skill-tag selected">
+                                {skill.name}
+                                <span className="ms-2 clickable" onClick={() => toggleSkill(skill.id)}>×</span>
+                              </span>
+                            ))}
+                        </div>
+                      </div>
+                    )}
                   </section>
                 )}
 
