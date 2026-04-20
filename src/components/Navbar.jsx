@@ -11,6 +11,21 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token, user, role } = useSelector((state) => state.auth);
+  const [activeDropdown, setActiveDropdown] = React.useState(null);
+
+  const toggleDropdown = (name) => {
+    setActiveDropdown(activeDropdown === name ? null : name);
+  };
+
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".nav-item.dropdown") && !event.target.closest(".sidebar-dropdown")) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -41,11 +56,15 @@ export default function Navbar() {
         <ul className="navbar-links">
           {/* Hire freelancers Dropdown - Visible to guests and Clients */}
           {(!role || role === "1") && (
-            <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" href="#">
+            <li className={`nav-item dropdown ${activeDropdown === 'hire' ? 'show' : ''}`}>
+              <a 
+                className="nav-link dropdown-toggle" 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); toggleDropdown('hire'); }}
+              >
                 Hire freelancers
               </a>
-              <ul className="dropdown-menu">
+              <ul className={`dropdown-menu ${activeDropdown === 'hire' ? 'show' : ''}`}>
                 <li><a className="dropdown-item" href="#">Design & creative</a></li>
                 <li><a className="dropdown-item" href="#">Developpement & tech</a></li>
                 <li><a className="dropdown-item" href="#">AI & emerging tech</a></li>
@@ -58,11 +77,15 @@ export default function Navbar() {
 
           {/* Find work Dropdown - Visible to guests and Freelancers */}
           {(!role || role === "2") && (
-            <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" href="#">
+            <li className={`nav-item dropdown ${activeDropdown === 'work' ? 'show' : ''}`}>
+              <a 
+                className="nav-link dropdown-toggle" 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); toggleDropdown('work'); }}
+              >
                 Find work
               </a>
-              <ul className="dropdown-menu">
+              <ul className={`dropdown-menu ${activeDropdown === 'work' ? 'show' : ''}`}>
                 <li><a className="dropdown-item" href="#">Design & creative jobs</a></li>
                 <li><a className="dropdown-item" href="#">Developpement & tech jobs</a></li>
                 <li><a className="dropdown-item" href="#">AI & emerging tech jobs</a></li>
@@ -75,14 +98,18 @@ export default function Navbar() {
 
           {/* Admin Panel - Visible to Admin */}
           {role === "3" && (
-            <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" href="#">
+            <li className={`nav-item dropdown ${activeDropdown === 'admin' ? 'show' : ''}`}>
+              <a 
+                className="nav-link dropdown-toggle" 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); toggleDropdown('admin'); }}
+              >
                 Admin Panel
               </a>
-              <ul className="dropdown-menu">
-                <li><Link className="dropdown-item" to="/admin/manage-users">Manage Users</Link></li>
-                <li><Link className="dropdown-item" to="/admin/manage-projects">Manage Projects</Link></li>
-                <li><Link className="dropdown-item" to="/admin/dashboard">Platform Stats</Link></li>
+              <ul className={`dropdown-menu ${activeDropdown === 'admin' ? 'show' : ''}`}>
+                <li><Link className="dropdown-item" to="/admin/manage-users" onClick={() => setActiveDropdown(null)}>Manage Users</Link></li>
+                <li><Link className="dropdown-item" to="/admin/manage-projects" onClick={() => setActiveDropdown(null)}>Manage Projects</Link></li>
+                <li><Link className="dropdown-item" to="/admin/dashboard" onClick={() => setActiveDropdown(null)}>Platform Stats</Link></li>
               </ul>
             </li>
           )}
@@ -144,33 +171,41 @@ export default function Navbar() {
 
         <ul>
           {(!role || role === "1") && (
-            <li className="nav-item dropdown sidebar-dropdown">
-              <a className="nav-link dropdown-toggle" href="#" id="hireDropdown">
+            <li className={`nav-item dropdown sidebar-dropdown ${activeDropdown === 'sidebar-hire' ? 'show' : ''}`}>
+              <a 
+                className="nav-link dropdown-toggle" 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); toggleDropdown('sidebar-hire'); }}
+              >
                 Hire freelancers
               </a>
-              <ul className="dropdown-menu">
-                <li><Link className="dropdown-item" to="/freelancer/design">Design & Creative</Link></li>
-                <li><Link className="dropdown-item" to="/freelancer/development">Development & Tech</Link></li>
-                <li><Link className="dropdown-item" to="/freelancer/ai">AI & Emerging Tech</Link></li>
-                <li><Link className="dropdown-item" to="/freelancer/marketing">Marketing</Link></li>
-                <li><Link className="dropdown-item" to="/freelancer/writing">Writing & Content</Link></li>
-                <li><Link className="dropdown-item" to="/freelancer/admin">Admin & Support</Link></li>
+              <ul className={`dropdown-menu ${activeDropdown === 'sidebar-hire' ? 'show' : ''}`}>
+                <li><Link className="dropdown-item" to="/freelancer/design" onClick={() => setOpen(false)}>Design & Creative</Link></li>
+                <li><Link className="dropdown-item" to="/freelancer/development" onClick={() => setOpen(false)}>Development & Tech</Link></li>
+                <li><Link className="dropdown-item" to="/freelancer/ai" onClick={() => setOpen(false)}>AI & Emerging Tech</Link></li>
+                <li><Link className="dropdown-item" to="/freelancer/marketing" onClick={() => setOpen(false)}>Marketing</Link></li>
+                <li><Link className="dropdown-item" to="/freelancer/writing" onClick={() => setOpen(false)}>Writing & Content</Link></li>
+                <li><Link className="dropdown-item" to="/freelancer/admin" onClick={() => setOpen(false)}>Admin & Support</Link></li>
               </ul>
             </li>
           )}
 
           {(!role || role === "2") && (
-            <li className="nav-item dropdown sidebar-dropdown">
-              <a className="nav-link dropdown-toggle" href="#" id="workDropdown">
+            <li className={`nav-item dropdown sidebar-dropdown ${activeDropdown === 'sidebar-work' ? 'show' : ''}`}>
+              <a 
+                className="nav-link dropdown-toggle" 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); toggleDropdown('sidebar-work'); }}
+              >
                 Find work
               </a>
-              <ul className="dropdown-menu">
-                <li><Link className="dropdown-item" to="/jobs/design">Design & Creative Jobs</Link></li>
-                <li><Link className="dropdown-item" to="/jobs/development">Development & Tech Jobs</Link></li>
-                <li><Link className="dropdown-item" to="/jobs/ai">AI & Emerging Tech Jobs</Link></li>
-                <li><Link className="dropdown-item" to="/jobs/marketing">Marketing Jobs</Link></li>
-                <li><Link className="dropdown-item" to="/jobs/writing">Writing & Content Jobs</Link></li>
-                <li><Link className="dropdown-item" to="/jobs/admin">Admin & Support Jobs</Link></li>
+              <ul className={`dropdown-menu ${activeDropdown === 'sidebar-work' ? 'show' : ''}`}>
+                <li><Link className="dropdown-item" to="/jobs/design" onClick={() => setOpen(false)}>Design & Creative Jobs</Link></li>
+                <li><Link className="dropdown-item" to="/jobs/development" onClick={() => setOpen(false)}>Development & Tech Jobs</Link></li>
+                <li><Link className="dropdown-item" to="/jobs/ai" onClick={() => setOpen(false)}>AI & Emerging Tech Jobs</Link></li>
+                <li><Link className="dropdown-item" to="/jobs/marketing" onClick={() => setOpen(false)}>Marketing Jobs</Link></li>
+                <li><Link className="dropdown-item" to="/jobs/writing" onClick={() => setOpen(false)}>Writing & Content Jobs</Link></li>
+                <li><Link className="dropdown-item" to="/jobs/admin" onClick={() => setOpen(false)}>Admin & Support Jobs</Link></li>
               </ul>
             </li>
           )}
