@@ -68,9 +68,8 @@ export default function Navbar() {
                 <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Design & creative")}`} onClick={() => setActiveDropdown(null)}>Design & creative</Link></li>
                 <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Developpement & tech")}`} onClick={() => setActiveDropdown(null)}>Developpement & tech</Link></li>
                 <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("AI & emerging tech")}`} onClick={() => setActiveDropdown(null)}>AI & emerging tech</Link></li>
-                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Markeing")}`} onClick={() => setActiveDropdown(null)}>Markeing</Link></li>
-                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Writing & content")}`} onClick={() => setActiveDropdown(null)}>Writing & content</Link></li>
-                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Adming & support")}`} onClick={() => setActiveDropdown(null)}>Adming & support</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Marketing")}`} onClick={() => setActiveDropdown(null)}>Marketing</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Admin & support")}`} onClick={() => setActiveDropdown(null)}>Admin & support</Link></li>
               </ul>
             </li>
           )}
@@ -86,12 +85,12 @@ export default function Navbar() {
                 Find work
               </a>
               <ul className={`dropdown-menu ${activeDropdown === 'work' ? 'show' : ''}`}>
-                <li><a className="dropdown-item" href="#">Design & creative jobs</a></li>
-                <li><a className="dropdown-item" href="#">Developpement & tech jobs</a></li>
-                <li><a className="dropdown-item" href="#">AI & emerging tech jobs</a></li>
-                <li><a className="dropdown-item" href="#">Markeing jobs</a></li>
-                <li><a className="dropdown-item" href="#">Writing & content jobs</a></li>
-                <li><a className="dropdown-item" href="#">Adming & support jobs</a></li>
+                <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("Design & creative")}`} onClick={() => setActiveDropdown(null)}>Design & creative jobs</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("Developpement & tech")}`} onClick={() => setActiveDropdown(null)}>Developpement & tech jobs</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("AI & emerging tech")}`} onClick={() => setActiveDropdown(null)}>AI & emerging tech jobs</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("Marketing")}`} onClick={() => setActiveDropdown(null)}>Marketing jobs</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("Writing & content")}`} onClick={() => setActiveDropdown(null)}>Writing & content jobs</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("Admin & support")}`} onClick={() => setActiveDropdown(null)}>Admin & support jobs</Link></li>
               </ul>
             </li>
           )}
@@ -183,9 +182,9 @@ export default function Navbar() {
                 <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Design & creative")}`} onClick={() => setOpen(false)}>Design & Creative</Link></li>
                 <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Developpement & tech")}`} onClick={() => setOpen(false)}>Development & Tech</Link></li>
                 <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("AI & emerging tech")}`} onClick={() => setOpen(false)}>AI & Emerging Tech</Link></li>
-                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Markeing")}`} onClick={() => setOpen(false)}>Marketing</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Marketing")}`} onClick={() => setOpen(false)}>Marketing</Link></li>
                 <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Writing & content")}`} onClick={() => setOpen(false)}>Writing & Content</Link></li>
-                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Adming & support")}`} onClick={() => setOpen(false)}>Admin & Support</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Admin & support")}`} onClick={() => setOpen(false)}>Admin & Support</Link></li>
               </ul>
             </li>
           )}
@@ -200,12 +199,12 @@ export default function Navbar() {
                 Find work
               </a>
               <ul className={`dropdown-menu ${activeDropdown === 'sidebar-work' ? 'show' : ''}`}>
-                <li><Link className="dropdown-item" to="/jobs/design" onClick={() => setOpen(false)}>Design & Creative Jobs</Link></li>
-                <li><Link className="dropdown-item" to="/jobs/development" onClick={() => setOpen(false)}>Development & Tech Jobs</Link></li>
-                <li><Link className="dropdown-item" to="/jobs/ai" onClick={() => setOpen(false)}>AI & Emerging Tech Jobs</Link></li>
-                <li><Link className="dropdown-item" to="/jobs/marketing" onClick={() => setOpen(false)}>Marketing Jobs</Link></li>
-                <li><Link className="dropdown-item" to="/jobs/writing" onClick={() => setOpen(false)}>Writing & Content Jobs</Link></li>
-                <li><Link className="dropdown-item" to="/jobs/admin" onClick={() => setOpen(false)}>Admin & Support Jobs</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("Design & creative")}`} onClick={() => setOpen(false)}>Design & Creative Jobs</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("Developpement & tech")}`} onClick={() => setOpen(false)}>Development & Tech Jobs</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("AI & emerging tech")}`} onClick={() => setOpen(false)}>AI & Emerging Tech Jobs</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("Marketing")}`} onClick={() => setOpen(false)}>Marketing Jobs</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("Writing & content")}`} onClick={() => setOpen(false)}>Writing & Content Jobs</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("Admin & support")}`} onClick={() => setOpen(false)}>Admin & Support Jobs</Link></li>
               </ul>
             </li>
           )}

@@ -91,12 +91,12 @@ export default function CreateProject() {
                 className={error?.errors?.category ? 'input-error' : ''}
               >
                 <option value="" disabled>Select a category</option>
-                <option value="design">Design & creative</option>
-                <option value="development">Developpement & tech</option>
-                <option value="ai">AI & emerging tech</option>
-                <option value="marketing">Markeing</option>
-                <option value="writing">Writing & content</option>
-                <option value="admin">Adming & support</option>
+                <option value="Design & creative">Design & creative</option>
+                <option value="Developpement & tech">Developpement & tech</option>
+                <option value="AI & emerging tech">AI & emerging tech</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Writing & content">Writing & content</option>
+                <option value="Admin & support">Admin & support</option>
               </select>
               {error?.errors?.category && <span className="field-error">{error.errors.category[0]}</span>}
             </div>

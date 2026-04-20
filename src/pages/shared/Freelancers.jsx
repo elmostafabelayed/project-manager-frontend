@@ -1,31 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import profileService from '../../services/profileService';
 import './Freelancers.css';
 
 export default function Freelancers() {
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const categoryFromUrl = queryParams.get('category');
 
   const [freelancers, setFreelancers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState(categoryFromUrl || '');
+  const [category, setCategory] = useState(categoryFromUrl);
 
   const categories = [
     'Design & creative',
     'Developpement & tech',
     'AI & emerging tech',
-    'Markeing',
+    'Marketing',
     'Writing & content',
-    'Adming & support'
+    'Admin & support'
   ];
 
   useEffect(() => {
     const fetchFreelancers = async () => {
       try {
         setLoading(true);
-        const data = await profileService.getFreelancers(category);
+        const data = await profileService.getFreelancers(category || '');
         setFreelancers(data);
       } catch (error) {
         console.error("Error fetching freelancers:", error);
@@ -37,11 +38,17 @@ export default function Freelancers() {
     fetchFreelancers();
   }, [category]);
 
+  const handleCategoryChange = (cat) => {
+    if (cat) {
+      navigate(`/shared/freelancers?category=${encodeURIComponent(cat)}`);
+    } else {
+      navigate('/shared/freelancers');
+    }
+  };
+
   // Update category when URL changes
   useEffect(() => {
-    if (categoryFromUrl !== category) {
-      setCategory(categoryFromUrl || '');
-    }
+    setCategory(categoryFromUrl);
   }, [categoryFromUrl]);
 
   return (
@@ -61,7 +68,7 @@ export default function Freelancers() {
                 <div className="category-list">
                   <button 
                     className={`category-btn ${!category ? 'active' : ''}`}
-                    onClick={() => setCategory('')}
+                    onClick={() => handleCategoryChange('')}
                   >
                     All Categories
                   </button>
@@ -69,7 +76,7 @@ export default function Freelancers() {
                     <button 
                       key={cat}
                       className={`category-btn ${category === cat ? 'active' : ''}`}
-                      onClick={() => setCategory(cat)}
+                      onClick={() => handleCategoryChange(cat)}
                     >
                       {cat}
                     </button>

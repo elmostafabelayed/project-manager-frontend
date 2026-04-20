@@ -5,20 +5,22 @@ import './ProjectCard.css';
 export default function ProjectCard({ project }) {
   if (!project) return null; // Or return a skeleton/placeholder
 
-  const categoryLabels = {
-    design: "Design & Creative",
-    development: "Development & Tech",
-    ai: "AI & Emerging Tech",
-    marketing: "Marketing",
-    writing: "Writing & Content",
-    admin: "Admin & Support"
+  const categoryMapping = {
+    "Design & creative": { slug: "design", label: "Design & Creative" },
+    "Developpement & tech": { slug: "development", label: "Development & Tech" },
+    "AI & emerging tech": { slug: "ai", label: "AI & Emerging Tech" },
+    "Marketing": { slug: "marketing", label: "Marketing" },
+    "Writing & content": { slug: "writing", label: "Writing & Content" },
+    "Admin & support": { slug: "admin", label: "Admin & Support" }
   };
+
+  const categoryInfo = categoryMapping[project.category] || { slug: "default", label: project.category || "General" };
 
   return (
     <div className="project-card">
       <div className="project-card-header">
-        <span className={`project-category cat-${project.category || 'default'}`}>
-          {categoryLabels[project.category] || project.category || 'Web Development'}
+        <span className={`project-category cat-${categoryInfo.slug}`}>
+          {categoryInfo.label}
         </span>
         <span className="project-budget">${project.budget}</span>
       </div>

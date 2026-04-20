@@ -2,8 +2,8 @@ import api from './api';
 
 const projectService = {
   // Get all projects for browse page
-  getAllProjects: async () => {
-    const response = await api.get('/projects');
+  getAllProjects: async (category) => {
+    const response = await api.get('/projects', { params: { category } });
     return response.data;
   },
 
