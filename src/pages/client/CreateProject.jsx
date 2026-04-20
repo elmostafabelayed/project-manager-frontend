@@ -13,6 +13,7 @@ export default function CreateProject() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    category: '',
     budget: '',
   });
 
@@ -77,6 +78,27 @@ export default function CreateProject() {
                 />
               </div>
               {error?.errors?.budget && <span className="field-error">{error.errors.budget[0]}</span>}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="category">Category</label>
+              <select
+                id="category"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required
+                className={error?.errors?.category ? 'input-error' : ''}
+              >
+                <option value="" disabled>Select a category</option>
+                <option value="design">Design & creative</option>
+                <option value="development">Developpement & tech</option>
+                <option value="ai">AI & emerging tech</option>
+                <option value="marketing">Markeing</option>
+                <option value="writing">Writing & content</option>
+                <option value="admin">Adming & support</option>
+              </select>
+              {error?.errors?.category && <span className="field-error">{error.errors.category[0]}</span>}
             </div>
 
             <div className="form-group">

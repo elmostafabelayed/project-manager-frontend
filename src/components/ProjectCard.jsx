@@ -5,10 +5,21 @@ import './ProjectCard.css';
 export default function ProjectCard({ project }) {
   if (!project) return null; // Or return a skeleton/placeholder
 
+  const categoryLabels = {
+    design: "Design & Creative",
+    development: "Development & Tech",
+    ai: "AI & Emerging Tech",
+    marketing: "Marketing",
+    writing: "Writing & Content",
+    admin: "Admin & Support"
+  };
+
   return (
     <div className="project-card">
       <div className="project-card-header">
-        <span className="project-category">Web Development</span>
+        <span className={`project-category cat-${project.category || 'default'}`}>
+          {categoryLabels[project.category] || project.category || 'Web Development'}
+        </span>
         <span className="project-budget">${project.budget}</span>
       </div>
       <h3 className="project-title">{project.title}</h3>
