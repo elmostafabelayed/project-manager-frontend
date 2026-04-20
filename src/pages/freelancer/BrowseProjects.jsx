@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProjects } from '../../store/slices/projectSlice';
 import { fetchMyProposals } from '../../store/slices/proposalSlice';
@@ -10,6 +10,7 @@ export default function BrowseProjects() {
   const dispatch = useDispatch();
   const { items: projects, loading: projectsLoading, error } = useSelector((state) => state.projects);
   const { items: proposals, loading: proposalsLoading } = useSelector((state) => state.proposals);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     dispatch(fetchProjects());
@@ -22,6 +23,12 @@ export default function BrowseProjects() {
   const appliedProjectIds = (proposals || []).map(p => p.project_id);
   const availableProjects = projects.filter(p => !appliedProjectIds.includes(p.id));
 
+  // Filter available projects based on search term
+  const filteredProjects = availableProjects.filter(project => 
+    project.title?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    project.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="browse-projects-container">
       <Navbar />
@@ -33,7 +40,13 @@ export default function BrowseProjects() {
             <p>Find the perfect opportunity to showcase your skills.</p>
             
             <div className="search-bar-wrapper">
-              <input type="text" placeholder="Search projects (e.g. React, Laravel, Design)..." className="search-input" />
+              <input 
+                type="text" 
+                placeholder="Search projects by title or description..." 
+                className="search-input" 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
               <button className="btn-search">Search</button>
             </div>
           </div>
@@ -61,8 +74,14 @@ export default function BrowseProjects() {
               </div>
             )}
 
+            {!loading && availableProjects.length > 0 && filteredProjects.length === 0 && (
+              <div className="empty-state">
+                <p>No projects found matching "<strong>{searchTerm}</strong>". Try a different keyword.</p>
+              </div>
+            )}
+
             <div className="projects-grid">
-              {availableProjects.map((project) => (
+              {filteredProjects.map((project) => (
                 <ProjectCard key={project.id} project={project} />
               ))}
             </div>
