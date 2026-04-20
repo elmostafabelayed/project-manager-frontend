@@ -24,6 +24,7 @@ import Review   from '../pages/shared/Review'
 import AdminDashboard   from '../pages/admin/Dashboard'
 import ManageUsers      from '../pages/admin/ManageUsers'
 import ManageProjects   from '../pages/admin/ManageProjects'
+import Freelancers      from '../pages/shared/Freelancers'
 
 export default function AppRoutes() {
   return (
@@ -96,6 +97,7 @@ export default function AppRoutes() {
       <Route path="/shared/aboutUs" element={<AboutUs />} />
       <Route path="/shared/contact" element={<Contact />} />
       <Route path="/shared/review" element={<Review />} />
+      <Route path="/shared/freelancers" element={<Freelancers />} />
 
       {/* Admin */}
       <Route path="/admin/dashboard" element={

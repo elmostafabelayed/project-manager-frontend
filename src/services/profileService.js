@@ -18,6 +18,12 @@ const profileService = {
   getPublicProfile: async (id) => {
     const response = await api.get(`/users/${id}/profile`);
     return response.data;
+  },
+
+  // List freelancers with optional category filter
+  getFreelancers: async (category) => {
+    const response = await api.get('/freelancers', { params: { category } });
+    return response.data;
   }
 };
 

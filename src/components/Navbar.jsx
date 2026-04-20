@@ -65,12 +65,12 @@ export default function Navbar() {
                 Hire freelancers
               </a>
               <ul className={`dropdown-menu ${activeDropdown === 'hire' ? 'show' : ''}`}>
-                <li><a className="dropdown-item" href="#">Design & creative</a></li>
-                <li><a className="dropdown-item" href="#">Developpement & tech</a></li>
-                <li><a className="dropdown-item" href="#">AI & emerging tech</a></li>
-                <li><a className="dropdown-item" href="#">Markeing</a></li>
-                <li><a className="dropdown-item" href="#">Writing & content</a></li>
-                <li><a className="dropdown-item" href="#">Adming & support</a></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Design & creative")}`} onClick={() => setActiveDropdown(null)}>Design & creative</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Developpement & tech")}`} onClick={() => setActiveDropdown(null)}>Developpement & tech</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("AI & emerging tech")}`} onClick={() => setActiveDropdown(null)}>AI & emerging tech</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Markeing")}`} onClick={() => setActiveDropdown(null)}>Markeing</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Writing & content")}`} onClick={() => setActiveDropdown(null)}>Writing & content</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Adming & support")}`} onClick={() => setActiveDropdown(null)}>Adming & support</Link></li>
               </ul>
             </li>
           )}
@@ -180,12 +180,12 @@ export default function Navbar() {
                 Hire freelancers
               </a>
               <ul className={`dropdown-menu ${activeDropdown === 'sidebar-hire' ? 'show' : ''}`}>
-                <li><Link className="dropdown-item" to="/freelancer/design" onClick={() => setOpen(false)}>Design & Creative</Link></li>
-                <li><Link className="dropdown-item" to="/freelancer/development" onClick={() => setOpen(false)}>Development & Tech</Link></li>
-                <li><Link className="dropdown-item" to="/freelancer/ai" onClick={() => setOpen(false)}>AI & Emerging Tech</Link></li>
-                <li><Link className="dropdown-item" to="/freelancer/marketing" onClick={() => setOpen(false)}>Marketing</Link></li>
-                <li><Link className="dropdown-item" to="/freelancer/writing" onClick={() => setOpen(false)}>Writing & Content</Link></li>
-                <li><Link className="dropdown-item" to="/freelancer/admin" onClick={() => setOpen(false)}>Admin & Support</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Design & creative")}`} onClick={() => setOpen(false)}>Design & Creative</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Developpement & tech")}`} onClick={() => setOpen(false)}>Development & Tech</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("AI & emerging tech")}`} onClick={() => setOpen(false)}>AI & Emerging Tech</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Markeing")}`} onClick={() => setOpen(false)}>Marketing</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Writing & content")}`} onClick={() => setOpen(false)}>Writing & Content</Link></li>
+                <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Adming & support")}`} onClick={() => setOpen(false)}>Admin & Support</Link></li>
               </ul>
             </li>
           )}
