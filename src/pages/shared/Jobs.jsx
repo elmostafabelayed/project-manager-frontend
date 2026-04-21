@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import projectService from '../../services/projectService';
+import { categories, getCategoryInfo } from '../../utils/categoryConstants';
+import '../../components/ProjectCard.css';
 import './Jobs.css';
 
 export default function Jobs() {
@@ -12,15 +14,6 @@ export default function Jobs() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState(categoryFromUrl);
-
-  const categories = [
-    'Design & creative',
-    'Developpement & tech',
-    'AI & emerging tech',
-    'Marketing',
-    'Writing & content',
-    'Admin & support'
-  ];
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -101,8 +94,8 @@ export default function Jobs() {
                     <div className="card h-100 border-0 shadow-sm job-card">
                       <div className="card-body d-flex flex-column">
                         <div className="d-flex justify-content-between align-items-start mb-3">
-                          <span className="badge bg-primary-subtle text-primary border-0 rounded-pill small">
-                            {job.category || 'General'}
+                          <span className={`project-category cat-${getCategoryInfo(job.category).slug}`}>
+                            {getCategoryInfo(job.category).label}
                           </span>
                           <span className="fw-bold text-success">${job.budget}</span>
                         </div>

@@ -1,20 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getCategoryInfo } from '../utils/categoryConstants';
 import './ProjectCard.css';
 
 export default function ProjectCard({ project }) {
   if (!project) return null; // Or return a skeleton/placeholder
 
-  const categoryMapping = {
-    "Design & creative": { slug: "design", label: "Design & Creative" },
-    "Developpement & tech": { slug: "development", label: "Development & Tech" },
-    "AI & emerging tech": { slug: "ai", label: "AI & Emerging Tech" },
-    "Marketing": { slug: "marketing", label: "Marketing" },
-    "Writing & content": { slug: "writing", label: "Writing & Content" },
-    "Admin & support": { slug: "admin", label: "Admin & Support" }
-  };
-
-  const categoryInfo = categoryMapping[project.category] || { slug: "default", label: project.category || "General" };
+  const categoryInfo = getCategoryInfo(project.category);
 
   return (
     <div className="project-card">

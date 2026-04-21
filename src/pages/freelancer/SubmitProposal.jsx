@@ -72,7 +72,6 @@ export default function SubmitProposal() {
               <div className="form-group">
                 <label className="form-label" htmlFor="price">Your Bid (USD)</label>
                 <div className="input-icon-wrapper">
-                   <span className="input-icon">$</span>
                    <input
                      type="number"
                      id="price"
@@ -90,7 +89,6 @@ export default function SubmitProposal() {
               <div className="form-group">
                 <label className="form-label" htmlFor="duration">Estimated Time (Days)</label>
                 <div className="input-icon-wrapper">
-                   <span className="input-icon">⏱</span>
                    <input
                      type="number"
                      id="duration"

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { createProject } from '../../store/slices/projectSlice';
+import { categories } from '../../utils/categoryConstants';
 import Navbar from '../../components/Navbar';
 import './CreateProject.css';
 
@@ -91,12 +92,9 @@ export default function CreateProject() {
                 className={error?.errors?.category ? 'input-error' : ''}
               >
                 <option value="" disabled>Select a category</option>
-                <option value="Design & creative">Design & creative</option>
-                <option value="Developpement & tech">Developpement & tech</option>
-                <option value="AI & emerging tech">AI & emerging tech</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Writing & content">Writing & content</option>
-                <option value="Admin & support">Admin & support</option>
+                {categories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
               </select>
               {error?.errors?.category && <span className="field-error">{error.errors.category[0]}</span>}
             </div>

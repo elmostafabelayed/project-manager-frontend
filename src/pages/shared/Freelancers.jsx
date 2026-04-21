@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import profileService from '../../services/profileService';
+import { categories } from '../../utils/categoryConstants';
 import './Freelancers.css';
 
 export default function Freelancers() {
@@ -12,15 +13,6 @@ export default function Freelancers() {
   const [freelancers, setFreelancers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState(categoryFromUrl);
-
-  const categories = [
-    'Design & creative',
-    'Developpement & tech',
-    'AI & emerging tech',
-    'Marketing',
-    'Writing & content',
-    'Admin & support'
-  ];
 
   useEffect(() => {
     const fetchFreelancers = async () => {
