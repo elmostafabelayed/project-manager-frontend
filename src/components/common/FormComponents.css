@@ -1,0 +1,152 @@
+/* HeroUI-inspired Form Component Styles */
+
+.premium-form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.premium-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #3f3f46;
+  margin-bottom: 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.premium-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.premium-input, 
+.premium-textarea, 
+.premium-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  background-color: #f4f4f5; /* Light grey/blue */
+  border: 2px solid transparent;
+  border-radius: 12px;
+  color: #18181b;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.premium-input:hover, 
+.premium-textarea:hover, 
+.premium-select:hover {
+  background-color: #e4e4e7;
+}
+
+.premium-input:focus, 
+.premium-textarea:focus, 
+.premium-select:focus {
+  background-color: #fff;
+  border-color: #185FA5; /* Project primary color */
+  box-shadow: 0 0 0 4px rgba(24, 95, 165, 0.1);
+}
+
+/* Error State */
+.premium-input.is-invalid, 
+.premium-textarea.is-invalid, 
+.premium-select.is-invalid {
+  background-color: #fff;
+  border-color: #f31260; /* HeroUI error red */
+  color: #f31260;
+}
+
+.premium-input.is-invalid:focus, 
+.premium-textarea.is-invalid:focus, 
+.premium-select.is-invalid:focus {
+  box-shadow: 0 0 0 4px rgba(243, 18, 96, 0.1);
+}
+
+.premium-error-message {
+  color: #f31260;
+  font-size: 0.75rem;
+  margin-top: 0.4rem;
+  font-weight: 500;
+  display: block;
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Select specific */
+.premium-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233f3f46'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='Wait, I'll use a simpler one' /%3E%3C/svg%3E"); /* Placeholder for arrow */
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.5em;
+}
+
+/* Textarea specific */
+.premium-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Required star */
+.required-star {
+  color: #f31260;
+  margin-left: 2px;
+}
+
+/* Premium Button Styles */
+.premium-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.premium-btn-primary {
+  background-color: #185FA5;
+  color: #fff;
+}
+
+.premium-btn-primary:hover {
+  background-color: #134d85;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(24, 95, 165, 0.2);
+}
+
+.premium-btn-primary:active {
+  transform: translateY(0);
+}
+
+.premium-btn-secondary {
+  background-color: #f4f4f5;
+  color: #3f3f46;
+}
+
+.premium-btn-secondary:hover {
+  background-color: #e4e4e7;
+}
+
+.premium-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

@@ -1,19 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { loginUser, clearError } from "../../store/slices/authSlice";
+import { FormInput } from "../../components/common/FormComponents";
+import toast from "react-hot-toast";
 import "../css/Login.css";
+
+// Login validation schema
+const loginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
 
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, role } = useSelector((s) => s.auth);
 
-  const [form, setForm] = useState({ email: "", password: "" });
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
   useEffect(() => {
     if (role && localStorage.getItem('token')) redirectByRole(role);
   }, [role]);
+
+  // Handle backend errors mapping
+  useEffect(() => {
+    if (error?.errors) {
+      Object.keys(error.errors).forEach((key) => {
+        setError(key, {
+          type: "manual",
+          message: error.errors[key][0],
+        });
+      });
+    }
+  }, [error, setError]);
 
   const redirectByRole = (r) => {
     if (r == "1") navigate("/client/dashboard");
@@ -21,15 +55,16 @@ export default function Login() {
     else if (r == "3") navigate("/admin/dashboard");
   };
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     dispatch(clearError());
-    const result = await dispatch(loginUser(form));
+    const result = await dispatch(loginUser(data));
     if (loginUser.fulfilled.match(result)) {
+      toast.success("Welcome back!");
       redirectByRole(result.payload.user.role_id);
+    } else {
+      if (!result.payload?.errors) {
+         toast.error(result.payload?.error || result.payload?.message || "Incorrect email or password");
+      }
     }
   };
 
@@ -49,40 +84,28 @@ export default function Login() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: "16px" }}>
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-              placeholder="example@email.com"
-              className={`login-input ${error?.errors?.email ? 'input-error' : ''}`}
-            />
-            {error?.errors?.email && (
-              <span className="field-error">{error.errors.email[0]}</span>
-            )}
-          </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormInput
+            label="Email"
+            name="email"
+            type="email"
+            placeholder="example@email.com"
+            register={register}
+            error={errors.email}
+            required
+          />
 
-          <div style={{ marginBottom: "24px" }}>
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-              placeholder="••••••••"
-              className={`login-input ${error?.errors?.password ? 'input-error' : ''}`}
-            />
-            {error?.errors?.password && (
-              <span className="field-error">{error.errors.password[0]}</span>
-            )}
-          </div>
+          <FormInput
+            label="Password"
+            name="password"
+            type="password"
+            placeholder="••••••••"
+            register={register}
+            error={errors.password}
+            required
+          />
 
-          <button type="submit" disabled={loading} className="login-button">
+          <button type="submit" disabled={loading} className="premium-btn premium-btn-primary w-100">
             {loading ? "Logging in..." : "Log In"}
           </button>
         </form>

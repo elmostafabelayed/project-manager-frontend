@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { updateUser } from '../../store/slices/authSlice';
 import Navbar from '../../components/Navbar';
 import profileService from '../../services/profileService';
 import skillService from '../../services/skillService';
+import { FormInput, FormTextArea } from '../../components/common/FormComponents';
 import toast from 'react-hot-toast';
 import './Profile.css';
+
+const profileSchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters"),
+  title: z.string().optional().or(z.literal('')),
+  location: z.string().optional().or(z.literal('')),
+  hourly_rate: z.coerce.number().min(0, "Rate cannot be negative"),
+  bio: z.string().optional().or(z.literal('')),
+});
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -19,31 +31,30 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  
   const [isEditMode, setIsEditMode] = useState(false);
-  
+  const [selectedSkills, setSelectedSkills] = useState([]);
+
   const isFreelancer = userData?.role_id == 2 || userData?.role?.name?.toLowerCase() === 'freelancer';
 
-  const [profileForm, setProfileForm] = useState({
-    name: '',
-    title: '',
-    bio: '',
-    location: '',
-    hourly_rate: 0
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setError,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(profileSchema),
   });
-
-  const [selectedSkills, setSelectedSkills] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
-        let profileResponse;
         const effectiveId = id || currentUser?.id;
         const isSelf = !id || id == currentUser?.id;
         setIsEditMode(isSelf);
 
+        let profileResponse;
         if (isSelf) {
           profileResponse = await profileService.getProfile();
         } else {
@@ -52,14 +63,13 @@ export default function Profile() {
 
         setUserData(profileResponse);
         
-        // Fetch global skills only if we might need to edit them (self mode)
         if (isSelf) {
           const skillsResponse = await skillService.getAllSkills();
           setAllSkills(skillsResponse);
         }
         
-        // Populate form
-        setProfileForm({
+        // Reset form with fetched data
+        reset({
           name: profileResponse.name || '',
           title: profileResponse.profile?.title || '',
           bio: profileResponse.profile?.bio || '',
@@ -67,25 +77,20 @@ export default function Profile() {
           hourly_rate: profileResponse.profile?.hourly_rate || 0
         });
         
-        // Populate selected skills
         if (profileResponse.skills) {
           setSelectedSkills(profileResponse.skills.map(s => s.id));
         }
 
       } catch (error) {
         console.error("Failed to load profile data:", error);
+        toast.error("Failed to load profile");
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [id, currentUser]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProfileForm(prev => ({ ...prev, [name]: value }));
-  };
+  }, [id, currentUser, reset]);
 
   const toggleSkill = (skillId) => {
     setSelectedSkills(prev => 
@@ -95,14 +100,11 @@ export default function Profile() {
     );
   };
 
-  const handleSaveProfile = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     try {
       setSaving(true);
+      const savePromises = [profileService.updateProfile(data)];
       
-      const savePromises = [profileService.updateProfile(profileForm)];
-      
-      // Only sync skills if the user is a freelancer
       if (isFreelancer) {
         savePromises.push(skillService.syncUserSkills(selectedSkills));
       }
@@ -112,12 +114,20 @@ export default function Profile() {
       
       if (updateResponse.user) {
         dispatch(updateUser(updateResponse.user));
+        setUserData(prev => ({ ...prev, ...updateResponse.user }));
       }
 
       toast.success("Profile updated successfully!");
     } catch (error) {
       console.error("Failed to save profile:", error);
-      toast.error("Error saving profile.");
+      const backendErrors = error.response?.data?.errors;
+      if (backendErrors) {
+        Object.keys(backendErrors).forEach((key) => {
+          setError(key, { type: "manual", message: backendErrors[key][0] });
+        });
+      } else {
+        toast.error("Error saving profile.");
+      }
     } finally {
       setSaving(false);
     }
@@ -135,239 +145,227 @@ export default function Profile() {
         >
           ← Back to Dashboard
         </Link>
-        <div className="profile-card">
-          <header className="profile-header">
+        <div className="profile-card shadow-sm rounded-4 overflow-hidden bg-white">
+          <header className="profile-header p-4 d-flex align-items-center gap-4 border-bottom">
             <img 
-              src={`https://ui-avatars.com/api/?name=${userData.name}&background=fff&color=185fa5`} 
+              src={`https://ui-avatars.com/api/?name=${userData.name}&background=185fa5&color=fff&size=128`} 
               alt="Avatar" 
-              className="profile-avatar-large"
+              className="profile-avatar-large rounded-circle border border-4 border-white shadow-sm"
             />
             <div className="profile-header-info">
-              <h1>{userData.name}</h1>
-              <p>{userData.role?.name || (userData.role_id === 1 ? 'Client' : 'Freelancer')} Account {isEditMode && `• ${userData.email}`}</p>
-              {isEditMode && <span className="badge bg-secondary">Owner View</span>}
+              <h1 className="h2 fw-bold mb-1">{userData.name}</h1>
+              <p className="text-muted mb-2">
+                {userData.role?.name || (userData.role_id === 1 ? 'Client' : 'Freelancer')} Account 
+                {isEditMode && <span className="ms-2 badge bg-light text-dark border">Owner View</span>}
+              </p>
+              {isEditMode && <p className="small text-muted">{userData.email}</p>}
             </div>
           </header>
 
-          <div className="profile-body">
+          <div className="profile-body p-4">
             {isEditMode ? (
-              <form onSubmit={handleSaveProfile}>
-                {/* Basic Information Section */}
-                <section className="profile-section">
-                  <h2>Basic Information</h2>
-                  <div className="profile-form-grid">
-                    <div className="form-group mb-3">
-                      <label className="form-label">Full Name</label>
-                      <input 
-                        type="text" 
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <section className="profile-section mb-5">
+                  <h2 className="h4 fw-bold mb-4 border-start border-4 border-primary ps-3">Basic Information</h2>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <FormInput 
+                        label="Full Name" 
                         name="name"
-                        className="form-control" 
-                        value={profileForm.name} 
-                        onChange={handleInputChange}
                         placeholder="Your full name"
+                        register={register}
+                        error={errors.name}
+                        required
                       />
-                      <small className="text-muted">This will be shown on your profile.</small>
                     </div>
-                    <div className="form-group mb-3">
-                      <label className="form-label">Email Address</label>
-                      <input 
-                        type="email" 
-                        className="form-control" 
-                        value={userData.email} 
-                        disabled 
-                        readOnly
-                      />
-                      <small className="text-muted">Email is managed in account settings.</small>
+                    <div className="col-md-6">
+                      <div className="form-group mb-3">
+                        <label className="form-label fw-bold small text-muted">Email Address (Read-only)</label>
+                        <input type="email" className="form-control bg-light" value={userData.email} disabled readOnly />
+                      </div>
                     </div>
                   </div>
                 </section>
 
-                {/* Professional Details - Only for Freelancers */}
                 {isFreelancer && (
-                  <section className="profile-section">
-                    <h2>Professional Details</h2>
-                    <div className="profile-form-grid">
-                      <div className="form-group mb-3">
-                        <label className="form-label">Professional Title</label>
-                        <input 
-                          type="text" 
-                          name="title" 
-                          className="form-control" 
-                          value={profileForm.title} 
-                          onChange={handleInputChange} 
-                          placeholder="e.g. Senior Full Stack Developer"
-                        />
+                  <>
+                    <section className="profile-section mb-5">
+                      <h2 className="h4 fw-bold mb-4 border-start border-4 border-primary ps-3">Professional Details</h2>
+                      <div className="row">
+                        <div className="col-md-6">
+                          <FormInput 
+                            label="Professional Title" 
+                            name="title" 
+                            placeholder="e.g. Senior Full Stack Developer"
+                            register={register}
+                            error={errors.title}
+                          />
+                        </div>
+                        <div className="col-md-3">
+                          <FormInput 
+                            label="Location" 
+                            name="location" 
+                            placeholder="e.g. Casablanca, Morocco"
+                            register={register}
+                            error={errors.location}
+                          />
+                        </div>
+                        <div className="col-md-3">
+                          <FormInput 
+                            label="Hourly Rate ($)" 
+                            name="hourly_rate" 
+                            type="number"
+                            register={register}
+                            error={errors.hourly_rate}
+                          />
+                        </div>
                       </div>
-                      <div className="form-group mb-3">
-                        <label className="form-label">Location</label>
-                        <input 
-                          type="text" 
-                          name="location" 
-                          className="form-control" 
-                          value={profileForm.location} 
-                          onChange={handleInputChange}
-                          placeholder="e.g. Casablanca, Morocco"
-                        />
-                      </div>
-                      <div className="form-group mb-3">
-                        <label className="form-label">Hourly Rate ($)</label>
-                        <input 
-                          type="number" 
-                          name="hourly_rate" 
-                          className="form-control" 
-                          value={profileForm.hourly_rate} 
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group mb-3">
-                      <label className="form-label">Bio / Overview</label>
-                      <textarea 
+                      <FormTextArea 
+                        label="Bio / Overview" 
                         name="bio" 
-                        className="form-control" 
-                        rows="5" 
-                        value={profileForm.bio} 
-                        onChange={handleInputChange}
+                        rows={5} 
                         placeholder="Tell us about your experience and skills..."
-                      ></textarea>
-                    </div>
-                  </section>
-                )}
+                        register={register}
+                        error={errors.bio}
+                      />
+                    </section>
 
-                {isFreelancer && (
-                  <section className="profile-section">
-                    <h2>Skills & Expertise</h2>
-                    {!selectedCategory ? (
-                      <>
-                        <p className="text-muted small mb-3">Choose a category to find your skills:</p>
-                        <div className="category-selection-grid">
+                    <section className="profile-section mb-5">
+                      <h2 className="h4 fw-bold mb-4 border-start border-4 border-primary ps-3">Skills & Expertise</h2>
+                      {!selectedCategory ? (
+                        <div className="category-selection-grid d-grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))' }}>
                           {[
                             'Design & creative',
                             'Developpement & tech',
                             'AI & emerging tech',
-                            'Markeing',
+                            'Marketing',
                             'Writing & content',
-                            'Adming & support'
+                            'Admin & support'
                           ].map(cat => (
                             <div 
                               key={cat} 
-                              className="category-card"
+                              className="category-card p-3 border rounded-3 text-center transition-all hover-shadow clickable bg-light"
                               onClick={() => setSelectedCategory(cat)}
+                              style={{ transition: 'all 0.2s ease' }}
                             >
-                              <div className="category-card-icon">
+                              <div className="h2 mb-2">
                                 {cat === 'Design & creative' && '🎨'}
                                 {cat === 'Developpement & tech' && '💻'}
                                 {cat === 'AI & emerging tech' && '🤖'}
-                                {cat === 'Markeing' && '📈'}
+                                {cat === 'Marketing' && '📈'}
                                 {cat === 'Writing & content' && '✍️'}
-                                {cat === 'Adming & support' && '🛠️'}
+                                {cat === 'Admin & support' && '🛠️'}
                               </div>
-                              <div className="category-card-name">{cat}</div>
-                              <div className="category-card-count">
+                              <div className="fw-bold small">{cat}</div>
+                              <div className="text-muted" style={{ fontSize: '11px' }}>
                                 {allSkills.filter(s => s.category === cat).length} skills
                               </div>
                             </div>
                           ))}
                         </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="d-flex align-items-center mb-3">
-                          <button 
-                            type="button" 
-                            className="btn btn-link p-0 me-3 text-decoration-none"
-                            onClick={() => setSelectedCategory(null)}
-                          >
-                            ← All Categories
-                          </button>
-                          <h4 className="mb-0">{selectedCategory}</h4>
+                      ) : (
+                        <div className="skills-editor border rounded-3 p-4 bg-light">
+                          <div className="d-flex align-items-center mb-4">
+                            <button 
+                              type="button" 
+                              className="btn btn-sm btn-outline-primary me-3"
+                              onClick={() => setSelectedCategory(null)}
+                            >
+                              ← Back
+                            </button>
+                            <h4 className="h5 mb-0 fw-bold">{selectedCategory}</h4>
+                          </div>
+                          <div className="skills-manager d-flex flex-wrap gap-2">
+                            {allSkills
+                              .filter(skill => skill.category === selectedCategory)
+                              .map(skill => (
+                                <span 
+                                  key={skill.id} 
+                                  className={`skill-tag px-3 py-1 border rounded-pill clickable transition-all ${selectedSkills.includes(skill.id) ? 'bg-primary text-white border-primary' : 'bg-white text-dark hover-bg-light'}`}
+                                  onClick={() => toggleSkill(skill.id)}
+                                  style={{ cursor: 'pointer', fontSize: '14px' }}
+                                >
+                                  {skill.name}
+                                  {selectedSkills.includes(skill.id) && <span className="ms-1">✓</span>}
+                                </span>
+                              ))}
+                          </div>
                         </div>
-                        <div className="skills-manager">
-                          {allSkills
-                            .filter(skill => skill.category === selectedCategory)
-                            .map(skill => (
-                              <span 
-                                key={skill.id} 
-                                className={`skill-tag clickable ${selectedSkills.includes(skill.id) ? 'selected' : ''}`}
-                                onClick={() => toggleSkill(skill.id)}
-                              >
-                                {skill.name}
-                                {selectedSkills.includes(skill.id) && <span>✓</span>}
-                              </span>
-                            ))}
+                      )}
+                      
+                      {selectedSkills.length > 0 && (
+                        <div className="mt-4">
+                          <h6 className="fw-bold mb-3">Selected Skills ({selectedSkills.length})</h6>
+                          <div className="selected-skills-summary d-flex flex-wrap gap-2">
+                            {allSkills
+                              .filter(s => selectedSkills.includes(s.id))
+                              .map(skill => (
+                                <span key={skill.id} className="skill-tag px-3 py-1 bg-primary text-white rounded-pill d-flex align-items-center" style={{ fontSize: '13px' }}>
+                                  {skill.name}
+                                  <span className="ms-2 clickable" style={{ cursor: 'pointer' }} onClick={() => toggleSkill(skill.id)}>×</span>
+                                </span>
+                              ))}
+                          </div>
                         </div>
-                      </>
-                    )}
-                    
-                    {selectedSkills.length > 0 && (
-                      <div className="mt-4">
-                        <h6>Your Selected Skills ({selectedSkills.length})</h6>
-                        <div className="selected-skills-summary">
-                          {allSkills
-                            .filter(s => selectedSkills.includes(s.id))
-                            .map(skill => (
-                              <span key={skill.id} className="skill-tag selected">
-                                {skill.name}
-                                <span className="ms-2 clickable" onClick={() => toggleSkill(skill.id)}>×</span>
-                              </span>
-                            ))}
-                        </div>
-                      </div>
-                    )}
-                  </section>
+                      )}
+                    </section>
+                  </>
                 )}
 
-                <div className="mt-4 text-end">
+                <div className="mt-5 pt-3 border-top text-end">
                   <button 
                     type="submit" 
-                    className="cl-btn-primary px-5 py-2"
+                    className="premium-btn premium-btn-primary px-5 shadow-sm"
                     disabled={saving}
                   >
-                    {saving ? 'Saving...' : 'Save Changes'}
+                    {saving ? 'Saving Changes...' : 'Save Profile'}
                   </button>
                 </div>
               </form>
             ) : (
               <div className="public-profile-view">
-                {isFreelancer && (
+                {isFreelancer ? (
                   <>
-                    <section className="profile-section">
-                      <h2>Professional Overview</h2>
+                    <section className="profile-section mb-5">
+                      <h2 className="h4 fw-bold mb-4 border-start border-4 border-primary ps-3">Professional Overview</h2>
                       <div className="mb-4">
-                        <h4 className="fw-bold">{userData.profile?.title || "No title provided"}</h4>
-                        <p className="text-muted">
-                          <i className="bi bi-geo-alt"></i> {userData.profile?.location || "Unknown Location"}
-                        </p>
-                        <div className="h5 text-primary fw-bold">
-                          Rate: ${userData.profile?.hourly_rate || '0'}/hr
+                        <h3 className="h4 fw-bold text-dark mb-2">{userData.profile?.title || "Professional Freelancer"}</h3>
+                        <div className="d-flex align-items-center gap-3 text-muted mb-3">
+                          <span><i className="bi bi-geo-alt me-1"></i> {userData.profile?.location || "Remote"}</span>
+                          <span className="fw-bold text-primary h5 mb-0">${userData.profile?.hourly_rate || '0'}/hr</span>
                         </div>
-                      </div>
-                      <div className="bio-box p-3 bg-light rounded-3">
-                        <p style={{ whiteSpace: 'pre-wrap' }}>
-                          {userData.profile?.bio || "This user hasn't added a bio yet."}
-                        </p>
+                        <div className="bio-box p-4 bg-light rounded-4 border">
+                          <p className="mb-0 text-dark lh-base" style={{ whiteSpace: 'pre-wrap' }}>
+                            {userData.profile?.bio || "This user hasn't added a bio yet."}
+                          </p>
+                        </div>
                       </div>
                     </section>
 
                     <section className="profile-section">
-                      <h2>Expertise</h2>
-                      <div className="skills-manager">
+                      <h2 className="h4 fw-bold mb-4 border-start border-4 border-primary ps-3">Expertise</h2>
+                      <div className="skills-list d-flex flex-wrap gap-2">
                         {userData.skills?.length > 0 ? (
                           userData.skills.map(skill => (
-                            <span key={skill.id} className="skill-tag selected">
+                            <span key={skill.id} className="skill-tag px-3 py-1 bg-white border border-primary text-primary rounded-pill fw-medium" style={{ fontSize: '14px' }}>
                               {skill.name}
                             </span>
                           ))
                         ) : (
-                          <p className="text-muted">No specific skills listed.</p>
+                          <p className="text-muted italic">No specific skills listed.</p>
                         )}
                       </div>
                     </section>
                   </>
+                ) : (
+                   <section className="profile-section">
+                      <h2 className="h4 fw-bold mb-4 border-start border-4 border-primary ps-3">About Client</h2>
+                      <p className="text-muted">This is a client account on Jobsy.</p>
+                   </section>
                 )}
 
-                <div className="mt-4 text-center">
-                   <button className="cl-btn-primary" onClick={() => navigate('/shared/chat')}>
+                <div className="mt-5 text-center">
+                   <button className="premium-btn premium-btn-primary px-5 rounded-pill shadow" onClick={() => navigate('/shared/chat')}>
                       Contact {userData.name.split(' ')[0]}
                    </button>
                 </div>

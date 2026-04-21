@@ -1,42 +1,73 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { registerUser, clearError } from "../../store/slices/authSlice";
+import { FormInput } from "../../components/common/FormComponents";
+import toast from "react-hot-toast";
 import "../css/Register.css";
+
+// Registration validation schema
+const registerSchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  password_confirmation: z.string(),
+  role_id: z.string(),
+}).refine((data) => data.password === data.password_confirmation, {
+  message: "Passwords don't match",
+  path: ["password_confirmation"],
+});
 
 export default function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((s) => s.auth);
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    password_confirmation: "",
-    role_id: "1",
+  const {
+    register,
+    handleSubmit,
+    setError,
+    watch,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      password_confirmation: "",
+      role_id: "1",
+    },
   });
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const selectedRoleId = watch("role_id");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Handle backend errors
+  useEffect(() => {
+    if (error?.errors) {
+      Object.keys(error.errors).forEach((key) => {
+        setError(key, {
+          type: "manual",
+          message: error.errors[key][0],
+        });
+      });
+    }
+  }, [error, setError]);
+
+  const onSubmit = async (data) => {
     dispatch(clearError());
-
-    if (form.password !== form.password_confirmation) {
-      // We can manually set an error here or just return and show a toast
-      return;
-    }
-
-    const result = await dispatch(registerUser(form));
+    const result = await dispatch(registerUser(data));
     if (registerUser.fulfilled.match(result)) {
+      toast.success("Account created successfully!");
       navigate("/shared/profile");
+    } else {
+      if (!result.payload?.errors) {
+        toast.error(result.payload?.message || "Registration failed");
+      }
     }
-  };
-
-  const getFieldError = (field) => {
-    return error?.errors?.[field]?.[0];
   };
 
   return (
@@ -53,67 +84,48 @@ export default function Register() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Full Name</label>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              required
-              placeholder="Your name"
-              className={getFieldError('name') ? 'input-error' : ''}
-            />
-            {getFieldError('name') && <span className="field-error">{getFieldError('name')}</span>}
-          </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormInput
+            label="Full Name"
+            name="name"
+            placeholder="Your name"
+            register={register}
+            error={errors.name}
+            required
+          />
 
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-              placeholder="example@email.com"
-              className={getFieldError('email') ? 'input-error' : ''}
-            />
-            {getFieldError('email') && <span className="field-error">{getFieldError('email')}</span>}
-          </div>
+          <FormInput
+            label="Email"
+            name="email"
+            type="email"
+            placeholder="example@email.com"
+            register={register}
+            error={errors.email}
+            required
+          />
 
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-              placeholder="••••••••"
-              className={getFieldError('password') ? 'input-error' : ''}
-            />
-            {getFieldError('password') && <span className="field-error">{getFieldError('password')}</span>}
-          </div>
+          <FormInput
+            label="Password"
+            name="password"
+            type="password"
+            placeholder="••••••••"
+            register={register}
+            error={errors.password}
+            required
+          />
 
-          <div className="form-group">
-            <label>Confirm Password</label>
-            <input
-              type="password"
-              name="password_confirmation"
-              value={form.password_confirmation}
-              onChange={handleChange}
-              required
-              placeholder="••••••••"
-              className={form.password !== form.password_confirmation && form.password_confirmation ? 'input-error' : ''}
-            />
-            {form.password !== form.password_confirmation && form.password_confirmation && (
-              <span className="field-error">Passwords do not match</span>
-            )}
-          </div>
+          <FormInput
+            label="Confirm Password"
+            name="password_confirmation"
+            type="password"
+            placeholder="••••••••"
+            register={register}
+            error={errors.password_confirmation}
+            required
+          />
 
-          <div className="role-group">
-            <label>I am...</label>
+          <div className="role-group mb-4">
+            <label className="premium-label">I am...</label>
 
             <div className="role-options">
               {[
@@ -122,14 +134,13 @@ export default function Register() {
               ].map((opt) => (
                 <label
                   key={opt.value}
-                  className={`role-card ${form.role_id === opt.value ? "active" : ""}`}
+                  className={`role-card ${selectedRoleId === opt.value ? "active" : ""}`}
+                  style={{ cursor: 'pointer', borderRadius: '12px' }}
                 >
                   <input
                     type="radio"
-                    name="role_id"
                     value={opt.value}
-                    checked={form.role_id === opt.value}
-                    onChange={handleChange}
+                    {...register("role_id")}
                     hidden
                   />
 
@@ -138,19 +149,20 @@ export default function Register() {
                 </label>
               ))}
             </div>
+            {errors.role_id && <span className="premium-error-message">{errors.role_id.message}</span>}
           </div>
 
           <button
             type="submit"
-            disabled={loading || (form.password !== form.password_confirmation && form.password_confirmation)}
-            className={`submit-btn ${loading ? "loading" : ""}`}
+            disabled={loading}
+            className={`premium-btn premium-btn-primary w-100 ${loading ? "loading" : ""}`}
           >
             {loading ? "Registering..." : "Sign Up"}
           </button>
         </form>
 
         <p className="register-footer">
-          Already have an account? <Link to="/auth/login">Log In</Link>
+          Already have an account? <Link to="/auth/login" style={{ color: "#185FA5", fontWeight: "600" }}>Log In</Link>
         </p>
       </div>
     </div>
