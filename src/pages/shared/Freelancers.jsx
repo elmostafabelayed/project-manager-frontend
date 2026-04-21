@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import profileService from '../../services/profileService';
 import { categories } from '../../utils/categoryConstants';
+import { useSelector } from 'react-redux';
+import InviteModal from '../../components/InviteModal';
 import './Freelancers.css';
 
 export default function Freelancers() {
@@ -13,6 +15,11 @@ export default function Freelancers() {
   const [freelancers, setFreelancers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState(categoryFromUrl);
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [selectedFreelancer, setSelectedFreelancer] = useState(null);
+
+  const { user } = useSelector((state) => state.auth);
+  const isClient = user && user.role_id === 1; // Assuming 1 is client role ID
 
   useEffect(() => {
     const fetchFreelancers = async () => {
@@ -119,9 +126,22 @@ export default function Freelancers() {
                         </div>
                         <div className="d-flex justify-content-between align-items-center mt-auto">
                           <span className="fw-bold">${freelancer.profile?.hourly_rate || 0}/hr</span>
-                          <Link to={`/shared/profile/${freelancer.id}`} className="btn btn-outline-primary btn-sm rounded-pill">
-                            View Profile
-                          </Link>
+                          <div className="d-flex gap-2">
+                            <Link to={`/shared/profile/${freelancer.id}`} className="btn btn-outline-primary btn-sm rounded-pill px-3">
+                              View Profile
+                            </Link>
+                            {isClient && (
+                              <button 
+                                className="btn btn-primary btn-sm rounded-pill px-3"
+                                onClick={() => {
+                                  setSelectedFreelancer(freelancer);
+                                  setShowInviteModal(true);
+                                }}
+                              >
+                                Invite
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -138,6 +158,16 @@ export default function Freelancers() {
           </div>
         </div>
       </div>
+      
+      {showInviteModal && selectedFreelancer && (
+        <InviteModal 
+          freelancer={selectedFreelancer} 
+          onClose={() => {
+            setShowInviteModal(false);
+            setSelectedFreelancer(null);
+          }} 
+        />
+      )}
     </div>
   );
 }

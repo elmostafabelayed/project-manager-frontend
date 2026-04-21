@@ -78,6 +78,14 @@ export default function NotificationDropdown({ onMessageUnreadCountChange }) {
       if (notification.type === "message_new" && notification.data?.conversation_id) {
         navigate(`/shared/chat?conversationId=${notification.data.conversation_id}`);
       }
+      
+      if (notification.type === "invitation_new") {
+        navigate(`/freelancer/my-proposals`);
+      }
+      
+      if (notification.type === "invitation_response") {
+        navigate(`/client/dashboard`); // Or appropriate client page
+      }
 
       setNotifications((prev) => {
         const updated = prev.map((n) =>
@@ -112,6 +120,10 @@ export default function NotificationDropdown({ onMessageUnreadCountChange }) {
         return `Your proposal has been accepted by ${notification.data.client_name}.`;
       case "message_new":
         return `New message from ${notification.data.sender_name}: ${notification.data.message_content}`;
+      case "invitation_new":
+        return `${notification.data.client_name} invited you to bid on "${notification.data.project_title}": ${notification.data.message_content}`;
+      case "invitation_response":
+        return `${notification.data.freelancer_name} responded to your invitation on "${notification.data.project_title}".`;
       default:
         return "New notification.";
     }
