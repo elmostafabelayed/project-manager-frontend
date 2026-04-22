@@ -16,6 +16,7 @@ export default function ProjectProposals() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [acceptingId, setAcceptingId] = useState(null);
+  const [rejectingId, setRejectingId] = useState(null);
 
   useEffect(() => {
     const fetchProposals = async () => {
@@ -65,6 +66,24 @@ export default function ProjectProposals() {
     }
   };
 
+  const handleReject = async (proposalId) => {
+    try {
+      setRejectingId(proposalId);
+      await proposalService.rejectProposal(proposalId);
+      
+      setProposals(proposals.map(p => 
+        p.id === proposalId ? { ...p, status: 'rejected' } : p
+      ));
+      
+      toast.success('Offer cancelled successfully.');
+    } catch (err) {
+      console.error('Error rejecting proposal:', err);
+      toast.error('Failed to cancel offer.');
+    } finally {
+      setRejectingId(null);
+    }
+  };
+
   return (
     <div className="dashboard-container">
       <Navbar />
@@ -104,7 +123,6 @@ export default function ProjectProposals() {
                          {proposal.freelancer?.name || 'Unknown Freelancer'}
                        </Link>
                      </h3>
-                     <p>Completed Jobs: {proposal.freelancer?.completed_jobs || 0}</p>
                    </div>
                 </div>
 
@@ -121,23 +139,38 @@ export default function ProjectProposals() {
 
                 <div className="proposal-cover-letter">
                   <h4>Cover Letter:</h4>
-                  <p>{proposal.message}</p>
+                  <p>{proposal.response_message || proposal.message}</p>
+                  
+                  {proposal.response_message && (
+                    <div className="original-invitation mt-3 p-2 bg-light rounded shadow-sm border-start border-primary border-4">
+                      <small className="text-muted d-block mb-1 fw-bold">Your Original Invitation:</small>
+                      <p className="mb-0 small italic">"{proposal.message}"</p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="proposal-actions">
                   {proposal.status === 'accepted' ? (
                      <span className="accepted-badge text-center w-100 py-2 block">Accepted</span>
+                  ) : proposal.status === 'rejected' ? (
+                     <span className="rejected-badge text-center w-100 py-2 block text-danger fw-bold border border-danger rounded">Cancelled</span>
                   ) : (
                      <>
                       <button 
                         className="btn-accept" 
                         onClick={() => handleAccept(proposal.id)}
-                        disabled={acceptingId === proposal.id || projectLoading}
+                        disabled={acceptingId === proposal.id || rejectingId === proposal.id || projectLoading}
                       >
                         {acceptingId === proposal.id ? 'Accepting...' : projectLoading ? 'Creating Project...' : 'Accept Offer'}
                       </button>
                       {/* Note: we might want a full view to read the entire cover letter */}
-                      <button className="btn-view">View Details</button>
+                      <button 
+                        className="btn-reject" 
+                        onClick={() => handleReject(proposal.id)}
+                        disabled={rejectingId === proposal.id || acceptingId === proposal.id}
+                      >
+                        {rejectingId === proposal.id ? 'Cancelling...' : 'Cancel Offer'}
+                      </button>
                      </>
                   )}
                 </div>

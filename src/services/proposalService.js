@@ -13,6 +13,12 @@ const proposalService = {
     return response.data; // Assuming backend returns success status / created contract
   },
 
+  // Reject a proposal
+  rejectProposal: async (proposalId) => {
+    const response = await api.put(`/proposals/${proposalId}/reject`);
+    return response.data;
+  },
+
   // Submit a new proposal
   sendProposal: async (proposalData) => {
     // proposalData should include projectId, price, duration, cover_letter

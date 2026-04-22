@@ -10,7 +10,7 @@ export default function MyProposals() {
   const [loading, setLoading] = useState(true);
   const [showRespondModal, setShowRespondModal] = useState(false);
   const [selectedProposal, setSelectedProposal] = useState(null);
-  const [formData, setFormData] = useState({ price: '', duration: '' });
+  const [formData, setFormData] = useState({ price: '', duration: '', message: '' });
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -35,8 +35,13 @@ export default function MyProposals() {
 
   const handleResponseSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.price || !formData.duration) {
+    if (!formData.price || !formData.duration || !formData.message) {
       toast.error('Please fill in all fields');
+      return;
+    }
+
+    if (formData.message.length < 20) {
+      toast.error('Cover letter must be at least 20 characters');
       return;
     }
 
@@ -161,7 +166,7 @@ export default function MyProposals() {
                     required
                   />
                 </div>
-                <div className="mb-4">
+                <div className="mb-3">
                   <label className="form-label fw-bold">Estimated Time (Days)</label>
                   <input 
                     type="number" 
@@ -171,6 +176,17 @@ export default function MyProposals() {
                     placeholder="e.g. 7"
                     required
                   />
+                </div>
+                <div className="mb-4">
+                  <label className="form-label fw-bold">Cover Letter / Message</label>
+                  <textarea 
+                    className="form-control"
+                    rows="5"
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    placeholder="Write your pitch to the client here..."
+                    required
+                  ></textarea>
                 </div>
                 <div className="d-grid">
                   <button type="submit" className="btn btn-primary rounded-pill py-2" disabled={submitting}>

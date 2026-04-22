@@ -118,6 +118,16 @@ export default function Profile() {
       }
 
       toast.success("Profile updated successfully!");
+      
+      const dashboardPath = currentUser?.role_id == 1 
+        ? '/client/dashboard' 
+        : currentUser?.role_id == 2 
+          ? '/freelancer/dashboard' 
+          : '/admin/dashboard';
+      
+      setTimeout(() => {
+        navigate(dashboardPath);
+      }, 1500);
     } catch (error) {
       console.error("Failed to save profile:", error);
       const backendErrors = error.response?.data?.errors;
@@ -154,11 +164,11 @@ export default function Profile() {
             />
             <div className="profile-header-info">
               <h1 className="h2 fw-bold mb-1">{userData.name}</h1>
-              <p className="text-muted mb-2">
+              <p className="mb-2">
                 {userData.role?.name || (userData.role_id === 1 ? 'Client' : 'Freelancer')} Account 
                 {isEditMode && <span className="ms-2 badge bg-light text-dark border">Owner View</span>}
               </p>
-              {isEditMode && <p className="small text-muted">{userData.email}</p>}
+              {isEditMode && <p className="small">{userData.email}</p>}
             </div>
           </header>
 
@@ -166,7 +176,7 @@ export default function Profile() {
             {isEditMode ? (
               <form onSubmit={handleSubmit(onSubmit)}>
                 <section className="profile-section mb-5">
-                  <h2 className="h4 fw-bold mb-4 border-start border-4 border-primary ps-3">Basic Information</h2>
+                  <h2 className="h4 fw-bold mb-4 ps-3">Basic Information</h2>
                   <div className="row">
                     <div className="col-md-6">
                       <FormInput 
@@ -190,7 +200,7 @@ export default function Profile() {
                 {isFreelancer && (
                   <>
                     <section className="profile-section mb-5">
-                      <h2 className="h4 fw-bold mb-4 border-start border-4 border-primary ps-3">Professional Details</h2>
+                      <h2 className="h4 fw-bold mb-4 ps-3">Professional Details</h2>
                       <div className="row">
                         <div className="col-md-6">
                           <FormInput 
@@ -231,7 +241,7 @@ export default function Profile() {
                     </section>
 
                     <section className="profile-section mb-5">
-                      <h2 className="h4 fw-bold mb-4 border-start border-4 border-primary ps-3">Skills & Expertise</h2>
+                      <h2 className="h4 fw-bold mb-4 ps-3">Skills & Expertise</h2>
                       {!selectedCategory ? (
                         <div className="category-selection-grid d-grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))' }}>
                           {[
@@ -327,7 +337,7 @@ export default function Profile() {
                 {isFreelancer ? (
                   <>
                     <section className="profile-section mb-5">
-                      <h2 className="h4 fw-bold mb-4 border-start border-4 border-primary ps-3">Professional Overview</h2>
+                      <h2 className="h4 fw-bold mb-4 ps-3">Professional Overview</h2>
                       <div className="mb-4">
                         <h3 className="h4 fw-bold text-dark mb-2">{userData.profile?.title || "Professional Freelancer"}</h3>
                         <div className="d-flex align-items-center gap-3 text-muted mb-3">
@@ -343,7 +353,7 @@ export default function Profile() {
                     </section>
 
                     <section className="profile-section">
-                      <h2 className="h4 fw-bold mb-4 border-start border-4 border-primary ps-3">Expertise</h2>
+                      <h2 className="h4 fw-bold mb-4 ps-3">Expertise</h2>
                       <div className="skills-list d-flex flex-wrap gap-2">
                         {userData.skills?.length > 0 ? (
                           userData.skills.map(skill => (
@@ -359,7 +369,7 @@ export default function Profile() {
                   </>
                 ) : (
                    <section className="profile-section">
-                      <h2 className="h4 fw-bold mb-4 border-start border-4 border-primary ps-3">About Client</h2>
+                      <h2 className="h4 fw-bold mb-4 ps-3">About Client</h2>
                       <p className="text-muted">This is a client account on Jobsy.</p>
                    </section>
                 )}

@@ -83,8 +83,12 @@ export default function NotificationDropdown({ onMessageUnreadCountChange }) {
         navigate(`/freelancer/my-proposals`);
       }
       
-      if (notification.type === "invitation_response") {
-        navigate(`/client/dashboard`); // Or appropriate client page
+      if (notification.type === "invitation_response" && notification.data?.project_id) {
+        navigate(`/client/projects/${notification.data.project_id}/proposals`);
+      }
+
+      if (notification.type === "proposal_new" && notification.data?.project_id) {
+        navigate(`/client/projects/${notification.data.project_id}/proposals`);
       }
 
       setNotifications((prev) => {
