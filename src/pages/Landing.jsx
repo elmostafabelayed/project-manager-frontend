@@ -88,6 +88,11 @@ export default function Landing() {
             <Link to="/shared/jobs" className="btn-hero-secondary">Explore the Platform</Link>
           </motion.div>
         </motion.div>
+        <div className="aboutus-hero-shapes">
+          <div className="shape shape-1"></div>
+          <div className="shape shape-2"></div>
+          <div className="shape shape-3"></div>
+        </div>
       </section>
 
       <section className="featured-projects">

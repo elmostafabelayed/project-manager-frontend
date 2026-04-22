@@ -16,10 +16,11 @@
 
 /* Hero Section */
 .hero {
-  padding: 140px 20px;
-  background-color: #E6F1FB;
-  text-align: center;
   position: relative;
+  background: linear-gradient(135deg, #E6F1FB 0%, #cce3f9 50%, #b3d4f5 100%);
+  text-align: center;
+  padding: 120px 20px 90px;
+  margin-top: 70px;
   overflow: hidden;
 }
 
@@ -84,6 +85,52 @@
 
 .btn-hero-secondary:hover {
   background: #f1f5f9;
+}
+
+.aboutus-hero-shapes {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.15;
+  animation: floatShape 8s ease-in-out infinite;
+}
+
+.shape-1 {
+  width: 200px;
+  height: 200px;
+  background: #185FA5;
+  top: -40px;
+  right: -60px;
+  animation-delay: 0s;
+}
+
+.shape-2 {
+  width: 140px;
+  height: 140px;
+  background: #0C447C;
+  bottom: -30px;
+  left: 5%;
+  animation-delay: 2s;
+}
+
+.shape-3 {
+  width: 90px;
+  height: 90px;
+  background: #185FA5;
+  top: 30%;
+  right: 15%;
+  animation-delay: 4s;
+}
+
+@keyframes floatShape {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
 }
 
 /* Featured Projects */
