@@ -1,101 +1,182 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProjectCard from "../components/ProjectCard";
+import projectService from "../services/projectService";
+import { categoryMapping } from "../utils/categoryConstants";
 import "./css/Landing.css";
 
 export default function Landing() {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { role } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const data = await projectService.getAllProjects();
+        setProjects(data.slice(0, 3));
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProjects();
+  }, []);
+
+  const getCategoryLink = (catLabel) => {
+    // If client (1) or guest (null), show freelancers. If freelancer (2), show jobs.
+    if (role === "2") {
+      return `/shared/jobs?category=${encodeURIComponent(catLabel)}`;
+    }
+    return `/shared/freelancers?category=${encodeURIComponent(catLabel)}`;
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 10, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.4 }
+    }
+  };
+
   return (
     <div className="landing-page">
       <Navbar />
+      
       <section className="hero">
-        <div className="hero-content">
-          <h1>Projects that matter, talents that shine</h1>
-          <p>
-            A modern platform to achieve your goals or grow your freelance
-            career.
-          </p>
-          <div className="hero-buttons">
-            <button className="btn-primary">Get Started</button>
-            <button className="btn-secondary">Explore the Platform</button>
-          </div>
-        </div>
+        <motion.div 
+          className="hero-content"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <motion.h1
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            Projects that matter, talents that shine
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
+            A modern platform to achieve your goals or grow your freelance career.
+          </motion.p>
+          <motion.div 
+            className="hero-buttons"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            <Link to="/auth/register" className="btn-hero-primary">Get Started</Link>
+            <Link to="/shared/jobs" className="btn-hero-secondary">Explore the Platform</Link>
+          </motion.div>
+        </motion.div>
       </section>
 
       <section className="featured-projects">
-        <h2>Projets en vedette</h2>
-        <div className="project-list">
-          <ProjectCard project={{ id: 1, title: 'Modern E-commerce App', budget: 1500, description: 'Build a full-stack e-commerce solution using React and Laravel.', client: { name: 'TechCorp' } }} />
-          <ProjectCard project={{ id: 2, title: 'Brand Identity Design', budget: 500, description: 'Create a unique brand identity for a startup in the green tech sector.', client: { name: 'GreenLife' } }} />
-          <ProjectCard project={{ id: 3, title: 'AI Chatbot Integration', budget: 1200, description: 'Integrate an AI-powered chatbot into an existing customer support system.', client: { name: 'CloudSoft' } }} />
+        <div className="container">
+          <motion.h2
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            Featured Projects
+          </motion.h2>
+          
+          {loading ? (
+            <div className="loader-container">
+              <div className="loader"></div>
+            </div>
+          ) : (
+            <motion.div 
+              className="project-grid"
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              {projects.length > 0 ? (
+                projects.map((project) => (
+                  <motion.div key={project.id} variants={itemVariants}>
+                    <ProjectCard project={project} />
+                  </motion.div>
+                ))
+              ) : (
+                <p className="no-projects">No featured projects available right now.</p>
+              )}
+            </motion.div>
+          )}
         </div>
       </section>
 
       <section className="categories-section">
         <div className="container text-center">
-          <h2 className="mb-4">Find freelancers for every type of work</h2>
-          <div className="row">
-            <div className="col-md-4 col-sm-6 mb-3">
-              <div className="category-box">
-                <img
-                  src="/img/ai-services.jpeg"
-                  alt="AI Services"
-                  className="category-img"
-                />
-                <p>AI Services</p>
-              </div>
-            </div>
-            <div className="col-md-4 col-sm-6 mb-3">
-              <div className="category-box">
-                <img
-                  src="/img/development-it.jpeg"
-                  alt="Development & IT"
-                  className="category-img"
-                />
-                <p>Development & IT</p>
-              </div>
-            </div>
-            <div className="col-md-4 col-sm-6 mb-3">
-              <div className="category-box">
-                <img
-                  src="/img/design-creative.jpeg"
-                  alt="Design & Creative"
-                  className="category-img"
-                />
-                <p>Design & Creative</p>
-              </div>
-            </div>
-            <div className="col-md-4 col-sm-6 mb-3">
-              <div className="category-box">
-                <img
-                  src="/img/sales-marketing.jpeg"
-                  alt="Sales & Marketing"
-                  className="category-img"
-                />
-                <p>Sales & Marketing</p>
-              </div>
-            </div>
-            <div className="col-md-4 col-sm-6 mb-3">
-              <div className="category-box">
-                <img
-                  src="/img/writing-translation.jpeg"
-                  alt="Writing & Translation"
-                  className="category-img"
-                />
-                <p>Writing & Translation</p>
-              </div>
-            </div>
-            <div className="col-md-4 col-sm-6 mb-3">
-              <div className="category-box">
-                <img
-                  src="/img/admin-support.jpeg"
-                  alt="Admin & Support"
-                  className="category-img"
-                />
-                <p>Admin & Support</p>
-              </div>
-            </div>
-          </div>
+          <motion.h2 
+            className="mb-5"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Find exactly what you need
+          </motion.h2>
+          <motion.div 
+            className="row"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {Object.entries(categoryMapping).map(([key, cat], index) => {
+              const imageMap = {
+                'design': 'design-creative.jpeg',
+                'development': 'development-it.jpeg',
+                'ai': 'ai-services.jpeg',
+                'marketing': 'sales-marketing.jpeg',
+                'writing': 'writing-translation.jpeg',
+                'admin': 'admin-support.jpeg'
+              };
+              const imgName = imageMap[cat.slug] || 'default-category.jpeg';
+              
+              return (
+                <div key={index} className="col-lg-4 col-md-6 mb-4">
+                  <Link to={getCategoryLink(key)} className="category-link">
+                    <motion.div 
+                      className="category-box"
+                      variants={itemVariants}
+                      whileHover={{ translateY: -5 }}
+                    >
+                      <div className="category-img-wrapper">
+                        <img
+                          src={`/img/${imgName}`}
+                          alt={cat.label}
+                          className="category-img"
+                          onError={(e) => { e.target.src = '/img/default-category.jpeg'; }}
+                        />
+                      </div>
+                      <p>{cat.label}</p>
+                    </motion.div>
+                  </Link>
+                </div>
+              );
+            })}
+          </motion.div>
         </div>
       </section>
 
