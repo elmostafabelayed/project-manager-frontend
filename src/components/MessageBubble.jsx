@@ -2,7 +2,7 @@ import React from 'react';
 import './MessageBubble.css';
 
 export default function MessageBubble({ message, isOwnMessage }) {
-  // Check against our user state later, but `isOwnMessage` is passed as a prop
+
   return (
     <div className={`message-bubble-wrapper ${isOwnMessage ? 'own-message' : 'other-message'}`}>
       <div className="message-bubble">

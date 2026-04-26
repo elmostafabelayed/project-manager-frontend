@@ -38,7 +38,7 @@ export default function CreateProject() {
     },
   });
 
-  // Handle backend errors
+
   useEffect(() => {
     if (error?.errors) {
       Object.keys(error.errors).forEach((key) => {

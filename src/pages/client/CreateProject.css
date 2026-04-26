@@ -155,7 +155,7 @@
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
 }
 
-/* Responsiveness */
+
 @media (max-width: 768px) {
   .create-project-container {
     padding-top: 80px;

@@ -68,7 +68,7 @@ export default function Profile() {
           setAllSkills(skillsResponse);
         }
         
-        // Reset form with fetched data
+
         reset({
           name: profileResponse.name || '',
           title: profileResponse.profile?.title || '',

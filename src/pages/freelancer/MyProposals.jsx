@@ -50,7 +50,7 @@ export default function MyProposals() {
       await proposalService.respondToInvitation(selectedProposal.id, formData);
       toast.success('Response sent successfully!');
       setShowRespondModal(false);
-      // Refresh list
+
       const updatedProposals = await proposalService.getMyProposals();
       setProposals(updatedProposals.data || updatedProposals);
     } catch (error) {

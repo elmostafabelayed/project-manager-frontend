@@ -22,7 +22,7 @@ export default function ProjectProposals() {
     const fetchProposals = async () => {
       try {
         setLoading(true);
-        // Assuming backend returns { data: [...] } or just the array
+
         const responseList = await proposalService.getProjectProposals(id);
         const data = responseList.data || responseList;
         setProposals(data);
@@ -163,7 +163,7 @@ export default function ProjectProposals() {
                       >
                         {acceptingId === proposal.id ? 'Accepting...' : projectLoading ? 'Creating Project...' : 'Accept Offer'}
                       </button>
-                      {/* Note: we might want a full view to read the entire cover letter */}
+                      
                       <button 
                         className="btn-reject" 
                         onClick={() => handleReject(proposal.id)}

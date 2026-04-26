@@ -9,7 +9,7 @@ import { FormInput } from "../../components/common/FormComponents";
 import toast from "react-hot-toast";
 import "../css/Login.css";
 
-// Login validation schema
+
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
@@ -37,7 +37,7 @@ export default function Login() {
     if (role && localStorage.getItem('token')) redirectByRole(role);
   }, [role]);
 
-  // Handle backend errors mapping
+
   useEffect(() => {
     if (error?.errors) {
       Object.keys(error.errors).forEach((key) => {

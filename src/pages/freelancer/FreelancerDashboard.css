@@ -1,9 +1,4 @@
-/* ══════════════════════════════════════════════
-   Freelancer Dashboard — Jobsy Design System
-   Colors: #185fa5 (primary), #0C447C (dark),
-           #E6F1FB / #f1f5f9 (light backgrounds)
-   Font: Inter
-   ══════════════════════════════════════════════ */
+
 
 .fl-dashboard-container {
   min-height: 100vh;
@@ -21,7 +16,7 @@
   padding: 0 20px 60px;
 }
 
-/* ── Sidebar ── */
+
 .fl-dashboard-sidebar {
   background: #ffffff;
   padding: 30px 24px;
@@ -96,14 +91,14 @@
   flex-shrink: 0;
 }
 
-/* ── Main Content ── */
+
 .fl-dashboard-main {
   display: flex;
   flex-direction: column;
   gap: 28px;
 }
 
-/* Header */
+
 .fl-dash-header {
   display: flex;
   justify-content: space-between;
@@ -145,7 +140,7 @@
   box-shadow: 0 8px 24px rgba(24, 95, 165, 0.35);
 }
 
-/* ── Stats Grid ── */
+
 .fl-stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -219,7 +214,7 @@
   letter-spacing: 0.5px;
 }
 
-/* ── Section Card ── */
+
 .fl-section-card {
   background: #ffffff;
   padding: 28px;
@@ -253,7 +248,7 @@
   color: #0C447C;
 }
 
-/* ── Proposals List ── */
+
 .fl-proposals-list {
   display: flex;
   flex-direction: column;
@@ -303,7 +298,7 @@
   font-weight: 600;
 }
 
-/* Status Badges */
+
 .fl-status-badge {
   padding: 5px 14px;
   border-radius: 20px;
@@ -329,7 +324,7 @@
   color: #b91c1c;
 }
 
-/* ── Projects Grid ── */
+
 .fl-projects-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -428,7 +423,7 @@
   color: #ffffff;
 }
 
-/* ── Loading & Empty States ── */
+
 .fl-loading-state {
   text-align: center;
   padding: 48px 0;
@@ -483,7 +478,7 @@
   box-shadow: 0 6px 18px rgba(24, 95, 165, 0.3);
 }
 
-/* ── Responsive ── */
+
 @media (max-width: 1024px) {
   .fl-stats-grid {
     grid-template-columns: repeat(2, 1fr);

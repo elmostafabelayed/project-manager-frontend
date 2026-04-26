@@ -160,7 +160,7 @@
   color: #185FA5;
 }
 
-/* Responsiveness */
+
 @media (max-width: 1024px) {
   .footer-grid {
     grid-template-columns: repeat(2, 1fr);

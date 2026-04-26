@@ -29,7 +29,7 @@ export default function Landing() {
   }, []);
 
   const getCategoryLink = (catLabel) => {
-    // If client (1) or guest (null), show freelancers. If freelancer (2), show jobs.
+
     if (role === "2") {
       return `/shared/jobs?category=${encodeURIComponent(catLabel)}`;
     }

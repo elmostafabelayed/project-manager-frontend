@@ -4,7 +4,7 @@ import { getCategoryInfo } from '../utils/categoryConstants';
 import './ProjectCard.css';
 
 export default function ProjectCard({ project }) {
-  if (!project) return null; // Or return a skeleton/placeholder
+  if (!project) return null;
 
   const categoryInfo = getCategoryInfo(project.category);
 

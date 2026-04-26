@@ -34,7 +34,7 @@ export default function AppRoutes() {
       <Route path="/auth/login"    element={<Login />} />
       <Route path="/auth/register" element={<Register />} />
 
-      {/* Client */}
+      
       <Route path="/client/dashboard" element={
         <ProtectedRoute allowedRoles={['1']}>
           <ClientDashboard />
@@ -56,7 +56,7 @@ export default function AppRoutes() {
         </ProtectedRoute>
       }/>
 
-      {/* Freelancer */}
+      
       <Route path="/freelancer/browse-projects" element={
         <ProtectedRoute allowedRoles={['2']}>
           <BrowseProjects />
@@ -78,7 +78,7 @@ export default function AppRoutes() {
         </ProtectedRoute>
       }/>
 
-      {/* Shared */}
+      
       <Route path="/shared/chat" element={
         <ProtectedRoute allowedRoles={['1','2','3']}>
           <Chat />
@@ -101,7 +101,7 @@ export default function AppRoutes() {
       <Route path="/shared/freelancers" element={<Freelancers />} />
       <Route path="/shared/jobs" element={<Jobs />} />
 
-      {/* Admin */}
+      
       <Route path="/admin/dashboard" element={
         <ProtectedRoute allowedRoles={['3']}>
           <AdminDashboard />

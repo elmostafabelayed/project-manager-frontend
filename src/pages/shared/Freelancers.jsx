@@ -19,7 +19,7 @@ export default function Freelancers() {
   const [selectedFreelancer, setSelectedFreelancer] = useState(null);
 
   const { user } = useSelector((state) => state.auth);
-  const isClient = user && user.role_id === 1; // Assuming 1 is client role ID
+  const isClient = user && user.role_id === 1;
 
   useEffect(() => {
     const fetchFreelancers = async () => {
@@ -45,7 +45,7 @@ export default function Freelancers() {
     }
   };
 
-  // Update category when URL changes
+
   useEffect(() => {
     setCategory(categoryFromUrl);
   }, [categoryFromUrl]);
@@ -59,7 +59,7 @@ export default function Freelancers() {
         </header>
 
         <div className="row">
-          {/* Sidebar / Filters */}
+          
           <div className="col-lg-3">
             <div className="card border-0 shadow-sm mb-4">
               <div className="card-body">
@@ -85,7 +85,7 @@ export default function Freelancers() {
             </div>
           </div>
 
-          {/* Freelancer List */}
+          
           <div className="col-lg-9">
             {loading ? (
               <div className="text-center py-5">

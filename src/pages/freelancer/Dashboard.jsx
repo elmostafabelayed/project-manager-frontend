@@ -19,15 +19,15 @@ export default function FreelancerDashboard() {
 
   const loading = projectsLoading || proposalsLoading;
 
-  // Stats derived from proposals
+
   const pendingProposals = proposals.filter(p => p.status === 'pending' || !p.status);
   const acceptedProposals = proposals.filter(p => p.status === 'accepted');
   const totalEarnings = acceptedProposals.reduce((sum, p) => sum + Number(p.price || 0), 0);
 
-  // Recent proposals (last 5)
+
   const recentProposals = proposals.slice(0, 5);
 
-  // Available projects (not already applied to)
+
   const appliedProjectIds = proposals.map(p => p.project_id);
   const availableProjects = projects.filter(p => !appliedProjectIds.includes(p.id)).slice(0, 4);
 
@@ -100,7 +100,7 @@ export default function FreelancerDashboard() {
         </aside>
 
         <main className="fl-dashboard-main">
-          {/* Header */}
+          
           <header className="fl-dash-header">
             <div>
               <h1>Freelancer Dashboard</h1>
@@ -115,7 +115,7 @@ export default function FreelancerDashboard() {
             </Link>
           </header>
 
-          {/* Stats */}
+          
           <section className="fl-stats-grid">
             <div className="fl-stat-card fl-stat-proposals">
               <div className="fl-stat-icon">
@@ -167,7 +167,7 @@ export default function FreelancerDashboard() {
             </div>
           </section>
 
-          {/* Recent Proposals */}
+          
           <section className="fl-section-card">
             <div className="fl-section-header">
               <h2>Recent Proposals</h2>
@@ -227,7 +227,7 @@ export default function FreelancerDashboard() {
             )}
           </section>
 
-          {/* Available Projects */}
+          
           <section className="fl-section-card">
             <div className="fl-section-header">
               <h2>Recommended Projects</h2>

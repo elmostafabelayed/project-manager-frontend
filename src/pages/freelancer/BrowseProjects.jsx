@@ -19,11 +19,11 @@ export default function BrowseProjects() {
 
   const loading = projectsLoading || proposalsLoading;
 
-  // Filter out projects that the freelancer has already applied for
+
   const appliedProjectIds = (proposals || []).map(p => p.project_id);
   const availableProjects = projects.filter(p => !appliedProjectIds.includes(p.id));
 
-  // Filter available projects based on search term
+
   const filteredProjects = availableProjects.filter(project => 
     project.title?.toLowerCase().includes(searchTerm.toLowerCase()) || 
     project.description?.toLowerCase().includes(searchTerm.toLowerCase())

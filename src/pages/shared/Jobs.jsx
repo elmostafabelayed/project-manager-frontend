@@ -39,7 +39,7 @@ export default function Jobs() {
     }
   };
 
-  // Update category when URL changes
+
   useEffect(() => {
     setCategory(categoryFromUrl);
   }, [categoryFromUrl]);
@@ -53,7 +53,7 @@ export default function Jobs() {
         </header>
 
         <div className="row">
-          {/* Sidebar / Filters */}
+          
           <div className="col-lg-3">
             <div className="card border-0 shadow-sm mb-4">
               <div className="card-body">
@@ -79,7 +79,7 @@ export default function Jobs() {
             </div>
           </div>
 
-          {/* Job List */}
+          
           <div className="col-lg-9">
             {loading ? (
               <div className="text-center py-5">

@@ -8,7 +8,7 @@ import './Review.css';
 export default function Review() {
   const location = useLocation();
   const navigate = useNavigate();
-  // We expect project info to be passed via location state
+
   const { project, userToReview } = location.state || {};
   
   const [rating, setRating] = useState(0);

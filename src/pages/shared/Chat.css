@@ -16,7 +16,7 @@
   gap: 1rem;
 }
 
-/* Sidebar */
+
 .chat-sidebar {
   width: 320px;
   background: white;
@@ -95,7 +95,7 @@
   text-overflow: ellipsis;
 }
 
-/* Main Chat Area */
+
 .chat-main {
   flex: 1;
   background: white;
@@ -235,7 +235,7 @@
   }
 
   .chat-sidebar-header {
-    display: none; /* Hide 'Messages' title on mobile to save space */
+    display: none; 
   }
 
   .conversations-list {
@@ -293,7 +293,7 @@
   }
 
   .conversation-details p {
-    display: none; /* Hide project title on mobile list */
+    display: none; 
   }
 
   .chat-main, .empty-chat {

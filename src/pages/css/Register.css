@@ -140,7 +140,7 @@
   text-decoration: underline;
 }
 
-/* Responsiveness */
+
 @media (max-width: 576px) {
   .register-card {
     padding: 0 20px 30px 20px;

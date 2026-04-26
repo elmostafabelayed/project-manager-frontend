@@ -9,7 +9,7 @@ export default function AboutUs() {
     <div className="aboutus-page">
       <Navbar />
 
-      {/* Hero Section */}
+      
       <section className="aboutus-hero">
         <div className="aboutus-hero-content">
           <span className="aboutus-badge">About Jobsy</span>
@@ -26,7 +26,7 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* Stats Section */}
+      
       <section className="aboutus-stats">
         <div className="stat-card">
           <span className="stat-number">10K+</span>
@@ -46,7 +46,7 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* Mission, Vision, Values */}
+      
       <section className="aboutus-mission">
         <h2>What Drives Us</h2>
         <div className="mission-grid">
@@ -95,44 +95,44 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* Story Section */}
+      
       <section className="aboutus-story">
         <div className="story-content">
           <h2>Our Story</h2>
           <p>
             Jobsy was born from a simple frustration: finding the right freelancer
-            shouldn't be harder than the project itself. Founded in 2024, we set
-            out to create a platform that prioritizes quality, trust, and seamless
+            shouldn't be harder than the project itself. Conceived recently as an ambitious
+            project, we set out to create a platform that prioritizes quality, trust, and seamless
             collaboration.
           </p>
           <p>
-            What started as a small idea has grown into a thriving community of
-            creative professionals, developers, marketers, and writers — all
-            united by the desire to do meaningful work on their own terms.
+            What started as a core idea earlier this year has rapidly evolved into a 
+            fully functional application, built through intensive development, long hours, 
+            and a passion for building robust digital solutions.
           </p>
           <p>
-            Today, Jobsy connects thousands of freelancers with clients across
-            the globe, powering everything from brand identity redesigns to
-            full-stack application development.
+            Today, as we finalize the platform this April 2026, we are proud of what we've 
+            achieve in a short time—a thriving platform ready to connect talent 
+            with opportunity across the globe.
           </p>
         </div>
         <div className="story-visual">
           <div className="story-card story-card-1">
-            <span className="story-year">2024</span>
-            <span className="story-event">Platform Founded</span>
+            <span className="story-year">March 2026</span>
+            <span className="story-event">Project Conception</span>
           </div>
           <div className="story-card story-card-2">
-            <span className="story-year">2025</span>
-            <span className="story-event">1K+ Freelancers Joined</span>
+            <span className="story-year">April 2026</span>
+            <span className="story-event">Intensive Development</span>
           </div>
           <div className="story-card story-card-3">
-            <span className="story-year">2026</span>
-            <span className="story-event">Global Expansion</span>
+            <span className="story-year">April 2026</span>
+            <span className="story-event">Official Launch</span>
           </div>
         </div>
       </section>
 
-      {/* Team Section */}
+      
       <section className="aboutus-team">
         <h2>Meet the Team</h2>
         <p className="team-subtitle">
@@ -142,40 +142,24 @@ export default function AboutUs() {
         <div className="team-grid">
           <div className="team-card">
             <div className="team-avatar">
-              <span>AE</span>
+              <span>MB</span>
             </div>
-            <h4>Amine El Mourabit</h4>
-            <span className="team-role">CEO & Co-Founder</span>
-            <p>Visionary leader with 10+ years in tech entrepreneurship.</p>
+            <h4>Mehdi Benchekroun</h4>
+            <span className="team-role">Web Developer</span>
+            <p>Develops scalable, high-performance web applications.</p>
           </div>
           <div className="team-card">
             <div className="team-avatar">
-              <span>SB</span>
+              <span>MB</span>
             </div>
-            <h4>Sara Bennani</h4>
-            <span className="team-role">CTO</span>
-            <p>Full-stack architect passionate about scalable platforms.</p>
-          </div>
-          <div className="team-card">
-            <div className="team-avatar">
-              <span>KH</span>
-            </div>
-            <h4>Karim Hadid</h4>
-            <span className="team-role">Head of Design</span>
-            <p>Creative mind crafting intuitive and delightful experiences.</p>
-          </div>
-          <div className="team-card">
-            <div className="team-avatar">
-              <span>LR</span>
-            </div>
-            <h4>Leila Rami</h4>
-            <span className="team-role">Community Manager</span>
-            <p>Building bridges between freelancers and clients every day.</p>
+            <h4>Mostafa Belyad</h4>
+            <span className="team-role">Web Developer</span>
+            <p>Builds responsive web apps with great performance and UX.</p>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
+      
       <section className="aboutus-cta">
         <h2>Ready to Get Started?</h2>
         <p>

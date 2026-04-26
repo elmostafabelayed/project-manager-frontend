@@ -24,12 +24,12 @@ export default function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Load conversations on mount
+
   useEffect(() => {
     const fetchConversations = async () => {
       try {
         setLoading(true);
-        // Backend should return list of conversations for this user
+
         const response = await chatService.getConversations();
         const data = response.data || response;
         setConversations(data);
@@ -56,7 +56,7 @@ export default function Chat() {
     fetchConversations();
   }, [searchParams]);
 
-  // Fetch messages when a conversation is selected
+
   const handleSelectConversation = async (conversation) => {
     setActiveConversation(conversation);
     setMobileShowSidebar(false);
@@ -88,7 +88,7 @@ export default function Chat() {
     }
   };
 
-  // Scroll when messages change
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -98,7 +98,7 @@ export default function Chat() {
     if (!newMessage.trim() || !activeConversation) return;
 
     try {
-      // Create optimistic UI message
+
       const optimisticMsg = {
         id: Date.now(),
         conversation_id: activeConversation.id,
@@ -110,20 +110,20 @@ export default function Chat() {
       setMessages(prev => [...prev, optimisticMsg]);
       setNewMessage('');
       
-      // Determine the receiver based on the conversation if possible. 
-      // Assume backend might need it if it's not strictly tied to conversation context, 
-      // or the API handles it via conversation_id. We'll rely on convention.
+
+
+
       await chatService.sendMessage(activeConversation.id, optimisticMsg.content);
       
-      // Optionally refetch messages here, but optimistic update is sufficient for demo
+
     } catch (error) {
       console.error("Failed to send message:", error);
       toast.error("Failed to send message.");
-      // We could remove the optimistic message on failure
+
     }
   };
 
-  // Determine the name of the "other person" in the active conversation
+
   const getOtherParticipantName = (conversation) => {
     return conversation?.other_participant?.name || 'User';
   };
@@ -137,7 +137,7 @@ export default function Chat() {
       <Navbar />
       <div className="chat-wrapper">
         
-        {/* Sidebar */}
+        
         <aside className="chat-sidebar">
           <div className="chat-sidebar-header">
             <h2>Messages</h2>
@@ -169,7 +169,7 @@ export default function Chat() {
           )}
         </aside>
 
-        {/* Main Chat Area */}
+        
         {activeConversation ? (
           <main className="chat-main">
             <header className="chat-main-header">

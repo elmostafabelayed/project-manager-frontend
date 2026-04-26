@@ -54,7 +54,7 @@ export default function Navbar() {
         </div>
 
         <ul className="navbar-links">
-          {/* Hire freelancers Dropdown - Visible to guests and Clients */}
+          
           {(!role || role === "1") && (
             <li className={`nav-item dropdown ${activeDropdown === 'hire' ? 'show' : ''}`}>
               <a 
@@ -74,7 +74,7 @@ export default function Navbar() {
             </li>
           )}
 
-          {/* Find work Dropdown - Visible to guests and Freelancers */}
+          
           {(!role || role === "2") && (
             <li className={`nav-item dropdown ${activeDropdown === 'work' ? 'show' : ''}`}>
               <a 
@@ -95,7 +95,7 @@ export default function Navbar() {
             </li>
           )}
 
-          {/* Admin Panel - Visible to Admin */}
+          
           {role === "3" && (
             <li className={`nav-item dropdown ${activeDropdown === 'admin' ? 'show' : ''}`}>
               <a 
@@ -113,7 +113,7 @@ export default function Navbar() {
             </li>
           )}
 
-          {/* Dynamic Links */}
+          
           {role === "2" && (
             <li>
               <Link to="/freelancer/browse-projects">Browse Projects</Link>

@@ -14,7 +14,7 @@ export default function ClientDashboard() {
     dispatch(fetchProjects());
   }, [dispatch]);
 
-  // Filter projects owned by the current user
+
   const myProjects = items.filter(p => p.client_id === user?.id);
 
   return (

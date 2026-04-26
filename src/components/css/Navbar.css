@@ -36,7 +36,7 @@
   color: #0C447C;
 }
 
-/* Desktop Dropdown Styles */
+
 .navbar-links .nav-item.dropdown {
   position: relative;
 }
@@ -353,10 +353,10 @@
   .navbar-links { display: none; }
   .navbar-auth { display: none; }
   .navbar-logo { flex: 1; text-align: center; }
-  .navbar-logo img { margin-left: -50px; } /* Center correction due to menu btn */
+  .navbar-logo img { margin-left: -50px; } 
 }
 
-/* Sidebar Dropdown refined for mobile */
+
 .sidebar-dropdown .dropdown-menu {
   position: static;
   display: none;

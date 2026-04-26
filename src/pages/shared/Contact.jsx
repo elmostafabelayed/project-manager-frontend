@@ -39,7 +39,7 @@ export default function Contact() {
     },
     {
       q: "How do I report an issue?",
-      a: "You can use this contact form or email us directly at support@jobsy.com. We typically respond within 24 hours.",
+      a: "You can use this contact form or email us directly at Jobsyy@proton.me. We typically respond within 24 hours.",
     },
   ];
 
@@ -47,7 +47,7 @@ export default function Contact() {
     <div className="contact-page">
       <Navbar />
 
-      {/* Hero */}
+      
       <section className="contact-hero">
         <div className="contact-hero-content">
           <span className="contact-badge">Get in Touch</span>
@@ -63,7 +63,7 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* Info Cards */}
+      
       <section className="contact-info">
         <div className="info-card">
           <div className="info-icon">
@@ -73,7 +73,7 @@ export default function Contact() {
             </svg>
           </div>
           <h3>Email Us</h3>
-          <p>support@jobsy.com</p>
+          <p>Jobsyy@proton.me</p>
           <span>We reply within 24 hours</span>
         </div>
         <div className="info-card">
@@ -83,7 +83,7 @@ export default function Contact() {
             </svg>
           </div>
           <h3>Call Us</h3>
-          <p>+212 5XX-XXXXXX</p>
+          <p>+212 688835120</p>
           <span>Mon - Fri, 9AM to 6PM</span>
         </div>
         <div className="info-card">
@@ -94,12 +94,12 @@ export default function Contact() {
             </svg>
           </div>
           <h3>Visit Us</h3>
-          <p>Casablanca, Morocco</p>
-          <span>By appointment only</span>
+          <p>Fes, Morocco</p>
+          <span>Currently no physical location</span>
         </div>
       </section>
 
-      {/* Contact Form + FAQ */}
+      
       <section className="contact-main">
         <div className="contact-form-wrapper">
           <h2>Send Us a Message</h2>

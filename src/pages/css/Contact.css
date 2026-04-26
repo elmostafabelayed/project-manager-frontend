@@ -3,7 +3,7 @@
   color: #172A39;
 }
 
-/* ── Hero ── */
+
 .contact-hero {
   position: relative;
   background: linear-gradient(135deg, #E6F1FB 0%, #cce3f9 50%, #b3d4f5 100%);
@@ -50,7 +50,7 @@
   line-height: 1.7;
 }
 
-/* Floating shapes */
+
 .contact-hero-shapes {
   position: absolute;
   inset: 0;
@@ -88,7 +88,7 @@
   50% { transform: translateY(-18px) scale(1.04); }
 }
 
-/* ── Info Cards ── */
+
 .contact-info {
   display: flex;
   justify-content: center;
@@ -149,7 +149,7 @@
   color: #8ba8c2;
 }
 
-/* ── Form + FAQ Section ── */
+
 .contact-main {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
@@ -175,7 +175,7 @@
   line-height: 1.5;
 }
 
-/* Form */
+
 .contact-form {
   display: flex;
   flex-direction: column;
@@ -256,7 +256,7 @@
   transform: translateY(0);
 }
 
-/* Success toast */
+
 .success-toast {
   display: flex;
   align-items: center;
@@ -277,7 +277,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* FAQ */
+
 .faq-list {
   display: flex;
   flex-direction: column;
@@ -348,7 +348,7 @@
   margin: 0;
 }
 
-/* ── Responsive ── */
+
 @media (max-width: 768px) {
   .contact-hero {
     padding: 90px 16px 70px;

@@ -1,5 +1,6 @@
 import "./css/Footer.css";
 import { Link } from "react-router-dom";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export default function Footer() {
   return (
@@ -15,10 +16,10 @@ export default function Footer() {
               Build your career or find the perfect freelancer for your next big project.
             </p>
             <div className="footer-social">
-              <a href="#" aria-label="Facebook"><i className="fab fa-facebook"></i></a>
-              <a href="#" aria-label="Twitter"><i className="fab fa-twitter"></i></a>
-              <a href="#" aria-label="LinkedIn"><i className="fab fa-linkedin"></i></a>
-              <a href="#" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
+              <a href="https://www.facebook.com/profile.php?id=61562951310171" aria-label="Facebook"><i className="fab fa-facebook"></i></a>
+              <a href="https://x.com/Jobsy230268" aria-label="Twitter"><i className="fab fa-twitter"></i></a>
+              <a href="https://www.linkedin.com/in/jobsy-jobsy-08374a405/" aria-label="LinkedIn"><i className="fab fa-linkedin"></i></a>
+              <a href="https://www.instagram.com/" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
             </div>
           </div>
 

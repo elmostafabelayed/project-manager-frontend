@@ -3,7 +3,7 @@
   color: #172A39;
 }
 
-/* ── Hero ── */
+
 .aboutus-hero {
   position: relative;
   background: linear-gradient(135deg, #E6F1FB 0%, #cce3f9 50%, #b3d4f5 100%);
@@ -52,7 +52,7 @@
   margin: 0 auto;
 }
 
-/* Floating shapes */
+
 .aboutus-hero-shapes {
   position: absolute;
   inset: 0;
@@ -99,7 +99,7 @@
   50% { transform: translateY(-20px) scale(1.05); }
 }
 
-/* ── Stats ── */
+
 .aboutus-stats {
   display: flex;
   justify-content: center;
@@ -139,7 +139,7 @@
   font-weight: 500;
 }
 
-/* ── Mission / Vision / Values ── */
+
 .aboutus-mission {
   padding: 80px 20px;
   text-align: center;
@@ -200,7 +200,7 @@
   color: #5a7a94;
 }
 
-/* ── Story ── */
+
 .aboutus-story {
   display: flex;
   align-items: center;
@@ -263,7 +263,7 @@
   color: #4a6a84;
 }
 
-/* ── Team ── */
+
 .aboutus-team {
   padding: 80px 20px;
   background: linear-gradient(180deg, #f8fbfe 0%, #E6F1FB 100%);
@@ -346,7 +346,7 @@
   line-height: 1.6;
 }
 
-/* ── CTA ── */
+
 .aboutus-cta {
   text-align: center;
   padding: 80px 20px;
@@ -406,7 +406,7 @@
   transform: translateY(-2px);
 }
 
-/* ── Responsive ── */
+
 @media (max-width: 768px) {
   .aboutus-hero {
     padding: 90px 16px 70px;

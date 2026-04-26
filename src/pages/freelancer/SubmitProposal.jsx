@@ -37,7 +37,7 @@ export default function SubmitProposal() {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      // The backend expects 'message' instead of 'cover_letter'
+
       await proposalService.sendProposal({ 
         project_id: projectId,
         price: data.price,

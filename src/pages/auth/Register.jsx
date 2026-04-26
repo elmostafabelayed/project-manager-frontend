@@ -9,7 +9,7 @@ import { FormInput } from "../../components/common/FormComponents";
 import toast from "react-hot-toast";
 import "../css/Register.css";
 
-// Registration validation schema
+
 const registerSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
   email: z.string().email("Invalid email address"),
@@ -45,7 +45,7 @@ export default function Register() {
 
   const selectedRoleId = watch("role_id");
 
-  // Handle backend errors
+
   useEffect(() => {
     if (error?.errors) {
       Object.keys(error.errors).forEach((key) => {

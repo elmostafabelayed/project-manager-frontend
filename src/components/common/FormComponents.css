@@ -1,4 +1,4 @@
-/* HeroUI-inspired Form Component Styles */
+
 
 .premium-form-group {
   margin-bottom: 1.5rem;
@@ -26,7 +26,7 @@
   width: 100%;
   padding: 0.75rem 1rem;
   font-size: 0.9375rem;
-  background-color: #f4f4f5; /* Light grey/blue */
+  background-color: #f4f4f5; 
   border: 2px solid transparent;
   border-radius: 12px;
   color: #18181b;
@@ -45,16 +45,16 @@
 .premium-textarea:focus, 
 .premium-select:focus {
   background-color: #fff;
-  border-color: #185FA5; /* Project primary color */
+  border-color: #185FA5; 
   box-shadow: 0 0 0 4px rgba(24, 95, 165, 0.1);
 }
 
-/* Error State */
+
 .premium-input.is-invalid, 
 .premium-textarea.is-invalid, 
 .premium-select.is-invalid {
   background-color: #fff;
-  border-color: #f31260; /* HeroUI error red */
+  border-color: #f31260; 
   color: #f31260;
 }
 
@@ -84,28 +84,28 @@
   }
 }
 
-/* Select specific */
+
 .premium-select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233f3f46'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='Wait, I'll use a simpler one' /%3E%3C/svg%3E"); /* Placeholder for arrow */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233f3f46'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='Wait, I'll use a simpler one' /%3E%3C/svg%3E"); 
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 1.5em;
 }
 
-/* Textarea specific */
+
 .premium-textarea {
   min-height: 120px;
   resize: vertical;
 }
 
-/* Required star */
+
 .required-star {
   color: #f31260;
   margin-left: 2px;
 }
 
-/* Premium Button Styles */
+
 .premium-btn {
   padding: 0.75rem 1.5rem;
   font-size: 0.9375rem;
