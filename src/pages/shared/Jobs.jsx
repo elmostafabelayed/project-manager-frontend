@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import projectService from '../../services/projectService';
 import { categories, getCategoryInfo } from '../../utils/categoryConstants';
+import { getAvatarUrl } from '../../utils/avatarHelper';
 import '../../components/ProjectCard.css';
 import './Jobs.css';
 
@@ -109,7 +110,7 @@ export default function Jobs() {
                         <div className="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
                           <div className="d-flex align-items-center">
                             <img 
-                              src={`https://ui-avatars.com/api/?name=${job.client?.name || 'Client'}&background=random&color=fff`} 
+                              src={getAvatarUrl(job.client)} 
                               alt="client"
                               className="rounded-circle me-2"
                               style={{ width: '24px', height: '24px' }}

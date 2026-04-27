@@ -5,6 +5,7 @@ import Navbar from '../../components/Navbar';
 import proposalService from '../../services/proposalService';
 import { createProjectFromProposal } from '../../store/slices/projectSlice';
 import toast from 'react-hot-toast';
+import { getAvatarUrl } from '../../utils/avatarHelper';
 import './ProjectProposals.css';
 
 export default function ProjectProposals() {
@@ -112,7 +113,7 @@ export default function ProjectProposals() {
                 <div className="freelancer-info">
                    <Link to={`/shared/profile/${proposal.freelancer_id}`}>
                      <img 
-                       src={`https://ui-avatars.com/api/?name=${proposal.freelancer?.name || 'Freelancer'}&background=185fa5&color=fff`} 
+                       src={getAvatarUrl(proposal.freelancer)} 
                        alt="freelancer" 
                        className="freelancer-avatar" 
                      />

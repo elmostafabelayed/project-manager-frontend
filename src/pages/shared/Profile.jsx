@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
@@ -10,6 +10,7 @@ import profileService from '../../services/profileService';
 import skillService from '../../services/skillService';
 import { FormInput, FormTextArea } from '../../components/common/FormComponents';
 import toast from 'react-hot-toast';
+import { getAvatarUrl } from '../../utils/avatarHelper';
 import './Profile.css';
 
 const profileSchema = z.object({
@@ -33,6 +34,8 @@ export default function Profile() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const isFreelancer = userData?.role_id == 2 || userData?.role?.name?.toLowerCase() === 'freelancer';
 
@@ -143,6 +146,47 @@ export default function Profile() {
     }
   };
 
+  const handleAvatarClick = () => {
+    if (isEditMode) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('Image size should be less than 2MB');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('profile_picture', file);
+
+    try {
+      setUploading(true);
+      const response = await profileService.uploadProfilePicture(formData);
+      
+      if (response.user) {
+        dispatch(updateUser(response.user));
+        setUserData(prev => ({ ...prev, ...response.user }));
+      }
+      
+      toast.success('Profile picture updated!');
+    } catch (error) {
+      console.error('Failed to upload profile picture:', error);
+      toast.error('Failed to upload profile picture');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   if (loading) return <div className="cl-loading-state p-5 text-center"><div className="cl-spinner"></div><p>Loading profile...</p></div>;
 
   return (
@@ -157,11 +201,33 @@ export default function Profile() {
         </Link>
         <div className="profile-card shadow-sm rounded-4 overflow-hidden bg-white">
           <header className="profile-header p-4 d-flex align-items-center gap-4 border-bottom">
-            <img 
-              src={`https://ui-avatars.com/api/?name=${userData.name}&background=185fa5&color=fff&size=128`} 
-              alt="Avatar" 
-              className="profile-avatar-large rounded-circle border border-4 border-white shadow-sm"
-            />
+            <div 
+              className={`profile-avatar-container ${isEditMode ? 'editable' : ''}`}
+              onClick={handleAvatarClick}
+            >
+              <img 
+                src={getAvatarUrl(userData)} 
+                alt="Avatar" 
+                className="profile-avatar-large rounded-circle border border-4 border-white shadow-sm"
+              />
+              {isEditMode && (
+                <div className="profile-avatar-overlay d-flex align-items-center justify-content-center rounded-circle">
+                  <i className="bi bi-pencil-fill text-white fs-4"></i>
+                </div>
+              )}
+              {uploading && (
+                <div className="profile-avatar-loader d-flex align-items-center justify-content-center rounded-circle">
+                  <div className="spinner-border spinner-border-sm text-white" role="status"></div>
+                </div>
+              )}
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleFileChange} 
+                accept="image/*" 
+                className="d-none" 
+              />
+            </div>
             <div className="profile-header-info">
               <h1 className="h2 fw-bold mb-1">{userData.name}</h1>
               <p className="mb-2">

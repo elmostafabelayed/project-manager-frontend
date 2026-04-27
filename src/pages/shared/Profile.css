@@ -28,6 +28,46 @@
   border-radius: 50%;
   border: 4px solid rgba(255, 255, 255, 0.2);
   object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.profile-avatar-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.profile-avatar-container.editable {
+  cursor: pointer;
+}
+
+.profile-avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.profile-avatar-container.editable:hover .profile-avatar-overlay {
+  opacity: 1;
+}
+
+.profile-avatar-container.editable:hover .profile-avatar-large {
+  filter: blur(1px);
+}
+
+.profile-avatar-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 2;
 }
 
 .profile-header-info h1 {

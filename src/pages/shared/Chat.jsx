@@ -6,6 +6,7 @@ import MessageBubble from '../../components/MessageBubble';
 import chatService from '../../services/chatService';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
+import { getAvatarUrl } from '../../utils/avatarHelper';
 import './Chat.css';
 
 export default function Chat() {
@@ -155,7 +156,7 @@ export default function Chat() {
                   onClick={() => handleSelectConversation(conv)}
                 >
                   <img 
-                    src={`https://ui-avatars.com/api/?name=${getOtherParticipantName(conv)}&background=f1efe8&color=185fa5`} 
+                    src={getAvatarUrl(conv.other_participant)} 
                     alt="avatar" 
                     className="conversation-avatar" 
                   />

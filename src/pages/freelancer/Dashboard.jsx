@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { fetchProjects } from '../../store/slices/projectSlice';
 import { fetchMyProposals } from '../../store/slices/proposalSlice';
 import Navbar from '../../components/Navbar';
+import { getAvatarUrl } from '../../utils/avatarHelper';
 import './FreelancerDashboard.css';
 
 export default function FreelancerDashboard() {
@@ -55,7 +56,7 @@ export default function FreelancerDashboard() {
         <aside className="fl-dashboard-sidebar">
           <div className="fl-user-profile">
             <img
-              src={`https://ui-avatars.com/api/?name=${user?.name}&background=185fa5&color=fff&size=96`}
+              src={getAvatarUrl(user)}
               alt="user"
               className="fl-avatar"
             />
@@ -256,7 +257,7 @@ export default function FreelancerDashboard() {
                     <div className="fl-project-card-footer">
                       <div className="fl-project-client-info">
                         <img
-                          src={`https://ui-avatars.com/api/?name=${project.client?.name || 'C'}&background=e2e8f0&color=334155&size=28`}
+                          src={getAvatarUrl(project.client)}
                           alt="client"
                         />
                         <Link to={`/shared/profile/${project.client?.id}`} className="text-decoration-none text-muted">

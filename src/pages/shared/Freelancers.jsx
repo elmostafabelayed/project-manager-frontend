@@ -4,6 +4,7 @@ import profileService from '../../services/profileService';
 import { categories } from '../../utils/categoryConstants';
 import { useSelector } from 'react-redux';
 import InviteModal from '../../components/InviteModal';
+import { getAvatarUrl } from '../../utils/avatarHelper';
 import './Freelancers.css';
 
 export default function Freelancers() {
@@ -101,7 +102,7 @@ export default function Freelancers() {
                       <div className="card-body">
                         <div className="d-flex align-items-center mb-3">
                           <img 
-                            src={`https://ui-avatars.com/api/?name=${freelancer.name}&background=random&color=fff`} 
+                            src={getAvatarUrl(freelancer)} 
                             alt={freelancer.name}
                             className="avatar-md rounded-circle me-3"
                           />

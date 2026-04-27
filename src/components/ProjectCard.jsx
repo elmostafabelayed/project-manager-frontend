@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getCategoryInfo } from '../utils/categoryConstants';
+import { getAvatarUrl } from '../utils/avatarHelper';
 import './ProjectCard.css';
 
 export default function ProjectCard({ project }) {
@@ -23,7 +24,7 @@ export default function ProjectCard({ project }) {
       <div className="project-footer">
         <div className="project-client">
           <Link to={`/shared/profile/${project.client_id}`}>
-            <img src={`https://ui-avatars.com/api/?name=${project.client?.name || 'Client'}&background=random`} alt="client" />
+            <img src={getAvatarUrl(project.client)} alt="client" />
           </Link>
           <Link to={`/shared/profile/${project.client_id}`} className="text-decoration-none text-dark">
             <span>{project.client?.name || 'Anonymous Client'}</span>

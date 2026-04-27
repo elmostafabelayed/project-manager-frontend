@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchProjects } from '../../store/slices/projectSlice';
 import Navbar from '../../components/Navbar';
+import { getAvatarUrl } from '../../utils/avatarHelper';
 import './Dashboard.css';
 
 export default function ClientDashboard() {
@@ -24,7 +25,7 @@ export default function ClientDashboard() {
       <div className="dashboard-content container">
         <aside className="dashboard-sidebar">
           <div className="user-profile-sm">
-            <img src={`https://ui-avatars.com/api/?name=${user?.name}&background=185fa5&color=fff`} alt="user" />
+            <img src={getAvatarUrl(user)} alt="user" />
             <div className="user-info">
               <h3>{user?.name}</h3>
               <p>Client Account</p>
