@@ -441,7 +441,7 @@ export default function Profile() {
                 )}
 
                 <div className="mt-5 text-center">
-                   <button className="premium-btn premium-btn-primary px-5 rounded-pill shadow" onClick={() => navigate('/shared/chat')}>
+                   <button className="premium-btn premium-btn-primary px-5 rounded-pill shadow" onClick={() => navigate(`/shared/chat?userId=${userData.id}`)}>
                       Contact {userData.name.split(' ')[0]}
                    </button>
                 </div>

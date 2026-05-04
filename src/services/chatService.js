@@ -6,6 +6,11 @@ const chatService = {
     const response = await api.get('/conversations');
     return response.data;
   },
+  
+  showOrCreateConversation: async (userId, projectId = null) => {
+    const response = await api.post('/conversations/show-or-create', { user_id: userId, project_id: projectId });
+    return response.data;
+  },
 
 
   getMessages: async (conversationId) => {

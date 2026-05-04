@@ -38,9 +38,28 @@ export default function Chat() {
         await markAllMessageNotificationsRead();
 
         const conversationIdFromUrl = searchParams.get('conversationId');
-        const initialConversation = conversationIdFromUrl
-          ? data.find((conv) => String(conv.id) === String(conversationIdFromUrl))
-          : null;
+        const userIdFromUrl = searchParams.get('userId');
+        let initialConversation = null;
+
+        if (conversationIdFromUrl) {
+          initialConversation = data.find((conv) => String(conv.id) === String(conversationIdFromUrl));
+        } else if (userIdFromUrl) {
+          initialConversation = data.find((conv) => String(conv.other_participant?.id) === String(userIdFromUrl));
+          
+          // If not found in current list, try to create/fetch from server
+          if (!initialConversation) {
+            try {
+              const newConv = await chatService.showOrCreateConversation(userIdFromUrl);
+              // Refresh conversations to include the new one
+              const refreshedResponse = await chatService.getConversations();
+              const refreshedData = refreshedResponse.data || refreshedResponse;
+              setConversations(refreshedData);
+              initialConversation = refreshedData.find(c => c.id === newConv.id);
+            } catch (error) {
+              console.error("Failed to show/create conversation:", error);
+            }
+          }
+        }
 
         if (initialConversation) {
           handleSelectConversation(initialConversation);

@@ -84,7 +84,7 @@ export default function Landing() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
-            <Link to="/auth/register" className="btn-hero-primary">Get Started</Link>
+            {!role && <Link to="/auth/register" className="btn-hero-primary">Get Started</Link>}
             <Link to="/shared/jobs" className="btn-hero-secondary">Explore the Platform</Link>
           </motion.div>
         </motion.div>
