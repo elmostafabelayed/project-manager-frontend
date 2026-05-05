@@ -4,29 +4,43 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import InviteModal from "../components/InviteModal";
 import ProjectCard from "../components/ProjectCard";
+import FreelancerCard from "../components/FreelancerCard";
 import projectService from "../services/projectService";
+import profileService from "../services/profileService";
 import { categoryMapping } from "../utils/categoryConstants";
 import "./css/Landing.css";
 
 export default function Landing() {
   const [projects, setProjects] = useState([]);
+  const [freelancers, setFreelancers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [selectedFreelancer, setSelectedFreelancer] = useState(null);
   const { role } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchData = async () => {
+      setLoading(true);
       try {
-        const data = await projectService.getAllProjects();
-        setProjects(data.slice(0, 3));
+        if (role === "1") {
+          // Fetch Featured Freelancers for Client
+          const data = await profileService.getFreelancers("");
+          setFreelancers(data.slice(0, 3));
+        } else {
+          // Fetch Featured Projects for Freelancer or Guest
+          const data = await projectService.getAllProjects();
+          setProjects(data.slice(0, 3));
+        }
       } catch (error) {
-        console.error("Error fetching projects:", error);
+        console.error("Error fetching landing page data:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchProjects();
-  }, []);
+    fetchData();
+  }, [role]);
 
   const getCategoryLink = (catLabel) => {
 
@@ -102,7 +116,7 @@ export default function Landing() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
           >
-            Featured Projects
+            {role === "1" ? "Featured Freelancers" : "Featured Projects"}
           </motion.h2>
           
           {loading ? (
@@ -117,15 +131,50 @@ export default function Landing() {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              {projects.length > 0 ? (
-                projects.map((project) => (
-                  <motion.div key={project.id} variants={itemVariants}>
-                    <ProjectCard project={project} />
-                  </motion.div>
-                ))
+              {role === "1" ? (
+                freelancers.length > 0 ? (
+                  freelancers.map((freelancer) => (
+                    <motion.div key={freelancer.id} variants={itemVariants}>
+                      <FreelancerCard 
+                        freelancer={freelancer} 
+                        isClient={true} 
+                        onInvite={(f) => {
+                          setSelectedFreelancer(f);
+                          setShowInviteModal(true);
+                        }}
+                      />
+                    </motion.div>
+                  ))
+                ) : (
+                  <p className="no-projects">No featured freelancers available right now.</p>
+                )
               ) : (
-                <p className="no-projects">No featured projects available right now.</p>
+                projects.length > 0 ? (
+                  projects.map((project) => (
+                    <motion.div key={project.id} variants={itemVariants}>
+                      <ProjectCard project={project} />
+                    </motion.div>
+                  ))
+                ) : (
+                  <p className="no-projects">No featured projects available right now.</p>
+                )
               )}
+            </motion.div>
+          )}
+
+          {!loading && (
+            <motion.div 
+              className="text-center mt-5"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+            >
+              <Link 
+                to={role === "1" ? "/shared/freelancers" : "/shared/jobs"} 
+                className="btn btn-outline-primary rounded-pill px-4"
+              >
+                {role === "1" ? "View All Freelancers" : "View All Projects"}
+              </Link>
             </motion.div>
           )}
         </div>
@@ -186,6 +235,16 @@ export default function Landing() {
       </section>
 
       <Footer />
+
+      {showInviteModal && selectedFreelancer && (
+        <InviteModal 
+          freelancer={selectedFreelancer} 
+          onClose={() => {
+            setShowInviteModal(false);
+            setSelectedFreelancer(null);
+          }} 
+        />
+      )}
     </div>
   );
 }
