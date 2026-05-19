@@ -406,9 +406,22 @@ export default function Profile() {
                       <h2 className="h4 fw-bold mb-4 ps-3">Professional Overview</h2>
                       <div className="mb-4">
                         <h3 className="h4 fw-bold text-dark mb-2">{userData.profile?.title || "Professional Freelancer"}</h3>
-                        <div className="d-flex align-items-center gap-3 text-muted mb-3">
+                        <div className="d-flex align-items-center gap-3 text-muted mb-3 flex-wrap">
                           <span><i className="bi bi-geo-alt me-1"></i> {userData.profile?.location || "Remote"}</span>
                           <span className="fw-bold text-primary h5 mb-0">${userData.profile?.hourly_rate || '0'}/hr</span>
+                          {userData.reviews_received?.length > 0 && (
+                            <>
+                              <span className="badge bg-warning text-dark d-inline-flex align-items-center gap-1 px-2 py-1">
+                                ★ {(userData.reviews_received.reduce((acc, r) => acc + r.rating, 0) / userData.reviews_received.length).toFixed(1)}
+                              </span>
+                              <span className="text-secondary small">
+                                ({userData.reviews_received.length} reviews)
+                              </span>
+                              <span className="badge bg-info text-white px-2 py-1">
+                                Trust Score: {Math.round((userData.reviews_received.reduce((acc, r) => acc + r.rating, 0) / userData.reviews_received.length) * 20)}%
+                              </span>
+                            </>
+                          )}
                         </div>
                         <div className="bio-box p-4 bg-light rounded-4 border">
                           <p className="mb-0 text-dark lh-base" style={{ whiteSpace: 'pre-wrap' }}>
@@ -431,6 +444,30 @@ export default function Profile() {
                           <p className="text-muted italic">No specific skills listed.</p>
                         )}
                       </div>
+                    </section>
+
+                    <section className="profile-section mt-5 border-top pt-4">
+                      <h2 className="h4 fw-bold mb-4 ps-3">Client Reviews & Testimonials</h2>
+                      {userData.reviews_received?.length > 0 ? (
+                        <div className="reviews-list d-flex flex-column gap-3">
+                          {userData.reviews_received.map(review => (
+                            <div key={review.id} className="review-item p-4 bg-light rounded-4 border">
+                              <div className="d-flex justify-content-between align-items-start mb-2 flex-wrap">
+                                <div className="d-flex align-items-center gap-2 flex-wrap">
+                                  <div className="fw-bold text-dark">{review.reviewer?.name || 'Client'}</div>
+                                  <span className="text-warning">
+                                    {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
+                                  </span>
+                                </div>
+                                <span className="small text-muted">{new Date(review.created_at).toLocaleDateString()}</span>
+                              </div>
+                              <p className="mb-0 text-dark italic">"{review.comment}"</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-muted italic ps-3">No reviews received yet.</p>
+                      )}
                     </section>
                   </>
                 ) : (

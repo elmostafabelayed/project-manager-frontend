@@ -86,11 +86,21 @@ export default function MyProjects() {
                     <p className="text-muted small mb-4 flex-grow-1">
                       {project.description.substring(0, 100)}...
                     </p>
-                    <div className="mt-auto pt-3 border-top d-flex justify-content-between">
-                       <Link to={`/client/projects/${project.id}/proposals`} className="btn btn-sm btn-outline-primary">
-                          View Proposals
-                       </Link>
-                       <button onClick={() => handleDelete(project.id)} className="btn btn-sm btn-link text-danger p-0">
+                    <div className="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
+                       {project.status === 'completed' ? (
+                         <Link 
+                           to="/shared/review" 
+                           state={{ project: project, userToReview: project.contract?.freelancer }} 
+                           className="btn btn-sm btn-success text-decoration-none fw-bold"
+                         >
+                           ★ Leave Review
+                         </Link>
+                       ) : (
+                         <Link to={`/client/projects/${project.id}/proposals`} className="btn btn-sm btn-outline-primary text-decoration-none">
+                            View Proposals
+                         </Link>
+                       )}
+                       <button onClick={() => handleDelete(project.id)} className="btn btn-sm btn-link text-danger p-0 text-decoration-none">
                           Delete
                        </button>
                     </div>
