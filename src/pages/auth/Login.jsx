@@ -18,7 +18,7 @@ const loginSchema = z.object({
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, role } = useSelector((s) => s.auth);
+  const { loading, error, role, user } = useSelector((s) => s.auth);
 
   const {
     register,
@@ -34,8 +34,8 @@ export default function Login() {
   });
 
   useEffect(() => {
-    if (role && localStorage.getItem('token')) redirectByRole(role);
-  }, [role]);
+    if (role && user) redirectByRole(role);
+  }, [role, user]);
 
 
   useEffect(() => {

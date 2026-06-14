@@ -42,7 +42,6 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user:    JSON.parse(localStorage.getItem('user'))  || null,
-    token:   localStorage.getItem('token') || null,
     role:    localStorage.getItem('role')  || null,
     loading: false,
     error:   null,
@@ -64,9 +63,7 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false
         state.user    = action.payload.user
-        state.token   = action.payload.token
         state.role    = String(action.payload.user.role_id)
-        localStorage.setItem('token', action.payload.token)
         localStorage.setItem('role',  action.payload.user.role_id)
         localStorage.setItem('user',  JSON.stringify(action.payload.user))
       })
@@ -84,9 +81,7 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false
         state.user    = action.payload.user
-        state.token   = action.payload.token
         state.role    = String(action.payload.user.role_id)
-        localStorage.setItem('token', action.payload.token)
         localStorage.setItem('role',  action.payload.user.role_id)
         localStorage.setItem('user',  JSON.stringify(action.payload.user))
       })
@@ -99,13 +94,11 @@ const authSlice = createSlice({
     builder
       .addCase(logoutUser.fulfilled, (state) => {
         state.user  = null
-        state.token = null
         state.role  = null
         localStorage.clear()
       })
       .addCase(logoutUser.rejected, (state) => {
         state.user  = null
-        state.token = null
         state.role  = null
         localStorage.clear()
       })

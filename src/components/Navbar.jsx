@@ -10,7 +10,7 @@ export default function Navbar() {
   const [messageUnreadCount, setMessageUnreadCount] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { token, user, role } = useSelector((state) => state.auth);
+  const { user, role } = useSelector((state) => state.auth);
   const [activeDropdown, setActiveDropdown] = React.useState(null);
 
   const toggleDropdown = (name) => {
@@ -119,7 +119,7 @@ export default function Navbar() {
               <Link to="/freelancer/browse-projects">Browse Projects</Link>
             </li>
           )}
-          {token && (
+          {user && (
             <>
               <li>
                 <Link to={getDashboardLink()}>Dashboard</Link>
@@ -140,7 +140,7 @@ export default function Navbar() {
         </ul>
 
         <div className="navbar-auth">
-          {!token ? (
+          {!user ? (
             <>
               <Link to="/auth/login" className="btn-secondary">Log in</Link>
               <Link to="/auth/register" className="btn-primary">Sign up</Link>
@@ -222,7 +222,7 @@ export default function Navbar() {
             </li>
           )}
 
-          {token ? (
+          {user ? (
             <>
               {role === "2" && (
                 <li><Link to="/freelancer/browse-projects" onClick={() => setOpen(false)}>Browse Projects</Link></li>
@@ -247,7 +247,7 @@ export default function Navbar() {
         </ul>
 
         <div className="sidebar-footer">
-          {token ? (
+          {user ? (
             <div className="sidebar-user-info">
                <span className="sidebar-user-name">Logged in as: <strong>{user?.name}</strong></span>
                <button onClick={handleLogout} className="btn-logout-sidebar">Logout</button>

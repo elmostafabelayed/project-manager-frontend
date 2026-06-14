@@ -9,7 +9,7 @@ export default function NotificationDropdown({ onMessageUnreadCountChange }) {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { token } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const updateCounts = useCallback((notificationsData) => {
@@ -27,20 +27,20 @@ export default function NotificationDropdown({ onMessageUnreadCountChange }) {
   }, [onMessageUnreadCountChange]);
 
   const fetchNotifications = useCallback(async () => {
-    if (!token) return;
+    if (!user) return;
     try {
       const response = await api.get("/notifications");
       updateCounts(response.data);
     } catch (error) {
       console.error("Error fetching notifications:", error);
     }
-  }, [token, updateCounts]);
+  }, [user, updateCounts]);
 
   useEffect(() => {
-    if (token) {
+    if (user) {
       fetchNotifications();
     }
-  }, [token]);
+  }, [user]);
 
   useEffect(() => {
     const refreshNotifications = () => {
