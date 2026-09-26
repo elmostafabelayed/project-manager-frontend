@@ -4,7 +4,9 @@ export const getAvatarUrl = (user) => {
     if (pic.startsWith('http://') || pic.startsWith('https://')) {
       return pic;
     }
-    return `http://127.0.0.1:8000/storage/${pic}?t=${new Date().getTime()}`;
+
+    const baseUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+    return `${baseUrl}/storage/${pic}?t=${new Date().getTime()}`;
   }
   
   const name = user?.name || 'User';
