@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { Link } from "react-router-dom";
 import "../css/AboutUs.css";
@@ -7,9 +6,9 @@ import "../css/AboutUs.css";
 export default function AboutUs() {
   return (
     <div className="aboutus-page">
-      <Navbar />
 
-      
+
+
       <section className="aboutus-hero">
         <div className="aboutus-hero-content">
           <span className="aboutus-badge">About Jobsy</span>
@@ -26,7 +25,7 @@ export default function AboutUs() {
         </div>
       </section>
 
-      
+
       <section className="aboutus-stats">
         <div className="stat-card">
           <span className="stat-number">10K+</span>
@@ -46,7 +45,7 @@ export default function AboutUs() {
         </div>
       </section>
 
-      
+
       <section className="aboutus-mission">
         <h2>What Drives Us</h2>
         <div className="mission-grid">
@@ -95,7 +94,7 @@ export default function AboutUs() {
         </div>
       </section>
 
-      
+
       <section className="aboutus-story">
         <div className="story-content">
           <h2>Our Story</h2>
@@ -106,13 +105,13 @@ export default function AboutUs() {
             collaboration.
           </p>
           <p>
-            What started as a core idea earlier this year has rapidly evolved into a 
-            fully functional application, built through intensive development, long hours, 
+            What started as a core idea earlier this year has rapidly evolved into a
+            fully functional application, built through intensive development, long hours,
             and a passion for building robust digital solutions.
           </p>
           <p>
-            Today, as we finalize the platform this April 2026, we are proud of what we've 
-            achieve in a short time—a thriving platform ready to connect talent 
+            Today, as we finalize the platform this April 2026, we are proud of what we've
+            achieve in a short time—a thriving platform ready to connect talent
             with opportunity across the globe.
           </p>
         </div>
@@ -132,7 +131,7 @@ export default function AboutUs() {
         </div>
       </section>
 
-      
+
       <section className="aboutus-team">
         <h2>Meet the Team</h2>
         <p className="team-subtitle">
@@ -159,7 +158,7 @@ export default function AboutUs() {
         </div>
       </section>
 
-      
+
       <section className="aboutus-cta">
         <h2>Ready to Get Started?</h2>
         <p>

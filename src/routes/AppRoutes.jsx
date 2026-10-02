@@ -1,40 +1,44 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from '../components/ProtectedRoute'
 
-import Login    from '../pages/auth/Login'
-import Register from '../pages/auth/Register'
+const Login = lazy(() => import('../pages/auth/Login'))
+const Register = lazy(() => import('../pages/auth/Register'))
 
-import ClientDashboard   from '../pages/client/Dashboard'
-import CreateProject     from '../pages/client/CreateProject'
-import ProjectProposals  from '../pages/client/ProjectProposals'
-import MyProjects        from '../pages/client/MyProjects'
+const ClientDashboard = lazy(() => import('../pages/client/Dashboard'))
+const CreateProject = lazy(() => import('../pages/client/CreateProject'))
+const ProjectProposals = lazy(() => import('../pages/client/ProjectProposals'))
+const MyProjects = lazy(() => import('../pages/client/MyProjects'))
 
-import BrowseProjects from '../pages/freelancer/BrowseProjects'
-import MyProposals    from '../pages/freelancer/MyProposals'
-import SubmitProposal from '../pages/freelancer/SubmitProposal'
-import FreelancerDash from '../pages/freelancer/Dashboard'
+const BrowseProjects = lazy(() => import('../pages/freelancer/BrowseProjects'))
+const MyProposals = lazy(() => import('../pages/freelancer/MyProposals'))
+const SubmitProposal = lazy(() => import('../pages/freelancer/SubmitProposal'))
+const FreelancerDash = lazy(() => import('../pages/freelancer/Dashboard'))
 
-import Chat     from '../pages/shared/Chat'
-import Profile  from '../pages/shared/Profile'
-import AboutUs  from '../pages/shared/AboutUs'
-import Contact  from '../pages/shared/Contact'
-import Landing  from '../pages/Landing'
-import Review   from '../pages/shared/Review'
+const Chat = lazy(() => import('../pages/shared/Chat'))
+const Profile = lazy(() => import('../pages/shared/Profile'))
+const AboutUs = lazy(() => import('../pages/shared/AboutUs'))
+const Contact = lazy(() => import('../pages/shared/Contact'))
+const Landing = lazy(() => import('../pages/Landing'))
+const Review = lazy(() => import('../pages/shared/Review'))
 
-import AdminDashboard   from '../pages/admin/Dashboard'
-import ManageUsers      from '../pages/admin/ManageUsers'
-import ManageProjects   from '../pages/admin/ManageProjects'
-import Freelancers      from '../pages/shared/Freelancers'
-import Jobs             from '../pages/shared/Jobs'
+const AdminDashboard = lazy(() => import('../pages/admin/Dashboard'))
+const ManageUsers = lazy(() => import('../pages/admin/ManageUsers'))
+const ManageProjects = lazy(() => import('../pages/admin/ManageProjects'))
+const Freelancers = lazy(() => import('../pages/shared/Freelancers'))
+const Jobs = lazy(() => import('../pages/shared/Jobs'))
+
+const ContactMessages = lazy(() => import('../pages/admin/ContactMessages'));
 
 export default function AppRoutes() {
   return (
+    <Suspense fallback={<div role="status" className="p-4 text-center">Loading…</div>}>
     <Routes>
       <Route path="/"            element={<Landing />} />
       <Route path="/auth/login"    element={<Login />} />
       <Route path="/auth/register" element={<Register />} />
 
-      
+
       <Route path="/client/dashboard" element={
         <ProtectedRoute allowedRoles={['1']}>
           <ClientDashboard />
@@ -56,7 +60,7 @@ export default function AppRoutes() {
         </ProtectedRoute>
       }/>
 
-      
+
       <Route path="/freelancer/browse-projects" element={
         <ProtectedRoute allowedRoles={['2']}>
           <BrowseProjects />
@@ -78,7 +82,7 @@ export default function AppRoutes() {
         </ProtectedRoute>
       }/>
 
-      
+
       <Route path="/shared/chat" element={
         <ProtectedRoute allowedRoles={['1','2','3']}>
           <Chat />
@@ -101,7 +105,7 @@ export default function AppRoutes() {
       <Route path="/shared/freelancers" element={<Freelancers />} />
       <Route path="/shared/jobs" element={<Jobs />} />
 
-      
+
       <Route path="/admin/dashboard" element={
         <ProtectedRoute allowedRoles={['3']}>
           <AdminDashboard />
@@ -118,7 +122,9 @@ export default function AppRoutes() {
         </ProtectedRoute>
       }/>
 
+      <Route path="/admin/contact-messages" element={<ProtectedRoute allowedRoles={['3']}><ContactMessages /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
+    </Suspense>
   )
 }

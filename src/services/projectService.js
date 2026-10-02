@@ -4,13 +4,13 @@ const projectService = {
 
   getAllProjects: async (category) => {
     const response = await api.get('/projects', { params: { category } });
-    return response.data;
+    return response.data.data;
   },
 
 
   getMyProjects: async () => {
     const response = await api.get('/my-projects');
-    return response.data;
+    return response.data.data;
   },
 
 

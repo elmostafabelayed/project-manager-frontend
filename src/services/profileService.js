@@ -30,7 +30,7 @@ const profileService = {
 
   getFreelancers: async (category) => {
     const response = await api.get('/freelancers', { params: { category } });
-    return response.data;
+    return response.data.data;
   }
 };
 

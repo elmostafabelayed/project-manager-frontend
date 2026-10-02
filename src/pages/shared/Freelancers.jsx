@@ -1,10 +1,10 @@
+import usePagedCollection from '../../hooks/usePagedCollection';
+import Pagination from '../../components/Pagination';
 import React, { useState, useEffect } from 'react';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
-import profileService from '../../services/profileService';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { categories } from '../../utils/categoryConstants';
 import { useSelector } from 'react-redux';
 import InviteModal from '../../components/InviteModal';
-import { getAvatarUrl } from '../../utils/avatarHelper';
 import FreelancerCard from '../../components/FreelancerCard';
 import './Freelancers.css';
 
@@ -14,8 +14,6 @@ export default function Freelancers() {
   const queryParams = new URLSearchParams(location.search);
   const categoryFromUrl = queryParams.get('category');
 
-  const [freelancers, setFreelancers] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState(categoryFromUrl);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [selectedFreelancer, setSelectedFreelancer] = useState(null);
@@ -23,21 +21,7 @@ export default function Freelancers() {
   const { user } = useSelector((state) => state.auth);
   const isClient = user && user.role_id === 1;
 
-  useEffect(() => {
-    const fetchFreelancers = async () => {
-      try {
-        setLoading(true);
-        const data = await profileService.getFreelancers(category || '');
-        setFreelancers(data);
-      } catch (error) {
-        console.error("Error fetching freelancers:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFreelancers();
-  }, [category]);
+  const { items: freelancers, loading, error, pagination, setPage, refresh } = usePagedCollection('/freelancers', { category: category || '' });
 
   const handleCategoryChange = (cat) => {
     if (cat) {
@@ -61,20 +45,20 @@ export default function Freelancers() {
         </header>
 
         <div className="row">
-          
+
           <div className="col-lg-3">
             <div className="card border-0 shadow-sm mb-4">
               <div className="card-body">
                 <h5 className="card-title fw-bold mb-3">Categories</h5>
                 <div className="category-list">
-                  <button 
+                  <button
                     className={`category-btn ${!category ? 'active' : ''}`}
                     onClick={() => handleCategoryChange('')}
                   >
                     All Categories
                   </button>
                   {categories.map(cat => (
-                    <button 
+                    <button
                       key={cat}
                       className={`category-btn ${category === cat ? 'active' : ''}`}
                       onClick={() => handleCategoryChange(cat)}
@@ -87,8 +71,9 @@ export default function Freelancers() {
             </div>
           </div>
 
-          
+
           <div className="col-lg-9">
+            {error && <div role="alert" className="alert alert-danger">{error} <button onClick={refresh}>Retry</button></div>}
             {loading ? (
               <div className="text-center py-5">
                 <div className="spinner-border text-primary" role="status">
@@ -99,13 +84,13 @@ export default function Freelancers() {
               <div className="row g-4">
                 {freelancers.map(freelancer => (
                   <div key={freelancer.id} className="col-md-6 col-xl-4">
-                    <FreelancerCard 
-                      freelancer={freelancer} 
-                      isClient={isClient} 
+                    <FreelancerCard
+                      freelancer={freelancer}
+                      isClient={isClient}
                       onInvite={(f) => {
                         setSelectedFreelancer(f);
                         setShowInviteModal(true);
-                      }} 
+                      }}
                     />
                   </div>
                 ))}
@@ -117,17 +102,18 @@ export default function Freelancers() {
                 <p className="text-muted">Try adjusting your filters to find more results.</p>
               </div>
             )}
+            <Pagination pagination={pagination} onPageChange={setPage} loading={loading} />
           </div>
         </div>
       </div>
-      
+
       {showInviteModal && selectedFreelancer && (
-        <InviteModal 
-          freelancer={selectedFreelancer} 
+        <InviteModal
+          freelancer={selectedFreelancer}
           onClose={() => {
             setShowInviteModal(false);
             setSelectedFreelancer(null);
-          }} 
+          }}
         />
       )}
     </div>

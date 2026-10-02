@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -33,9 +33,16 @@ export default function Login() {
     },
   });
 
+  const redirectByRole = useCallback((r) => {
+    if (String(r) === "1") navigate("/client/dashboard");
+    else if (String(r) === "2") navigate("/freelancer/browse-projects");
+    else if (String(r) === "3") navigate("/admin/dashboard");
+  }, [navigate]);
+
+
   useEffect(() => {
     if (role && user) redirectByRole(role);
-  }, [role, user]);
+  }, [role, user, redirectByRole]);
 
 
   useEffect(() => {
@@ -48,12 +55,6 @@ export default function Login() {
       });
     }
   }, [error, setError]);
-
-  const redirectByRole = (r) => {
-    if (r == "1") navigate("/client/dashboard");
-    else if (r == "2") navigate("/freelancer/browse-projects");
-    else if (r == "3") navigate("/admin/dashboard");
-  };
 
   const onSubmit = async (data) => {
     dispatch(clearError());

@@ -13,6 +13,8 @@ export const fetchProjects = createAsyncThunk(
   }
 )
 
+export const fetchOwnProjects = createAsyncThunk('projects/fetchOwn', async () => (await projectService.getOwnProjects()).data);
+
 export const createProject = createAsyncThunk(
   'projects/create',
   async (projectData, { rejectWithValue }) => {
@@ -41,12 +43,17 @@ const projectSlice = createSlice({
   name: 'projects',
   initialState: {
     items: [],
+    total: 0,
+    summary: {},
     loading: false,
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(fetchOwnProjects.pending, state => { state.loading = true; state.error = null; })
+      .addCase(fetchOwnProjects.fulfilled, (state, action) => { state.loading = false; state.items = action.payload.data; state.total = action.payload.total; state.summary = action.payload.summary; })
+      .addCase(fetchOwnProjects.rejected, (state, action) => { state.loading = false; state.error = action.error.message; })
       .addCase(fetchProjects.pending, (state) => {
         state.loading = true
         state.error = null

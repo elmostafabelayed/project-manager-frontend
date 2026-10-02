@@ -1,18 +1,17 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchProjects } from '../../store/slices/projectSlice';
-import Navbar from '../../components/Navbar';
+import { fetchOwnProjects } from '../../store/slices/projectSlice';
 import { getAvatarUrl } from '../../utils/avatarHelper';
 import './Dashboard.css';
 
 export default function ClientDashboard() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { items, loading } = useSelector((state) => state.projects);
+  const { items, loading, total, summary } = useSelector((state) => state.projects);
 
   useEffect(() => {
-    dispatch(fetchProjects());
+    dispatch(fetchOwnProjects());
   }, [dispatch]);
 
 
@@ -20,8 +19,8 @@ export default function ClientDashboard() {
 
   return (
     <div className="dashboard-container">
-      <Navbar />
-      
+
+
       <div className="dashboard-content container">
         <aside className="dashboard-sidebar">
           <div className="user-profile-sm">
@@ -52,15 +51,15 @@ export default function ClientDashboard() {
           <section className="stats-grid">
             <div className="stat-card">
               <span className="stat-label">Total Projects</span>
-              <span className="stat-value">{myProjects.length}</span>
+              <span className="stat-value">{total}</span>
             </div>
             <div className="stat-card">
               <span className="stat-label">Active Proposals</span>
-              <span className="stat-value">0</span>
+              <span className="stat-value">{summary?.active_proposals || 0}</span>
             </div>
             <div className="stat-card">
-              <span className="stat-label">Budget Spent</span>
-              <span className="stat-value">$0</span>
+              <span className="stat-label">Total Project Budget</span>
+              <span className="stat-value">${Number(summary?.total_budget || 0).toLocaleString()}</span>
             </div>
           </section>
 

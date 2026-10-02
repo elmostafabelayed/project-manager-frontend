@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import InviteModal from "../components/InviteModal";
 import ProjectCard from "../components/ProjectCard";
@@ -69,10 +68,10 @@ export default function Landing() {
 
   return (
     <div className="landing-page">
-      <Navbar />
-      
+
+
       <section className="hero">
-        <motion.div 
+        <motion.div
           className="hero-content"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -92,7 +91,7 @@ export default function Landing() {
           >
             A modern platform to achieve your goals or grow your freelance career.
           </motion.p>
-          <motion.div 
+          <motion.div
             className="hero-buttons"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -118,13 +117,13 @@ export default function Landing() {
           >
             {role === "1" ? "Featured Freelancers" : "Featured Projects"}
           </motion.h2>
-          
+
           {loading ? (
             <div className="loader-container">
               <div className="loader"></div>
             </div>
           ) : (
-            <motion.div 
+            <motion.div
               className="project-grid"
               variants={containerVariants}
               initial="hidden"
@@ -135,9 +134,9 @@ export default function Landing() {
                 freelancers.length > 0 ? (
                   freelancers.map((freelancer) => (
                     <motion.div key={freelancer.id} variants={itemVariants}>
-                      <FreelancerCard 
-                        freelancer={freelancer} 
-                        isClient={true} 
+                      <FreelancerCard
+                        freelancer={freelancer}
+                        isClient={true}
                         onInvite={(f) => {
                           setSelectedFreelancer(f);
                           setShowInviteModal(true);
@@ -163,14 +162,14 @@ export default function Landing() {
           )}
 
           {!loading && (
-            <motion.div 
+            <motion.div
               className="text-center mt-5"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
             >
-              <Link 
-                to={role === "1" ? "/shared/freelancers" : "/shared/jobs"} 
+              <Link
+                to={role === "1" ? "/shared/freelancers" : "/shared/jobs"}
                 className="btn btn-outline-primary rounded-pill px-4"
               >
                 {role === "1" ? "View All Freelancers" : "View All Projects"}
@@ -182,7 +181,7 @@ export default function Landing() {
 
       <section className="categories-section">
         <div className="container text-center">
-          <motion.h2 
+          <motion.h2
             className="mb-5"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -190,7 +189,7 @@ export default function Landing() {
           >
             Find exactly what you need
           </motion.h2>
-          <motion.div 
+          <motion.div
             className="row"
             variants={containerVariants}
             initial="hidden"
@@ -207,11 +206,11 @@ export default function Landing() {
                 'admin': 'admin-support.jpeg'
               };
               const imgName = imageMap[cat.slug] || 'default-category.jpeg';
-              
+
               return (
                 <div key={index} className="col-lg-4 col-md-6 mb-4">
                   <Link to={getCategoryLink(key)} className="category-link">
-                    <motion.div 
+                    <motion.div
                       className="category-box"
                       variants={itemVariants}
                       whileHover={{ translateY: -5 }}
@@ -237,12 +236,12 @@ export default function Landing() {
       <Footer />
 
       {showInviteModal && selectedFreelancer && (
-        <InviteModal 
-          freelancer={selectedFreelancer} 
+        <InviteModal
+          freelancer={selectedFreelancer}
           onClose={() => {
             setShowInviteModal(false);
             setSelectedFreelancer(null);
-          }} 
+          }}
         />
       )}
     </div>

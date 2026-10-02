@@ -1,29 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import usePagedCollection from '../../hooks/usePagedCollection';
+import Pagination from '../../components/Pagination';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
 import projectService from '../../services/projectService';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import './MyProjects.css';
 
 export default function MyProjects() {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchMyProjects = async () => {
-      try {
-        setLoading(true);
-        const data = await projectService.getMyProjects();
-        setProjects(data.data || data);
-      } catch (error) {
-        console.error("Failed to fetch my projects", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMyProjects();
-  }, []);
+  const { items: projects, loading, error, pagination, page, setPage, refresh } = usePagedCollection('/my-projects');
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
@@ -39,7 +24,8 @@ export default function MyProjects() {
     if (!result.isConfirmed) return;
     try {
       await projectService.deleteProject(id);
-      setProjects(projects.filter(p => p.id !== id));
+      if (projects.length === 1 && page > 1) setPage(page - 1);
+      else refresh();
       toast.success("Project deleted.");
     } catch (error) {
       toast.error("Failed to delete project.");
@@ -48,7 +34,7 @@ export default function MyProjects() {
 
   return (
     <div className="bg-background min-vh-100 mt-5">
-      <Navbar />
+
       <div className="container py-5">
         <Link to="/client/dashboard" className="back-link mb-3 d-inline-block text-decoration-none">
           ← Back to Dashboard
@@ -88,9 +74,9 @@ export default function MyProjects() {
                     </p>
                     <div className="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
                        {project.status === 'completed' ? (
-                         <Link 
-                           to="/shared/review" 
-                           state={{ project: project, userToReview: project.contract?.freelancer }} 
+                         <Link
+                           to="/shared/review"
+                           state={{ project: project, userToReview: project.contract?.freelancer }}
                            className="btn btn-sm btn-success text-decoration-none fw-bold"
                          >
                            ★ Leave Review
@@ -110,6 +96,8 @@ export default function MyProjects() {
             ))}
           </div>
         )}
+        {error && <div role="alert" className="alert alert-danger">{error} <button onClick={refresh}>Retry</button></div>}
+        <Pagination pagination={pagination} onPageChange={setPage} loading={loading} />
       </div>
     </div>
   );

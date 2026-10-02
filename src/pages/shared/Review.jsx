@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 import './Review.css';
@@ -10,7 +9,7 @@ export default function Review() {
   const navigate = useNavigate();
 
   const { project, userToReview } = location.state || {};
-  
+
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [comment, setComment] = useState('');
@@ -46,7 +45,7 @@ export default function Review() {
   if (submitted) {
     return (
       <div className="bg-background min-vh-100">
-        <Navbar />
+
         <div className="review-container">
           <div className="review-card review-success">
             <h2>Thank You!</h2>
@@ -60,7 +59,7 @@ export default function Review() {
 
   return (
     <div className="bg-background min-vh-100">
-      <Navbar />
+
       <div className="review-container">
         <div className="review-card">
           <h1 className="text-center fw-bold mb-2">Leave a Review</h1>
@@ -97,8 +96,8 @@ export default function Review() {
               ></textarea>
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="btn-submit-review"
               disabled={submitting}
             >

@@ -1,32 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import usePagedCollection from '../../hooks/usePagedCollection';
+import Pagination from '../../components/Pagination';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
 import proposalService from '../../services/proposalService';
 import toast from 'react-hot-toast';
 import './MyProposals.css';
 
 export default function MyProposals() {
-  const [proposals, setProposals] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { items: proposals, loading, error, pagination, setPage, refresh } = usePagedCollection('/my-proposals');
   const [showRespondModal, setShowRespondModal] = useState(false);
   const [selectedProposal, setSelectedProposal] = useState(null);
   const [formData, setFormData] = useState({ price: '', duration: '', message: '' });
   const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    const fetchMyProposals = async () => {
-      try {
-        setLoading(true);
-        const data = await proposalService.getMyProposals();
-        setProposals(data.data || data);
-      } catch (error) {
-        console.error("Failed to fetch my proposals", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMyProposals();
-  }, []);
 
   const handleRespondClick = (proposal) => {
     setSelectedProposal(proposal);
@@ -51,8 +36,7 @@ export default function MyProposals() {
       toast.success('Response sent successfully!');
       setShowRespondModal(false);
 
-      const updatedProposals = await proposalService.getMyProposals();
-      setProposals(updatedProposals.data || updatedProposals);
+      refresh();
     } catch (error) {
       console.error('Error responding to invitation:', error);
       toast.error('Failed to send response');
@@ -73,7 +57,7 @@ export default function MyProposals() {
 
   return (
     <div className="bg-background min-vh-100 mt-5">
-      <Navbar />
+
       <div className="container py-5">
         <Link to="/freelancer/dashboard" className="back-link mb-3 d-inline-block text-decoration-none">
           ← Back to Dashboard
@@ -125,7 +109,7 @@ export default function MyProposals() {
                           <span className="badge bg-purple ms-1">Invitation</span>
                         )}
                         {proposal.status === 'invited' && (
-                          <button 
+                          <button
                             className="btn btn-sm btn-primary rounded-pill ms-2"
                             onClick={() => handleRespondClick(proposal)}
                           >
@@ -143,6 +127,8 @@ export default function MyProposals() {
         )}
       </div>
 
+      {error && <p role="alert">{error} <button onClick={refresh}>Retry</button></p>}
+      <Pagination pagination={pagination} onPageChange={setPage} loading={loading} />
       {showRespondModal && (
         <div className="invite-modal-overlay">
           <div className="invite-modal-content card border-0 shadow">
@@ -157,8 +143,8 @@ export default function MyProposals() {
               <form onSubmit={handleResponseSubmit}>
                 <div className="mb-3">
                   <label className="form-label fw-bold">Your Bid ($)</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     className="form-control"
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
@@ -168,8 +154,8 @@ export default function MyProposals() {
                 </div>
                 <div className="mb-3">
                   <label className="form-label fw-bold">Estimated Time (Days)</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     className="form-control"
                     value={formData.duration}
                     onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
@@ -179,7 +165,7 @@ export default function MyProposals() {
                 </div>
                 <div className="mb-4">
                   <label className="form-label fw-bold">Cover Letter / Message</label>
-                  <textarea 
+                  <textarea
                     className="form-control"
                     rows="5"
                     value={formData.message}

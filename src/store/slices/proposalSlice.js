@@ -29,6 +29,8 @@ const proposalSlice = createSlice({
   name: 'proposals',
   initialState: {
     items: [],
+    total: 0,
+    summary: {},
     loading: false,
     error: null,
   },
@@ -41,7 +43,9 @@ const proposalSlice = createSlice({
       })
       .addCase(fetchMyProposals.fulfilled, (state, action) => {
         state.loading = false
-        state.items = action.payload
+        state.items = action.payload.data
+        state.total = action.payload.total
+        state.summary = action.payload.summary
       })
       .addCase(fetchMyProposals.rejected, (state, action) => {
         state.loading = false

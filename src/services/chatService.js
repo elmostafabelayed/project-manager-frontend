@@ -2,8 +2,8 @@ import api from './api';
 
 const chatService = {
 
-  getConversations: async () => {
-    const response = await api.get('/conversations');
+  getConversations: async (params = {}) => {
+    const response = await api.get('/conversations', { params });
     return response.data;
   },
   
@@ -13,8 +13,8 @@ const chatService = {
   },
 
 
-  getMessages: async (conversationId) => {
-    const response = await api.get(`/conversations/${conversationId}/messages`);
+  getMessages: async (conversationId, params = {}) => {
+    const response = await api.get(`/conversations/${conversationId}/messages`, { params });
     return response.data;
   },
 

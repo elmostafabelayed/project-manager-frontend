@@ -1,36 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import projectService from '../services/projectService';
+import usePagedCollection from '../hooks/usePagedCollection';
+import Pagination from './Pagination';
 import proposalService from '../services/proposalService';
 import toast from 'react-hot-toast';
 import './InviteModal.css';
 
 export default function InviteModal({ freelancer, onClose }) {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { items: projects, loading, error, pagination, setPage } = usePagedCollection('/my-projects', { status: 'open' });
   const [submitting, setSubmitting] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState('');
   const [message, setMessage] = useState(`Hi ${freelancer.name}, I'm impressed with your profile and would like to invite you to bid on my project.`);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        setLoading(true);
-        const data = await projectService.getMyProjects();
-        setProjects(data);
-        if (data.length > 0) {
-          setSelectedProjectId(data[0].id);
-        }
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-        toast.error('Failed to load your projects');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, []);
+  useEffect(() => { setSelectedProjectId(projects[0]?.id || ''); }, [projects]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,6 +53,7 @@ export default function InviteModal({ freelancer, onClose }) {
             Select one of your projects to invite this freelancer to bid.
           </p>
 
+          {error && <p role="alert">{error}</p>}
           {loading ? (
             <div className="text-center py-4">
               <div className="spinner-border text-primary" role="status">
@@ -80,10 +62,11 @@ export default function InviteModal({ freelancer, onClose }) {
             </div>
           ) : projects.length > 0 ? (
             <form onSubmit={handleSubmit}>
+              <Pagination pagination={pagination} onPageChange={setPage} loading={loading} />
               <div className="mb-3">
                 <label className="form-label fw-bold">Select Project</label>
-                <select 
-                  className="form-select" 
+                <select
+                  className="form-select"
                   value={selectedProjectId}
                   onChange={(e) => setSelectedProjectId(e.target.value)}
                   required
@@ -98,8 +81,8 @@ export default function InviteModal({ freelancer, onClose }) {
 
               <div className="mb-4">
                 <label className="form-label fw-bold">Invitation Message</label>
-                <textarea 
-                  className="form-control" 
+                <textarea
+                  className="form-control"
                   rows="4"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
@@ -109,8 +92,8 @@ export default function InviteModal({ freelancer, onClose }) {
               </div>
 
               <div className="d-grid">
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="btn btn-primary rounded-pill py-2"
                   disabled={submitting}
                 >
@@ -121,7 +104,7 @@ export default function InviteModal({ freelancer, onClose }) {
           ) : (
             <div className="text-center py-4">
               <p className="mb-3">You don't have any active projects.</p>
-              <button 
+              <button
                 className="btn btn-outline-primary btn-sm rounded-pill"
                 onClick={() => window.location.href = '/client/create-project'}
               >

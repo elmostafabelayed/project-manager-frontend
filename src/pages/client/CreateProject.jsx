@@ -6,7 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { createProject } from '../../store/slices/projectSlice';
 import { categories } from '../../utils/categoryConstants';
-import Navbar from '../../components/Navbar';
 import { FormInput, FormTextArea, FormSelect } from '../../components/common/FormComponents';
 import toast from 'react-hot-toast';
 import './CreateProject.css';
@@ -62,8 +61,8 @@ export default function CreateProject() {
 
   return (
     <div className="create-project-container">
-      <Navbar />
-      
+
+
       <main className="create-project-main container mt-5 pt-4">
         <Link to="/client/dashboard" className="back-link mb-3 d-inline-block text-decoration-none">
           ← Back to Dashboard

@@ -43,7 +43,7 @@ export default function Navbar() {
   return (
     <>
       <nav className="navbar fixed-top">
-        <button className="menu-btn" onClick={() => setOpen(true)}>
+        <button className="menu-btn" aria-label="Open navigation" aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen(true)}>
           ☰
         </button>
 
@@ -54,16 +54,16 @@ export default function Navbar() {
         </div>
 
         <ul className="navbar-links">
-          
+
           {(!role || role === "1") && (
             <li className={`nav-item dropdown ${activeDropdown === 'hire' ? 'show' : ''}`}>
-              <a 
-                className="nav-link dropdown-toggle" 
-                href="#" 
+              <button
+                className="nav-link dropdown-toggle"
+                type="button"
                 onClick={(e) => { e.preventDefault(); toggleDropdown('hire'); }}
               >
                 Hire freelancers
-              </a>
+              </button>
               <ul className={`dropdown-menu ${activeDropdown === 'hire' ? 'show' : ''}`}>
                 <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Design & creative")}`} onClick={() => setActiveDropdown(null)}>Design & creative</Link></li>
                 <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Developpement & tech")}`} onClick={() => setActiveDropdown(null)}>Developpement & tech</Link></li>
@@ -74,16 +74,16 @@ export default function Navbar() {
             </li>
           )}
 
-          
+
           {(!role || role === "2") && (
             <li className={`nav-item dropdown ${activeDropdown === 'work' ? 'show' : ''}`}>
-              <a 
-                className="nav-link dropdown-toggle" 
-                href="#" 
+              <button
+                className="nav-link dropdown-toggle"
+                type="button"
                 onClick={(e) => { e.preventDefault(); toggleDropdown('work'); }}
               >
                 Find work
-              </a>
+              </button>
               <ul className={`dropdown-menu ${activeDropdown === 'work' ? 'show' : ''}`}>
                 <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("Design & creative")}`} onClick={() => setActiveDropdown(null)}>Design & creative jobs</Link></li>
                 <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("Developpement & tech")}`} onClick={() => setActiveDropdown(null)}>Developpement & tech jobs</Link></li>
@@ -95,16 +95,16 @@ export default function Navbar() {
             </li>
           )}
 
-          
+
           {role === "3" && (
             <li className={`nav-item dropdown ${activeDropdown === 'admin' ? 'show' : ''}`}>
-              <a 
-                className="nav-link dropdown-toggle" 
-                href="#" 
+              <button
+                className="nav-link dropdown-toggle"
+                type="button"
                 onClick={(e) => { e.preventDefault(); toggleDropdown('admin'); }}
               >
                 Admin Panel
-              </a>
+              </button>
               <ul className={`dropdown-menu ${activeDropdown === 'admin' ? 'show' : ''}`}>
                 <li><Link className="dropdown-item" to="/admin/manage-users" onClick={() => setActiveDropdown(null)}>Manage Users</Link></li>
                 <li><Link className="dropdown-item" to="/admin/manage-projects" onClick={() => setActiveDropdown(null)}>Manage Projects</Link></li>
@@ -113,7 +113,7 @@ export default function Navbar() {
             </li>
           )}
 
-          
+
           {role === "2" && (
             <li>
               <Link to="/freelancer/browse-projects">Browse Projects</Link>
@@ -161,8 +161,8 @@ export default function Navbar() {
         className={`overlay ${open ? "active" : ""}`}
         onClick={() => setOpen(false)}
       />
-      <div className={`sidebar ${open ? "active" : ""}`}>
-        <button className="close-btn" onClick={() => setOpen(false)}>✕</button>
+      <div id="mobile-navigation" className={`sidebar ${open ? "active" : ""}`} inert={!open} aria-hidden={!open}>
+        <button className="close-btn" aria-label="Close navigation" onClick={() => setOpen(false)}>✕</button>
 
         <div className="sidebar-logo">
           <img src="/img/logon.png" alt="logo" />
@@ -171,13 +171,13 @@ export default function Navbar() {
         <ul>
           {(!role || role === "1") && (
             <li className={`nav-item dropdown sidebar-dropdown ${activeDropdown === 'sidebar-hire' ? 'show' : ''}`}>
-              <a 
-                className="nav-link dropdown-toggle" 
-                href="#" 
+              <button
+                className="nav-link dropdown-toggle"
+                type="button"
                 onClick={(e) => { e.preventDefault(); toggleDropdown('sidebar-hire'); }}
               >
                 Hire freelancers
-              </a>
+              </button>
               <ul className={`dropdown-menu ${activeDropdown === 'sidebar-hire' ? 'show' : ''}`}>
                 <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Design & creative")}`} onClick={() => setOpen(false)}>Design & Creative</Link></li>
                 <li><Link className="dropdown-item" to={`/shared/freelancers?category=${encodeURIComponent("Developpement & tech")}`} onClick={() => setOpen(false)}>Development & Tech</Link></li>
@@ -191,13 +191,13 @@ export default function Navbar() {
 
           {(!role || role === "2") && (
             <li className={`nav-item dropdown sidebar-dropdown ${activeDropdown === 'sidebar-work' ? 'show' : ''}`}>
-              <a 
-                className="nav-link dropdown-toggle" 
-                href="#" 
+              <button
+                className="nav-link dropdown-toggle"
+                type="button"
                 onClick={(e) => { e.preventDefault(); toggleDropdown('sidebar-work'); }}
               >
                 Find work
-              </a>
+              </button>
               <ul className={`dropdown-menu ${activeDropdown === 'sidebar-work' ? 'show' : ''}`}>
                 <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("Design & creative")}`} onClick={() => setOpen(false)}>Design & Creative Jobs</Link></li>
                 <li><Link className="dropdown-item" to={`/shared/jobs?category=${encodeURIComponent("Developpement & tech")}`} onClick={() => setOpen(false)}>Development & Tech Jobs</Link></li>
@@ -210,11 +210,11 @@ export default function Navbar() {
           )}
 
           {role === "3" && (
-            <li className="nav-item dropdown sidebar-dropdown">
-              <a className="nav-link dropdown-toggle" href="#">
+            <li className={`nav-item dropdown sidebar-dropdown ${activeDropdown === 'sidebar-admin' ? 'show' : ''}`}>
+              <button className="nav-link dropdown-toggle" type="button" onClick={() => toggleDropdown('sidebar-admin')}>
                 Admin Management
-              </a>
-              <ul className="dropdown-menu">
+              </button>
+              <ul className={`dropdown-menu ${activeDropdown === 'sidebar-admin' ? 'show' : ''}`}>
                 <li><Link className="dropdown-item" to="/admin/manage-users" onClick={() => setOpen(false)}>Manage Users</Link></li>
                 <li><Link className="dropdown-item" to="/admin/manage-projects" onClick={() => setOpen(false)}>Manage Projects</Link></li>
                 <li><Link className="dropdown-item" to="/admin/dashboard" onClick={() => setOpen(false)}>Stats Dashboard</Link></li>
@@ -238,7 +238,7 @@ export default function Navbar() {
               </li>
               <li className="sidebar-notifications">
                 <span>Notifications</span>
-                <NotificationDropdown onMessageUnreadCountChange={setMessageUnreadCount} />
+                {open && <NotificationDropdown onMessageUnreadCountChange={setMessageUnreadCount} />}
               </li>
             </>
           ) : null}

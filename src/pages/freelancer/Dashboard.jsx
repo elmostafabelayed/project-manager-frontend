@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchProjects } from '../../store/slices/projectSlice';
 import { fetchMyProposals } from '../../store/slices/proposalSlice';
-import Navbar from '../../components/Navbar';
 import { getAvatarUrl } from '../../utils/avatarHelper';
 import './FreelancerDashboard.css';
 
@@ -11,7 +10,7 @@ export default function FreelancerDashboard() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { items: projects, loading: projectsLoading } = useSelector((state) => state.projects);
-  const { items: proposals, loading: proposalsLoading } = useSelector((state) => state.proposals);
+  const { items: proposals, loading: proposalsLoading, total, summary } = useSelector((state) => state.proposals);
 
   useEffect(() => {
     dispatch(fetchProjects());
@@ -21,10 +20,7 @@ export default function FreelancerDashboard() {
   const loading = projectsLoading || proposalsLoading;
 
 
-  const pendingProposals = proposals.filter(p => p.status === 'pending' || !p.status);
-  const acceptedProposals = proposals.filter(p => p.status === 'accepted');
-  const totalEarnings = acceptedProposals.reduce((sum, p) => sum + Number(p.price || 0), 0);
-
+  const totalEarnings = Number(summary?.accepted_value || 0);
 
   const recentProposals = proposals.slice(0, 5);
 
@@ -50,7 +46,7 @@ export default function FreelancerDashboard() {
 
   return (
     <div className="fl-dashboard-container">
-      <Navbar />
+
 
       <div className="fl-dashboard-content container">
         <aside className="fl-dashboard-sidebar">
@@ -101,7 +97,7 @@ export default function FreelancerDashboard() {
         </aside>
 
         <main className="fl-dashboard-main">
-          
+
           <header className="fl-dash-header">
             <div>
               <h1>Freelancer Dashboard</h1>
@@ -116,7 +112,7 @@ export default function FreelancerDashboard() {
             </Link>
           </header>
 
-          
+
           <section className="fl-stats-grid">
             <div className="fl-stat-card fl-stat-proposals">
               <div className="fl-stat-icon">
@@ -126,7 +122,7 @@ export default function FreelancerDashboard() {
                 </svg>
               </div>
               <div className="fl-stat-data">
-                <span className="fl-stat-value">{proposals.length}</span>
+                <span className="fl-stat-value">{total}</span>
                 <span className="fl-stat-label">Total Proposals</span>
               </div>
             </div>
@@ -138,7 +134,7 @@ export default function FreelancerDashboard() {
                 </svg>
               </div>
               <div className="fl-stat-data">
-                <span className="fl-stat-value">{pendingProposals.length}</span>
+                <span className="fl-stat-value">{summary?.pending || 0}</span>
                 <span className="fl-stat-label">Pending</span>
               </div>
             </div>
@@ -150,7 +146,7 @@ export default function FreelancerDashboard() {
                 </svg>
               </div>
               <div className="fl-stat-data">
-                <span className="fl-stat-value">{acceptedProposals.length}</span>
+                <span className="fl-stat-value">{summary?.accepted || 0}</span>
                 <span className="fl-stat-label">Accepted</span>
               </div>
             </div>
@@ -163,12 +159,12 @@ export default function FreelancerDashboard() {
               </div>
               <div className="fl-stat-data">
                 <span className="fl-stat-value">${totalEarnings.toLocaleString()}</span>
-                <span className="fl-stat-label">Total Earnings</span>
+                <span className="fl-stat-label">Accepted Proposal Value</span>
               </div>
             </div>
           </section>
 
-          
+
           <section className="fl-section-card">
             <div className="fl-section-header">
               <h2>Recent Proposals</h2>
@@ -228,7 +224,7 @@ export default function FreelancerDashboard() {
             )}
           </section>
 
-          
+
           <section className="fl-section-card">
             <div className="fl-section-header">
               <h2>Recommended Projects</h2>

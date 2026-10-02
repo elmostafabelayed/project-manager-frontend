@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import Navbar from '../../components/Navbar';
 import proposalService from '../../services/proposalService';
 import { FormInput, FormTextArea } from '../../components/common/FormComponents';
 import toast from 'react-hot-toast';
@@ -38,13 +37,13 @@ export default function SubmitProposal() {
     try {
       setLoading(true);
 
-      await proposalService.sendProposal({ 
+      await proposalService.sendProposal({
         project_id: projectId,
         price: data.price,
         duration: data.duration,
-        message: data.cover_letter 
+        message: data.cover_letter
       });
-      
+
       toast.success('Proposal submitted successfully!');
       navigate('/freelancer/my-proposals');
     } catch (err) {
@@ -68,7 +67,7 @@ export default function SubmitProposal() {
 
   return (
     <div className="dashboard-container bg-background min-vh-100 mt-5">
-      <Navbar />
+
       <div className="submit-proposal-container container py-5">
         <Link to="/freelancer/browse-projects" className="back-link mb-3 d-inline-block text-decoration-none">
           ← Back to Projects
@@ -123,8 +122,8 @@ export default function SubmitProposal() {
               <Link to="/freelancer/browse-projects" className="premium-btn premium-btn-secondary text-decoration-none">
                  Cancel
               </Link>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="premium-btn premium-btn-primary px-5 py-2 fw-bold"
                 disabled={loading}
               >

@@ -1,6 +1,7 @@
+import usePagedCollection from '../../hooks/usePagedCollection';
+import Pagination from '../../components/Pagination';
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
-import projectService from '../../services/projectService';
 import { categories, getCategoryInfo } from '../../utils/categoryConstants';
 import { getAvatarUrl } from '../../utils/avatarHelper';
 import '../../components/ProjectCard.css';
@@ -12,25 +13,9 @@ export default function Jobs() {
   const queryParams = new URLSearchParams(location.search);
   const categoryFromUrl = queryParams.get('category');
 
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState(categoryFromUrl);
 
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        setLoading(true);
-        const data = await projectService.getAllProjects(category || '');
-        setJobs(data);
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchJobs();
-  }, [category]);
+  const { items: jobs, loading, error, pagination, setPage, refresh } = usePagedCollection('/projects', { category: category || '' });
 
   const handleCategoryChange = (cat) => {
     if (cat) {
@@ -82,6 +67,7 @@ export default function Jobs() {
 
           
           <div className="col-lg-9">
+            {error && <div role="alert" className="alert alert-danger">{error} <button onClick={refresh}>Retry</button></div>}
             {loading ? (
               <div className="text-center py-5">
                 <div className="spinner-border text-primary" role="status">
@@ -135,6 +121,7 @@ export default function Jobs() {
                 <p className="text-muted">Try adjusting your filters to find more results.</p>
               </div>
             )}
+            <Pagination pagination={pagination} onPageChange={setPage} loading={loading} />
           </div>
         </div>
       </div>

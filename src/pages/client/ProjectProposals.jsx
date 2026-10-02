@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import usePagedCollection from '../../hooks/usePagedCollection';
+import Pagination from '../../components/Pagination';
+import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import Navbar from '../../components/Navbar';
 import proposalService from '../../services/proposalService';
-import { createProjectFromProposal } from '../../store/slices/projectSlice';
 import toast from 'react-hot-toast';
 import { getAvatarUrl } from '../../utils/avatarHelper';
 import './ProjectProposals.css';
@@ -11,53 +10,16 @@ import './ProjectProposals.css';
 export default function ProjectProposals() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { loading: projectLoading } = useSelector((state) => state.projects);
-  const [proposals, setProposals] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { items: proposals, loading, error, pagination, setPage, refresh } = usePagedCollection(`/projects/${id}/proposals`);
   const [acceptingId, setAcceptingId] = useState(null);
   const [rejectingId, setRejectingId] = useState(null);
-
-  useEffect(() => {
-    const fetchProposals = async () => {
-      try {
-        setLoading(true);
-
-        const responseList = await proposalService.getProjectProposals(id);
-        const data = responseList.data || responseList;
-        setProposals(data);
-        setError(null);
-      } catch (err) {
-        setError('Error loading proposals. Please try again later.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProposals();
-  }, [id]);
 
   const handleAccept = async (proposalId) => {
     try {
       setAcceptingId(proposalId);
       await proposalService.acceptProposal(proposalId);
-      
-      const acceptedProposal = proposals.find(p => p.id === proposalId);
-      const projectData = {
-        proposal_id: proposalId,
-        title: acceptedProposal?.project?.title || `Project from Proposal ${proposalId}`,
-        description: acceptedProposal?.project?.description || '',
-        budget: acceptedProposal?.price || 0,
-      };
-      
-      await dispatch(createProjectFromProposal(projectData));
-      
-      setProposals(proposals.map(p => 
-        p.id === proposalId ? { ...p, status: 'accepted' } : p
-      ));
-      
-      toast.success('Proposal accepted! Project created successfully.');
+
+      toast.success('Proposal accepted! The project is now active.');
       navigate('/client/dashboard');
     } catch (err) {
       console.error('Error accepting proposal:', err);
@@ -71,11 +33,8 @@ export default function ProjectProposals() {
     try {
       setRejectingId(proposalId);
       await proposalService.rejectProposal(proposalId);
-      
-      setProposals(proposals.map(p => 
-        p.id === proposalId ? { ...p, status: 'rejected' } : p
-      ));
-      
+
+      refresh();
       toast.success('Offer cancelled successfully.');
     } catch (err) {
       console.error('Error rejecting proposal:', err);
@@ -87,7 +46,7 @@ export default function ProjectProposals() {
 
   return (
     <div className="dashboard-container">
-      <Navbar />
+
       <div className="proposals-container container">
         <div className="proposals-header">
           <Link to="/client/dashboard" className="back-link mb-3 d-inline-block text-decoration-none">← Back to Dashboard</Link>
@@ -112,10 +71,10 @@ export default function ProjectProposals() {
               <div key={proposal.id} className="proposal-card">
                 <div className="freelancer-info">
                    <Link to={`/shared/profile/${proposal.freelancer_id}`}>
-                     <img 
-                       src={getAvatarUrl(proposal.freelancer)} 
-                       alt="freelancer" 
-                       className="freelancer-avatar" 
+                     <img
+                       src={getAvatarUrl(proposal.freelancer)}
+                       alt="freelancer"
+                       className="freelancer-avatar"
                      />
                    </Link>
                    <div className="freelancer-details">
@@ -141,7 +100,7 @@ export default function ProjectProposals() {
                 <div className="proposal-cover-letter">
                   <h4>Cover Letter:</h4>
                   <p>{proposal.response_message || proposal.message}</p>
-                  
+
                   {proposal.response_message && (
                     <div className="original-invitation mt-3 p-2 bg-light rounded shadow-sm border-start border-primary border-4">
                       <small className="text-muted d-block mb-1 fw-bold">Your Original Invitation:</small>
@@ -157,16 +116,16 @@ export default function ProjectProposals() {
                      <span className="rejected-badge text-center w-100 py-2 block text-danger fw-bold border border-danger rounded">Cancelled</span>
                   ) : (
                      <>
-                      <button 
-                        className="btn-accept" 
+                      <button
+                        className="btn-accept"
                         onClick={() => handleAccept(proposal.id)}
-                        disabled={acceptingId === proposal.id || rejectingId === proposal.id || projectLoading}
+                        disabled={acceptingId === proposal.id || rejectingId === proposal.id}
                       >
-                        {acceptingId === proposal.id ? 'Accepting...' : projectLoading ? 'Creating Project...' : 'Accept Offer'}
+                        {acceptingId === proposal.id ? 'Accepting...' : 'Accept Offer'}
                       </button>
-                      
-                      <button 
-                        className="btn-reject" 
+
+                      <button
+                        className="btn-reject"
                         onClick={() => handleReject(proposal.id)}
                         disabled={rejectingId === proposal.id || acceptingId === proposal.id}
                       >
@@ -179,6 +138,7 @@ export default function ProjectProposals() {
             ))}
           </div>
         )}
+        <Pagination pagination={pagination} onPageChange={setPage} loading={loading} />
       </div>
     </div>
   );

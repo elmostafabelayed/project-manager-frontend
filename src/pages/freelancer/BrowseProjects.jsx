@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProjects } from '../../store/slices/projectSlice';
+import usePagedCollection from '../../hooks/usePagedCollection';
+import Pagination from '../../components/Pagination';
 import { fetchMyProposals } from '../../store/slices/proposalSlice';
 import ProjectCard from '../../components/ProjectCard';
-import Navbar from '../../components/Navbar';
 import './BrowseProjects.css';
 
 export default function BrowseProjects() {
   const dispatch = useDispatch();
-  const { items: projects, loading: projectsLoading, error } = useSelector((state) => state.projects);
   const { items: proposals, loading: proposalsLoading } = useSelector((state) => state.proposals);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    dispatch(fetchProjects());
     dispatch(fetchMyProposals());
   }, [dispatch]);
+
+  const { items: projects, loading: projectsLoading, error, pagination, setPage, refresh } = usePagedCollection('/projects', { search: searchTerm, available: true });
 
   const loading = projectsLoading || proposalsLoading;
 
@@ -24,30 +24,30 @@ export default function BrowseProjects() {
   const availableProjects = projects.filter(p => !appliedProjectIds.includes(p.id));
 
 
-  const filteredProjects = availableProjects.filter(project => 
-    project.title?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredProjects = availableProjects.filter(project =>
+    project.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     project.description?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="browse-projects-container">
-      <Navbar />
-      
+
+
       <main className="projects-main">
         <header className="projects-header">
           <div className="container">
             <h1>Browse Available Projects</h1>
             <p>Find the perfect opportunity to showcase your skills.</p>
-            
+
             <div className="search-bar-wrapper">
-              <input 
-                type="text" 
-                placeholder="Search projects by title or description..." 
-                className="search-input" 
+              <input
+                type="text"
+                placeholder="Search projects by title or description..."
+                className="search-input"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <button className="btn-search">Search</button>
+
             </div>
           </div>
         </header>
@@ -64,7 +64,7 @@ export default function BrowseProjects() {
             {error && (
               <div className="error-state">
                 <p>Error: {error}</p>
-                <button onClick={() => dispatch(fetchProjects())} className="btn-retry">Retry</button>
+                <button onClick={() => refresh()} className="btn-retry">Retry</button>
               </div>
             )}
 
@@ -85,6 +85,7 @@ export default function BrowseProjects() {
                 <ProjectCard key={project.id} project={project} />
               ))}
             </div>
+            <Pagination pagination={pagination} onPageChange={setPage} loading={loading} />
           </div>
         </section>
       </main>

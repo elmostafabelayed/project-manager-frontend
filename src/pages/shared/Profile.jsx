@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { updateUser } from '../../store/slices/authSlice';
-import Navbar from '../../components/Navbar';
 import profileService from '../../services/profileService';
 import skillService from '../../services/skillService';
 import { FormInput, FormTextArea } from '../../components/common/FormComponents';
@@ -26,7 +25,7 @@ export default function Profile() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { user: currentUser } = useSelector((state) => state.auth);
-  
+
   const [userData, setUserData] = useState(null);
   const [allSkills, setAllSkills] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +36,7 @@ export default function Profile() {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
 
-  const isFreelancer = userData?.role_id == 2 || userData?.role?.name?.toLowerCase() === 'freelancer';
+  const isFreelancer = Number(userData?.role_id) === 2 || userData?.role?.name?.toLowerCase() === 'freelancer';
 
   const {
     register,
@@ -53,8 +52,7 @@ export default function Profile() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const effectiveId = id || currentUser?.id;
-        const isSelf = !id || id == currentUser?.id;
+        const isSelf = !id || String(id) === String(currentUser?.id);
         setIsEditMode(isSelf);
 
         let profileResponse;
@@ -65,12 +63,12 @@ export default function Profile() {
         }
 
         setUserData(profileResponse);
-        
+
         if (isSelf) {
           const skillsResponse = await skillService.getAllSkills();
           setAllSkills(skillsResponse);
         }
-        
+
 
         reset({
           name: profileResponse.name || '',
@@ -79,7 +77,7 @@ export default function Profile() {
           location: profileResponse.profile?.location || '',
           hourly_rate: profileResponse.profile?.hourly_rate || 0
         });
-        
+
         if (profileResponse.skills) {
           setSelectedSkills(profileResponse.skills.map(s => s.id));
         }
@@ -96,9 +94,9 @@ export default function Profile() {
   }, [id, currentUser, reset]);
 
   const toggleSkill = (skillId) => {
-    setSelectedSkills(prev => 
-      prev.includes(skillId) 
-        ? prev.filter(id => id !== skillId) 
+    setSelectedSkills(prev =>
+      prev.includes(skillId)
+        ? prev.filter(id => id !== skillId)
         : [...prev, skillId]
     );
   };
@@ -107,27 +105,27 @@ export default function Profile() {
     try {
       setSaving(true);
       const savePromises = [profileService.updateProfile(data)];
-      
+
       if (isFreelancer) {
         savePromises.push(skillService.syncUserSkills(selectedSkills));
       }
 
       const results = await Promise.all(savePromises);
       const updateResponse = results[0];
-      
+
       if (updateResponse.user) {
         dispatch(updateUser(updateResponse.user));
         setUserData(prev => ({ ...prev, ...updateResponse.user }));
       }
 
       toast.success("Profile updated successfully!");
-      
-      const dashboardPath = currentUser?.role_id == 1 
-        ? '/client/dashboard' 
-        : currentUser?.role_id == 2 
-          ? '/freelancer/dashboard' 
+
+      const dashboardPath = Number(currentUser?.role_id) === 1
+        ? '/client/dashboard'
+        : Number(currentUser?.role_id) === 2
+          ? '/freelancer/dashboard'
           : '/admin/dashboard';
-      
+
       setTimeout(() => {
         navigate(dashboardPath);
       }, 1500);
@@ -172,12 +170,12 @@ export default function Profile() {
     try {
       setUploading(true);
       const response = await profileService.uploadProfilePicture(formData);
-      
+
       if (response.user) {
         dispatch(updateUser(response.user));
         setUserData(prev => ({ ...prev, ...response.user }));
       }
-      
+
       toast.success('Profile picture updated!');
     } catch (error) {
       console.error('Failed to upload profile picture:', error);
@@ -191,23 +189,23 @@ export default function Profile() {
 
   return (
     <div className="bg-background min-vh-100 mt-5">
-      <Navbar />
+
       <div className="profile-container mt-4">
-        <Link 
-          to={currentUser?.role_id == 1 ? '/client/dashboard' : currentUser?.role_id == 2 ? '/freelancer/dashboard' : '/admin/dashboard'} 
+        <Link
+          to={Number(currentUser?.role_id) === 1 ? '/client/dashboard' : Number(currentUser?.role_id) === 2 ? '/freelancer/dashboard' : '/admin/dashboard'}
           className="back-link mb-3 d-inline-block text-decoration-none"
         >
           ← Back to Dashboard
         </Link>
         <div className="profile-card shadow-sm rounded-4 overflow-hidden bg-white">
           <header className="profile-header p-4 d-flex align-items-center gap-4 border-bottom">
-            <div 
+            <div
               className={`profile-avatar-container ${isEditMode ? 'editable' : ''}`}
               onClick={handleAvatarClick}
             >
-              <img 
-                src={getAvatarUrl(userData)} 
-                alt="Avatar" 
+              <img
+                src={getAvatarUrl(userData)}
+                alt="Avatar"
                 className="profile-avatar-large rounded-circle border border-4 border-white shadow-sm"
               />
               {isEditMode && (
@@ -220,18 +218,18 @@ export default function Profile() {
                   <div className="spinner-border spinner-border-sm text-white" role="status"></div>
                 </div>
               )}
-              <input 
-                type="file" 
-                ref={fileInputRef} 
-                onChange={handleFileChange} 
-                accept="image/*" 
-                className="d-none" 
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                className="d-none"
               />
             </div>
             <div className="profile-header-info">
               <h1 className="h2 fw-bold mb-1">{userData.name}</h1>
               <p className="mb-2">
-                {userData.role?.name || (userData.role_id === 1 ? 'Client' : 'Freelancer')} Account 
+                {userData.role?.name || (userData.role_id === 1 ? 'Client' : 'Freelancer')} Account
                 {isEditMode && <span className="ms-2 badge bg-light text-dark border">Owner View</span>}
               </p>
               {isEditMode && <p className="small">{userData.email}</p>}
@@ -245,8 +243,8 @@ export default function Profile() {
                   <h2 className="h4 fw-bold mb-4 ps-3">Basic Information</h2>
                   <div className="row">
                     <div className="col-md-6">
-                      <FormInput 
-                        label="Full Name" 
+                      <FormInput
+                        label="Full Name"
                         name="name"
                         placeholder="Your full name"
                         register={register}
@@ -269,37 +267,37 @@ export default function Profile() {
                       <h2 className="h4 fw-bold mb-4 ps-3">Professional Details</h2>
                       <div className="row">
                         <div className="col-md-6">
-                          <FormInput 
-                            label="Professional Title" 
-                            name="title" 
+                          <FormInput
+                            label="Professional Title"
+                            name="title"
                             placeholder="e.g. Senior Full Stack Developer"
                             register={register}
                             error={errors.title}
                           />
                         </div>
                         <div className="col-md-3">
-                          <FormInput 
-                            label="Location" 
-                            name="location" 
+                          <FormInput
+                            label="Location"
+                            name="location"
                             placeholder="e.g. Casablanca, Morocco"
                             register={register}
                             error={errors.location}
                           />
                         </div>
                         <div className="col-md-3">
-                          <FormInput 
-                            label="Hourly Rate ($)" 
-                            name="hourly_rate" 
+                          <FormInput
+                            label="Hourly Rate ($)"
+                            name="hourly_rate"
                             type="number"
                             register={register}
                             error={errors.hourly_rate}
                           />
                         </div>
                       </div>
-                      <FormTextArea 
-                        label="Bio / Overview" 
-                        name="bio" 
-                        rows={5} 
+                      <FormTextArea
+                        label="Bio / Overview"
+                        name="bio"
+                        rows={5}
                         placeholder="Tell us about your experience and skills..."
                         register={register}
                         error={errors.bio}
@@ -318,8 +316,8 @@ export default function Profile() {
                             'Writing & content',
                             'Admin & support'
                           ].map(cat => (
-                            <div 
-                              key={cat} 
+                            <div
+                              key={cat}
                               className="category-card p-3 border rounded-3 text-center transition-all hover-shadow clickable bg-light"
                               onClick={() => setSelectedCategory(cat)}
                               style={{ transition: 'all 0.2s ease' }}
@@ -342,8 +340,8 @@ export default function Profile() {
                       ) : (
                         <div className="skills-editor border rounded-3 p-4 bg-light">
                           <div className="d-flex align-items-center mb-4">
-                            <button 
-                              type="button" 
+                            <button
+                              type="button"
                               className="btn btn-sm btn-outline-primary me-3"
                               onClick={() => setSelectedCategory(null)}
                             >
@@ -355,8 +353,8 @@ export default function Profile() {
                             {allSkills
                               .filter(skill => skill.category === selectedCategory)
                               .map(skill => (
-                                <span 
-                                  key={skill.id} 
+                                <span
+                                  key={skill.id}
                                   className={`skill-tag px-3 py-1 border rounded-pill clickable transition-all ${selectedSkills.includes(skill.id) ? 'bg-primary text-white border-primary' : 'bg-white text-dark hover-bg-light'}`}
                                   onClick={() => toggleSkill(skill.id)}
                                   style={{ cursor: 'pointer', fontSize: '14px' }}
@@ -368,7 +366,7 @@ export default function Profile() {
                           </div>
                         </div>
                       )}
-                      
+
                       {selectedSkills.length > 0 && (
                         <div className="mt-4">
                           <h6 className="fw-bold mb-3">Selected Skills ({selectedSkills.length})</h6>
@@ -389,8 +387,8 @@ export default function Profile() {
                 )}
 
                 <div className="mt-5 pt-3 border-top text-end">
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     className="premium-btn premium-btn-primary px-5 shadow-sm"
                     disabled={saving}
                   >

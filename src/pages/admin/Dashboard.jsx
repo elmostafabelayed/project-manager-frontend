@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
 import api from '../../services/api';
 
 export default function AdminDashboard() {
@@ -26,10 +25,10 @@ export default function AdminDashboard() {
 
   return (
     <div className="bg-background min-vh-100 mt-5">
-      <Navbar />
+
       <div className="container py-5">
         <h1 className="fw-bold mb-4">Admin Dashboard</h1>
-        
+
         <div className="row g-4 mb-5">
            <div className="col-md-3">
               <div className="card border-0 shadow-sm p-4 text-center">
@@ -57,6 +56,7 @@ export default function AdminDashboard() {
            </div>
         </div>
 
+        <Link to="/admin/contact-messages" className="btn btn-outline-primary mb-4">Contact Messages</Link>
         <div className="row">
            <div className="col-md-6">
               <Link to="/admin/manage-users" className="card border-0 shadow-sm p-5 text-center text-decoration-none hover-lift mb-4">

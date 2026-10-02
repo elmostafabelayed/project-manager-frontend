@@ -1,28 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import usePagedCollection from '../../hooks/usePagedCollection';
+import Pagination from '../../components/Pagination';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 
 export default function ManageProjects() {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        setLoading(true);
-        const response = await api.get('/admin/projects');
-        setProjects(response.data);
-      } catch (error) {
-        console.error("Failed to fetch projects", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProjects();
-  }, []);
+  const { items: projects, loading, error, pagination, page, setPage, refresh } = usePagedCollection('/admin/projects');
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
@@ -38,7 +23,8 @@ export default function ManageProjects() {
     if (!result.isConfirmed) return;
     try {
       await api.delete(`/admin/projects/${id}`);
-      setProjects(projects.filter(p => p.id !== id));
+      if (projects.length === 1 && page > 1) setPage(page - 1);
+      else refresh();
       toast.success("Project deleted.");
     } catch (error) {
       toast.error("Failed to delete project.");
@@ -47,13 +33,13 @@ export default function ManageProjects() {
 
   return (
     <div className="bg-background min-vh-100 mt-5">
-      <Navbar />
+
       <div className="container py-5">
         <Link to="/admin/dashboard" className="back-link mb-3 d-inline-block text-decoration-none">
           ← Back to Dashboard
         </Link>
         <h1 className="fw-bold mb-4">Manage Projects</h1>
-        
+
         {loading ? (
           <div className="text-center p-5"><div className="cl-spinner"></div></div>
         ) : (
@@ -94,6 +80,8 @@ export default function ManageProjects() {
             </table>
           </div>
         )}
+        {error && <div role="alert" className="alert alert-danger">{error} <button onClick={refresh}>Retry</button></div>}
+        <Pagination pagination={pagination} onPageChange={setPage} loading={loading} />
       </div>
     </div>
   );

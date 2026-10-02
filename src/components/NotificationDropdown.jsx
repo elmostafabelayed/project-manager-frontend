@@ -1,3 +1,4 @@
+import Pagination from './Pagination';
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -7,40 +8,31 @@ import "./css/NotificationDropdown.css";
 
 export default function NotificationDropdown({ onMessageUnreadCountChange }) {
   const [notifications, setNotifications] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState(null);
   const [unreadCount, setUnreadCount] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
-  const updateCounts = useCallback((notificationsData) => {
-    const unreadTotal = notificationsData.filter((n) => !n.read_at).length;
-    const unreadMessages = notificationsData.filter(
-      (n) => n.type === "message_new" && !n.read_at
-    ).length;
-
-    setNotifications(notificationsData);
-    setUnreadCount(unreadTotal);
-
-    if (typeof onMessageUnreadCountChange === "function") {
-      onMessageUnreadCountChange(unreadMessages);
-    }
-  }, [onMessageUnreadCountChange]);
-
   const fetchNotifications = useCallback(async () => {
     if (!user) return;
     try {
-      const response = await api.get("/notifications");
-      updateCounts(response.data);
+      const response = await api.get("/notifications", { params: { page } });
+      setNotifications(response.data.data);
+      setPagination(response.data);
+      setUnreadCount(response.data.unread_count);
+      if (typeof onMessageUnreadCountChange === 'function') onMessageUnreadCountChange(response.data.unread_messages);
     } catch (error) {
       console.error("Error fetching notifications:", error);
     }
-  }, [user, updateCounts]);
+  }, [user, page, onMessageUnreadCountChange]);
 
   useEffect(() => {
     if (user) {
       fetchNotifications();
     }
-  }, [user]);
+  }, [user, fetchNotifications]);
 
   useEffect(() => {
     const refreshNotifications = () => {
@@ -54,21 +46,6 @@ export default function NotificationDropdown({ onMessageUnreadCountChange }) {
     };
   }, [fetchNotifications]);
 
-  const markAsRead = async (id) => {
-    try {
-      await api.put(`/notifications/${id}/read`);
-      setNotifications((prev) => {
-        const updated = prev.map((n) =>
-          n.id === id ? { ...n, read_at: new Date() } : n
-        );
-        updateCounts(updated);
-        return updated;
-      });
-    } catch (error) {
-      console.error("Error marking as read:", error);
-    }
-  };
-
   const handleNotificationClick = async (notification) => {
     try {
       if (!notification.read_at) {
@@ -78,11 +55,11 @@ export default function NotificationDropdown({ onMessageUnreadCountChange }) {
       if (notification.type === "message_new" && notification.data?.conversation_id) {
         navigate(`/shared/chat?conversationId=${notification.data.conversation_id}`);
       }
-      
+
       if (notification.type === "invitation_new") {
         navigate(`/freelancer/my-proposals`);
       }
-      
+
       if (notification.type === "invitation_response" && notification.data?.project_id) {
         navigate(`/client/projects/${notification.data.project_id}/proposals`);
       }
@@ -91,13 +68,7 @@ export default function NotificationDropdown({ onMessageUnreadCountChange }) {
         navigate(`/client/projects/${notification.data.project_id}/proposals`);
       }
 
-      setNotifications((prev) => {
-        const updated = prev.map((n) =>
-          n.id === notification.id ? { ...n, read_at: new Date() } : n
-        );
-        updateCounts(updated);
-        return updated;
-      });
+      await fetchNotifications();
     } catch (error) {
       console.error("Error processing notification click:", error);
     }
@@ -106,11 +77,7 @@ export default function NotificationDropdown({ onMessageUnreadCountChange }) {
   const markAllAsRead = async () => {
     try {
       await api.put("/notifications/mark-all-read");
-      setNotifications((prev) => {
-        const updated = prev.map((n) => ({ ...n, read_at: new Date() }));
-        updateCounts(updated);
-        return updated;
-      });
+      await fetchNotifications();
     } catch (error) {
       console.error("Error marking all as read:", error);
     }
@@ -168,6 +135,7 @@ export default function NotificationDropdown({ onMessageUnreadCountChange }) {
               ))
             )}
           </ul>
+          <Pagination pagination={pagination} onPageChange={setPage} />
         </div>
       )}
     </div>

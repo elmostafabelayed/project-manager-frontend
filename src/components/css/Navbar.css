@@ -353,7 +353,7 @@
   .navbar-links { display: none; }
   .navbar-auth { display: none; }
   .navbar-logo { flex: 1; text-align: center; }
-  .navbar-logo img { margin-left: -50px; } 
+  .navbar-logo img { margin-left: -50px; }
 }
 
 
@@ -410,4 +410,6 @@
 .btn-logout:hover {
   background: #e2e8f0;
   color: #1e293b;
-}
+}
+
+button.nav-link { background: transparent; border: 0; font: inherit; cursor: pointer; }

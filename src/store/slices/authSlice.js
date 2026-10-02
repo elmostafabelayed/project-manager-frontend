@@ -38,10 +38,15 @@ export const logoutUser = createAsyncThunk(
 )
 
 
+const readStoredUser = () => {
+  try { return JSON.parse(localStorage.getItem('user')) || null; }
+  catch { localStorage.removeItem('user'); return null; }
+};
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user:    JSON.parse(localStorage.getItem('user'))  || null,
+    user:    readStoredUser(),
     role:    localStorage.getItem('role')  || null,
     loading: false,
     error:   null,
@@ -95,12 +100,14 @@ const authSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state) => {
         state.user  = null
         state.role  = null
-        localStorage.clear()
+        localStorage.removeItem('user');
+        localStorage.removeItem('role')
       })
       .addCase(logoutUser.rejected, (state) => {
         state.user  = null
         state.role  = null
-        localStorage.clear()
+        localStorage.removeItem('user');
+        localStorage.removeItem('role')
       })
   },
 })

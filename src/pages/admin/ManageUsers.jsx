@@ -1,33 +1,18 @@
+import usePagedCollection from '../../hooks/usePagedCollection';
+import Pagination from '../../components/Pagination';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
 import api from '../../services/api';
-import { useEffect, useState } from 'react';
+import React from 'react';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 
 export default function ManageUsers() {
   const { user: currentUser } = useSelector((state) => state.auth);
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const response = await api.get('/admin/users');
-        setUsers(response.data);
-      } catch (error) {
-        console.error("Failed to fetch users", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUsers();
-  }, []);
+  const { items: users, loading, error, pagination, page, setPage, refresh } = usePagedCollection('/admin/users');
 
   const handleDelete = async (id) => {
-    const userName = users.find(user => user.id == id)?.name;
+    const userName = users.find(user => String(user.id) === String(id))?.name;
     const result = await Swal.fire({
       title: 'Are you sure?',
       text: "This action is permanent!",
@@ -41,7 +26,8 @@ export default function ManageUsers() {
     if (!result.isConfirmed) return;
     try {
       await api.delete(`/admin/users/${id}`);
-      setUsers(users.filter(u => u.id !== id));
+      if (users.length === 1 && page > 1) setPage(page - 1);
+      else refresh();
       toast.success("User deleted.");
     } catch (error) {
       toast.error("Failed to delete user.");
@@ -50,13 +36,13 @@ export default function ManageUsers() {
 
   return (
     <div className="bg-background min-vh-100 mt-5">
-      <Navbar />
+
       <div className="container py-5">
         <Link to="/admin/dashboard" className="back-link mb-3 d-inline-block text-decoration-none">
           ← Back to Dashboard
         </Link>
         <h1 className="fw-bold mb-4">Manage Users</h1>
-        
+
         {loading ? (
           <div className="text-center p-5"><div className="cl-spinner"></div></div>
         ) : (
@@ -99,6 +85,8 @@ export default function ManageUsers() {
             </table>
           </div>
         )}
+        {error && <div role="alert" className="alert alert-danger">{error} <button onClick={refresh}>Retry</button></div>}
+        <Pagination pagination={pagination} onPageChange={setPage} loading={loading} />
       </div>
     </div>
   );

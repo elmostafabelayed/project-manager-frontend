@@ -1,5 +1,5 @@
+import api from '../../services/api';
 import React, { useState } from "react";
-import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import "../css/Contact.css";
 
@@ -10,6 +10,8 @@ export default function Contact() {
     subject: "",
     message: "",
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
 
@@ -17,11 +19,19 @@ export default function Contact() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 4000);
-    setFormData({ name: "", email: "", subject: "", message: "" });
+    if (submitting) return;
+    setSubmitting(true);
+    setSubmitted(false);
+    setError('');
+    try {
+      await api.post('/contact', formData);
+      setSubmitted(true);
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (err) {
+      setError(Object.values(err.response?.data?.errors || {}).flat()[0] || 'Could not send your message. Please retry.');
+    } finally { setSubmitting(false); }
   };
 
   const faqs = [
@@ -31,7 +41,7 @@ export default function Contact() {
     },
     {
       q: "How does payment work?",
-      a: "Clients fund projects upfront through our secure escrow system. Freelancers receive payment once milestones are approved.",
+      a: "Clients and freelancers agree on payment arrangements directly. Jobsy tracks projects, proposals and contracts; it does not currently process payments.",
     },
     {
       q: "Can I be both a client and a freelancer?",
@@ -39,15 +49,15 @@ export default function Contact() {
     },
     {
       q: "How do I report an issue?",
-      a: "You can use this contact form or email us directly at Jobsyy@proton.me. We typically respond within 24 hours.",
+      a: "You can use this contact form or email us directly at Jobsyy@proton.me. Your message will be available to the support team.",
     },
   ];
 
   return (
     <div className="contact-page">
-      <Navbar />
 
-      
+
+
       <section className="contact-hero">
         <div className="contact-hero-content">
           <span className="contact-badge">Get in Touch</span>
@@ -63,7 +73,7 @@ export default function Contact() {
         </div>
       </section>
 
-      
+
       <section className="contact-info">
         <div className="info-card">
           <div className="info-icon">
@@ -99,7 +109,7 @@ export default function Contact() {
         </div>
       </section>
 
-      
+
       <section className="contact-main">
         <div className="contact-form-wrapper">
           <h2>Send Us a Message</h2>
@@ -107,13 +117,14 @@ export default function Contact() {
             Fill out the form below and our team will get back to you shortly.
           </p>
 
+          {error && <p role="alert" className="alert alert-danger">{error}</p>}
           {submitted && (
             <div className="success-toast">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                 <polyline points="22 4 12 14.01 9 11.01"/>
               </svg>
-              Message sent successfully! We'll be in touch soon.
+              Your message has been received.
             </div>
           )}
 
@@ -168,7 +179,7 @@ export default function Contact() {
                 required
               />
             </div>
-            <button type="submit" className="contact-submit-btn">
+            <button type="submit" className="contact-submit-btn" disabled={submitting}>
               Send Message
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="22" y1="2" x2="11" y2="13"/>
